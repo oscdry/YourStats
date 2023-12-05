@@ -1,0 +1,36 @@
+version: '3'
+services:
+  # Database
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'yourstats'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'abc.123'
+      MYSQL_ROOT_PASSWORD: 'abc.123'
+    volumes:
+      - db_data:/var/lib/mysql
+  # Server app
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "mysql://admin:abc.123@db:3306/yourstats"
+  # PHPMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: admin
+      PMA_PASSWORD: abc.123
+volumes:
+  db_data: {}

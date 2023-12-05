@@ -1,0 +1,27 @@
+{
+  "name": "yourstats",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "prisma:pull": "prisma db pull",
+    "prisma:generate": "prisma generate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polcondal/YourStats.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polcondal/YourStats/issues"
+  },
+  "homepage": "https://github.com/polcondal/YourStats",
+  "keywords": [],
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^20.10.3",
+    "prisma": "^5.6.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  }
+}
