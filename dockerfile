@@ -1,12 +1,11 @@
-FROM node:16
+FROM node:18
+
+EXPOSE 8080
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+# RUN npm run build
+# RUN npm run prisma:pull
+# RUN npm run prisma:generate
 
-RUN npm install
-
-COPY . .
-
-CMD [ "npm", "run", "prisma:pull" ]
-CMD [ "npm", "run", "prisma:generate" ]
+# CMD [ "npm", "run", "start" ]
