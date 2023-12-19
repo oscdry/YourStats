@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: 'abc.123'
       MYSQL_ROOT_PASSWORD: 'abc.123'
     volumes:
-      - db_data:/var/lib/mysql
+      - ./data:/var/lib/mysql
   # Server app
   app:
     build: .
