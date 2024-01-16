@@ -1,0 +1,37 @@
+{
+  "name": "yourstats",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "build": "tsc",
+    "prisma:pull": "prisma db pull",
+    "prisma:generate": "prisma generate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polcondal/YourStats.git"
+  },
+  "author": "Steve Wozniak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polcondal/YourStats/issues"
+  },
+  "type": "module",
+  "homepage": "https://github.com/polcondal/YourStats",
+  "keywords": [],
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.3",
+    "prisma": "^5.7.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "osu-web.js": "^1.4.0"
+  }
+}
