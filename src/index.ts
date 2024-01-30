@@ -9,7 +9,7 @@ const client = new Client('eUPnOYKsnu4dBD6BJzjtsrtFpf91r7LFK7MTkbAa');
 const prisma = new PrismaClient();
 
 import express, { Request, Response } from "express";
-import { RiotPUUIDByTagName, RiotCallExample } from "./calls.js";
+import { RiotPUUIDByTagName, RiotCallExample, Cs2CallExample } from "./calls.js";
 
 const server = express();
 
@@ -28,12 +28,16 @@ console.log("Initializing server...");
 // await RiotCallExample();
 
 // // API v2
-let v2User = await client.users.getUser(16615204, {
-    urlParams: {
-        mode: 'osu'
-    }
-});
+// let v2User = await client.users.getUser(16615204, {
+//     urlParams: {
+//         mode: 'osu'
+//     }
+// });
 // console.log(v2User.id);
+
+const cs2 = await Cs2CallExample("76561198161126716");
+
+console.log(JSON.stringify(cs2));
 
 
 const port = 8080;
