@@ -22,7 +22,7 @@ services:
       DATABASE_URL: "mysql://admin:abc.123@db:3306/yourstats"
     volumes:
       - ./:/usr/src/app
-    command: /bin/sh -c "npm run build; npm run prisma:pull; npm run prisma:generate; npm run start"
+    command: /bin/sh -c "npm run build; npx prisma migrate dev --name init; npm run prisma:generate; npm run start"
   # PHPMyAdmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

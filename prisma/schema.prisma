@@ -7,8 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id       Int    @id @default(autoincrement())
-  email    String @db.VarChar(255)
-  username String @db.VarChar(255)
+// model users {
+//   id       Int    @id @default(autoincrement())
+//   email    String @db.VarChar(255)
+//   username String @db.VarChar(255)
+//   bio
+// }
+
+model game {
+  id         Int    @id @default(autoincrement())
+  name       String @db.VarChar(255)
+  web_link   String @db.VarChar(255)
+  page_views Int    @db.Int
+  dev_name   String @db.VarChar(255)
+  status     String @db.VarChar(255)
 }

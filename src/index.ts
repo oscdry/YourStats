@@ -35,9 +35,11 @@ console.log("Initializing server...");
 // });
 // console.log(v2User.id);
 
-const cs2 = await Cs2CallExample("76561198161126716");
+// const cs2 = await Cs2CallExample("76561198161126716");
 
-console.log(JSON.stringify(cs2));
+// console.log(JSON.stringify(cs2));
+
+console.log();
 
 
 const port = 8080;

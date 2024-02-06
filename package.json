@@ -5,12 +5,16 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "build": "tsc",
+    "build:dev": "tsc",
     "prisma:pull": "prisma db pull",
     "prisma:generate": "prisma generate"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/polcondal/YourStats.git"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "author": "Steve Wozniak",
   "license": "ISC",
