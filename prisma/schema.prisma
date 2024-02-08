@@ -14,7 +14,7 @@ datasource db {
 //   bio
 // }
 
-model game {
+model Game {
   id         Int    @id @default(autoincrement())
   name       String @db.VarChar(255)
   web_link   String @db.VarChar(255)
