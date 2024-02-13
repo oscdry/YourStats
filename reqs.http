@@ -2,4 +2,4 @@ GET http://localhost:8080/
 
 ###
 
-GET http://localhost:8080/one
+GET http://localhost:8080/
