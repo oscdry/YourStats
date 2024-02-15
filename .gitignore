@@ -4,4 +4,4 @@ node_modules
 data/mysql.sock
 package-lock.json
 
-data/db/
+data/db
