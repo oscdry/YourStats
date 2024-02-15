@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/src/index.js",
+    "start": "node ./dist/index.js",
     "build": "ncp src/views dist/views && tsc",
     "build:dev": "tsc -w",
     "prisma:pull": "prisma db pull",
