@@ -14,6 +14,8 @@ config();
 
 import { RiotPUUIDByTagName, RiotCallExample, Cs2CallExample } from "./calls.js";
 import mainRouter from "./routes/mainRouter.js";
+import { getUserById } from "./api/controllers/userController.js";
+import webRouter from "./routes/web.js";
 
 const app = express();
 
@@ -51,14 +53,10 @@ app.set('views', path.join(__dirname, 'views'));
 // const cs2 = await Cs2CallExample("76561198161126716");
 
 // console.log(JSON.stringify(cs2));
+app.use('/api', mainRouter);
+app.use(webRouter);
 
-app.get('/', (req, res) => {
-    res.render('index', { title: "Homepage" });
-});
-
-app.use(mainRouter);
-
-console.log();
+console.log(await getUserById(1));
 
 const port = 8080;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
