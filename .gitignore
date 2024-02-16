@@ -1,6 +1,7 @@
+dist/
 .env
 node_modules
-
-dist/
-
 data/mysql.sock
+package-lock.json
+
+data/db

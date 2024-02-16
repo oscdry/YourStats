@@ -1,25 +1,23 @@
 version: '3'
 services:
-  # Database
-  db:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'yourstats'
-      MYSQL_USER: 'admin'
-      MYSQL_PASSWORD: 'abc.123'
-      MYSQL_ROOT_PASSWORD: 'abc.123'
-    volumes:
-      - ./data:/var/lib/mysql
+  # # Database
+  # db:
+  #   image: mysql:8.0
+  #   restart: always
+  #   environment:
+  #     MYSQL_DATABASE: 'yourstats'
+  #     MYSQL_USER: 'admin'
+  #     MYSQL_PASSWORD: 'abc.123'
+  #     MYSQL_ROOT_PASSWORD: 'abc.123'
+  #   volumes:
+  #     - ./data/db:/var/lib/mysql
   # Server app
   app:
     build: .
     ports:
       - "8080:8080"
-    depends_on:
-      - db
     environment:
-      DATABASE_URL: "mysql://admin:abc.123@db:3306/yourstats"
+      DATABASE_URL: "mysql://yourstats:abc.123@130.61.75.54:3306/yourstats"
     volumes:
       - ./:/usr/src/app
     command: /bin/sh -c "npm run build; npx prisma migrate dev --name init; npm run prisma:generate; npm run start"
@@ -29,11 +27,9 @@ services:
     restart: always
     ports:
       - "8081:80"
-    depends_on:
-      - db
     environment:
-      PMA_HOST: db
-      PMA_USER: admin
+      PMA_HOST: 130.61.75.54
+      PMA_USER: yourstats
       PMA_PASSWORD: abc.123
 volumes:
   db_data: {}
