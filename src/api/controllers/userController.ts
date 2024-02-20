@@ -1,7 +1,5 @@
-// import prismaClient from "../db/dbConnections.js";
+import { type Request, type Response } from 'express';
 
-
-// export const getUserById = async (id: number) => {
-//     return prismaClient.game.count();
-
-// };
+export const createUser = (req: Request, res: Response) => {
+    res.status(200).send({ msg: "Usuario creado correctamente" });
+};
