@@ -6,12 +6,14 @@ const firestore = new Firestore({
   keyFilename: 'yourstats-24dea-firebase-adminsdk-wlko5-606a53a876.json',
 });
 
-async function quickstart() {
+export default firestore;
+
+/*async function quickstart() {
   // Obtain a document reference.
   const document = firestore.doc('users/S05SDbrkJMhzeaNwc4md');
 
   // Enter new data into the document.
-  /*await document.set({
+  await document.set({
     title: 'Welcome to Firestore',
     body: 'Hello World',
   });
@@ -21,14 +23,14 @@ async function quickstart() {
   await document.update({
     body: 'My first Firestore app',
   });
-  console.log('Updated an existing document');*/
+  console.log('Updated an existing document');
 
   // Read the document.
   const doc = await document.get();
   console.log(doc);
 
   // Delete the document.
-  /*await document.delete();
-  console.log('Deleted the document');*/
+  await document.delete();
+  console.log('Deleted the document');
 }
-await quickstart();
+await quickstart();*/
