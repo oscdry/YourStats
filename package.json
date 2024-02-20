@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
+    "dev": "npm run build & npx prisma migrate dev --name init & npm run prisma:generate & npm run start:dev",
     "start": "node ./dist/index.js",
-    "build": "ncp src/views dist/views && tsc",
-    "start:prod": "npm run build && npx prisma migrate dev --name init && npm run prisma:generate && npm run start",
-    "build:dev": "tsc -w",
+    "build": "ncp src/views dist/views & tsc",
+    "build:dev": "ncp src/views dist/views & tsc -w",
     "prisma:pull": "prisma db pull",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -45,6 +45,6 @@
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
     "express-requests-logger": "^4.0.0",
-    "osu-web.js": "^1.4.0"
+    "osu-web.js": "^2.0.2"
   }
 }

@@ -1,7 +1,7 @@
-import prismaClient from "../db/dbConnections.js";
+// import prismaClient from "../db/dbConnections.js";
 
 
-export const getUserById = async (id: number) => {
-    return prismaClient.game.count();
+// export const getUserById = async (id: number) => {
+//     return prismaClient.game.count();
 
-};
+// };
