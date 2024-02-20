@@ -14,7 +14,7 @@ html
     height: 100%;
     width: 100%;
 
-    font-family: 'Arial';
+    font-family: 'Sen', 'Arial', sans-serif;
 }
 
 body
@@ -31,16 +31,25 @@ body
     min-width: 100%;
 
     overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 main
 {
+
     height: 100%;
+    box-sizing: border-box;
+}
+
+a
+{
+    text-decoration: none;
 }
 
 nav
 {
-    position: relative;
+    position: sticky;
+    top: 0;
     background-color: var(--accent-color);
 
     display: flex;
@@ -77,11 +86,17 @@ nav>.navbar-list
 #navbar-top
 {}
 
-#logo-nav
+a#logo-nav
 {
-    font-size: 1.5rem;
-    margin: 0.7rem;
+    margin: 0.1rem;
 
+    min-width: 200px;
+    min-height: 50px;
+
+    background-image: url('/img/nav.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 div.banner
@@ -95,13 +110,15 @@ div.banner
 
 footer
 {
-    width: 100%;
-    min-height: 25px;
-    height: 3vh;
-
     display: flex;
     align-items: center;
     justify-content: center;
+
+    width: 100%;
+    min-height: 3vh;
+
+    padding: 3rem 2rem;
+    box-sizing: border-box;
 
     background-color: var(--accent-color);
 }
