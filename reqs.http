@@ -3,3 +3,14 @@ GET http://localhost:8080/
 ###
 
 GET http://localhost:8080/
+
+###
+
+POST http://localhost:8080/api/createUser
+Content-Type: application/json
+
+{
+    "name": "John",
+    "email": "a@mail.com",
+    "password": "Abc.1234"
+}

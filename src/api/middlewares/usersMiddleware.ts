@@ -1,5 +1,5 @@
-import {type Request, type Response, type NextFunction} from 'express';
-import firestore from '../db/firebaseConnections';
+import { type Request, type Response, type NextFunction } from 'express';
+import firestore from '../db/firebaseConnections.js';
 import Joi from 'joi';
 
 // Validate the method for create users
@@ -8,6 +8,7 @@ export const validateCreateUser = async (req: Request, res: Response, next: Next
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
+    password_confirmation: Joi.required().valid(Joi.ref('password')),
   });
 
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;

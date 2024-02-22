@@ -19,6 +19,8 @@ import webRouter from "./routes/web.js";
 
 const app = express();
 
+app.use(express.json());
+
 console.log("Initializing server...");
 
 app.use(audit());
