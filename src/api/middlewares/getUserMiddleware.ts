@@ -3,11 +3,10 @@ import Joi from 'joi';
 
 export const validateGetUser = (req: Request, res: Response, next: NextFunction) => {
     const schema = Joi.object({
-        id: Joi.string().optional(),
-        email: Joi.string().email().optional(),
-    }).xor('id', 'email'); // .xor asegura que solo uno de los dos campos puede estar presente
+        identifier: Joi.string().required(), // Asegura que el identificador sea requerido
+    });
 
-    const { error } = schema.validate(req.query);
+    const { error } = schema.validate(req.params);
 
     if (error) {
         return res.status(400).json({ error: error.details[0].message });

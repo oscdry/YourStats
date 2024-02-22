@@ -18,28 +18,25 @@ export async function createUser(req: Request, res: Response) {
 }
 
 export async function getUser(req: Request, res: Response) {
-    const { id, email } = req.query; // Asume que los valores vienen como query params
+    const { identifier } = req.params; // Ahora se usa "identifier"
 
     try {
-        if (id) {
+        // Determinar si el identificador es un email
+        if (identifier.includes('@')) {
+            // Buscar usuario por email
+            const querySnapshot = await firestore.collection('users').where('email', '==', identifier).get();
+            if (querySnapshot.empty) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            const userData = querySnapshot.docs[0].data();
+            return res.status(200).json(userData);
+        } else {
             // Buscar usuario por ID
-            const doc = await firestore.collection('users').doc(String(id)).get();
+            const doc = await firestore.collection('users').doc(identifier).get();
             if (!doc.exists) {
                 return res.status(404).json({ error: 'User not found' });
             }
             return res.status(200).json(doc.data());
-        } else if (email) {
-            // Buscar usuario por email
-            const querySnapshot = await firestore.collection('users').where('email', '==', email).get();
-            if (querySnapshot.empty) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-            // Suponiendo que el email es único, devuelve el primer resultado
-            const userData = querySnapshot.docs[0].data();
-            return res.status(200).json(userData);
-        } else {
-            // Si no se proporciona ni id ni email
-            return res.status(400).json({ error: 'User ID or email must be provided' });
         }
     } catch (error) {
         const message = (error as Error).message;
