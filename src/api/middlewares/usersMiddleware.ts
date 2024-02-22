@@ -1,5 +1,5 @@
-import {type Request, type Response, type NextFunction} from 'express';
-import firestore from '../db/firebaseConnections';
+import { type Request, type Response, type NextFunction } from 'express';
+import firestore from '../db/firebaseConnections.js';
 import Joi from 'joi';
 
 // Validate the method for create users
