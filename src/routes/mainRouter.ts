@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { createUser } from "../api/controllers/userController.js";
-import { validateCreateUser } from "../api/middlewares/usersMiddleware.js";
+import { validateCreateUser } from "../api/middlewares/createUsersMiddleware.js";
 import { validateUserIdentifier } from "../api/middlewares/ValidateUserIdentifier.js";
 import { getUser } from "../api/controllers/userController.js";
 import { deleteUser } from "../api/controllers/userController.js";
