@@ -44,4 +44,34 @@ export async function getUser(req: Request, res: Response) {
     }
 };
 
+export async function deleteUser(req: Request, res: Response) {
+    const { identifier } = req.params;
+
+    try {
+        if (identifier.includes('@')) {
+            // Eliminar usuario por email
+            const querySnapshot = await firestore.collection('users').where('email', '==', identifier).get();
+            if (querySnapshot.empty) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            // Suponiendo que el email es único y solo hay un documento que coincida
+            const userId = querySnapshot.docs[0].id;
+            await firestore.collection('users').doc(userId).delete();
+            return res.status(200).json({ msg: "User deleted successfully" });
+        } else {
+            // Eliminar usuario por ID
+            const doc = await firestore.collection('users').doc(identifier).get();
+            if (!doc.exists) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            await firestore.collection('users').doc(identifier).delete();
+            return res.status(200).json({ msg: "User deleted successfully" });
+        }
+    } catch (error) {
+        const message = (error as Error).message;
+        res.status(500).json({ error: 'An error occurred while deleting the user', details: message });
+    }
+};
 
