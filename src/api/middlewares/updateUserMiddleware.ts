@@ -29,9 +29,7 @@ export async function validateUpdateUser(req: Request, res: Response, next: Next
   if (!userExists.empty) {
     return res.status(400).json({ error: 'Mail already used to create a user' });
   }
-
-
-
+  
   const { error } = schema.validate(req.body);
 
   if (error) {
