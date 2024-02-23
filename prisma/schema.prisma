@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider          = "mysql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 // model users {
@@ -22,4 +21,24 @@ model Game {
   page_views Int    @db.Int
   dev_name   String @db.VarChar(255)
   status     String @db.VarChar(255)
+  items Item[]
+  genres Genre[]
+}
+
+model Item {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(100)
+  web_link String @db.VarChar(255)
+  page_views Int    @db.Int
+  dev_name   String @db.VarChar(255)
+  status     String @db.VarChar(255)
+  type Int @db.Int
+  game_Id  Int  
+  game Game @relation(fields: [game_Id], references: [id])
+}
+
+model Genre {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(100)
+  games Game[]
 }

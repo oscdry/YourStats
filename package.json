@@ -37,6 +37,7 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^7.3.0",
     "@prisma/client": "^5.7.0",
     "@types/express-ejs-layouts": "^2.5.4",
     "@types/express-requests-logger": "^3.0.4",
