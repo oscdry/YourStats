@@ -2,12 +2,12 @@ import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
 
 export async function createUser(req: Request, res: Response) {
-    const { name, email, password } = req.body;
+    const { name, mail, password } = req.body;
     try {
         // Add the user to the Firestore database
         const newUserRef = await firestore.collection('users').add({
             name,
-            email,
+            mail,
             password,
         });
         res.status(201).send({ msg: "Usuario creado correctamente", userId: newUserRef.id });
@@ -21,10 +21,10 @@ export async function getUser(req: Request, res: Response) {
     const { identifier } = req.params; // Ahora se usa "identifier"
 
     try {
-        // Determinar si el identificador es un email
+        // Determinar si el identificador es un mail
         if (identifier.includes('@')) {
-            // Buscar usuario por email
-            const querySnapshot = await firestore.collection('users').where('email', '==', identifier).get();
+            // Buscar usuario por mail
+            const querySnapshot = await firestore.collection('users').where('mail', '==', identifier).get();
             if (querySnapshot.empty) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -49,13 +49,13 @@ export async function deleteUser(req: Request, res: Response) {
 
     try {
         if (identifier.includes('@')) {
-            // Eliminar usuario por email
-            const querySnapshot = await firestore.collection('users').where('email', '==', identifier).get();
+            // Eliminar usuario por mail
+            const querySnapshot = await firestore.collection('users').where('mail', '==', identifier).get();
             if (querySnapshot.empty) {
                 return res.status(404).json({ error: 'User not found' });
             }
 
-            // Suponiendo que el email es único y solo hay un documento que coincida
+            // Suponiendo que el mail es único y solo hay un documento que coincida
             const userId = querySnapshot.docs[0].id;
             await firestore.collection('users').doc(userId).delete();
             return res.status(200).json({ msg: "User deleted successfully" });
