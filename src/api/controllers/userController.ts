@@ -77,7 +77,11 @@ export async function deleteUser(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
     const { identifier } = req.params;
-    const updates = req.body; // Los campos a actualizar
+    const updates = {
+        name: req.body.name,
+        mail: req.body.mail,
+        password: req.body.password,
+    };
 
     try {
         if (identifier.includes('@')) {
