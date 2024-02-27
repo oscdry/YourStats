@@ -1,0 +1,20 @@
+<div id="modal-register" class="modal fade" tabindex="-1"
+    aria-labelledby="modal-register-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modal-register-label">¿Nuevo
+                    por aquí?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <%- include('./components/input-username.ejs') %>
+                <%- include('./components/input-password.ejs') %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="primary">Registrarse</button>
+            </div>
+        </div>
+    </div>
+</div>

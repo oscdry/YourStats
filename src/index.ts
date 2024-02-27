@@ -24,13 +24,12 @@ app.use(express.json());
 console.log("Initializing server...");
 
 app.use(audit());
-
-console.log(__dirname + '../public');
-
 app.use(express.static(path.join(__dirname, '../public')));
+
+// EJS
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
 app.use(expressLayouts);
-app.set('views', path.join(__dirname, 'views'));
 
 // server.get('/hola', async (req: Request, res: Response): Promise<void> => {
 //     res.sendStatus(200);
