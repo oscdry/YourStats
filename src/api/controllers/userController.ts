@@ -75,3 +75,34 @@ export async function deleteUser(req: Request, res: Response) {
     }
 };
 
+export async function updateUser(req: Request, res: Response) {
+    const { identifier } = req.params;
+    const updates = req.body; // Los campos a actualizar
+
+    try {
+        if (identifier.includes('@')) {
+            // Actualizar usuario por email
+            const querySnapshot = await firestore.collection('users').where('email', '==', identifier).get();
+            if (querySnapshot.empty) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            // Actualizar el primer usuario que coincida (email debería ser único)
+            const userId = querySnapshot.docs[0].id;
+            await firestore.collection('users').doc(userId).update(updates);
+            return res.status(200).json({ msg: "User updated successfully" });
+        } else {
+            // Actualizar usuario por ID
+            const doc = await firestore.collection('users').doc(identifier).get();
+            if (!doc.exists) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            await firestore.collection('users').doc(identifier).update(updates);
+            return res.status(200).json({ msg: "User updated successfully" });
+        }
+    } catch (error) {
+        const message = (error as Error).message;
+        res.status(500).json({ error: 'An error occurred while updating the user', details: message });
+    }
+};
