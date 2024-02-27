@@ -1,8 +1,9 @@
 import { Request, Response, Router } from "express";
-import { createUser } from "../api/controllers/userController.js";
-import { validateCreateUser } from "../api/middlewares/usersMiddleware.js";
-import { validateGetUser } from "../api/middlewares/getUserMiddleware.js";
-import { getUser } from "../api/controllers/userController.js";
+import { createUser, getUser, deleteUser, updateUser } from "../api/controllers/userController.js";
+import { validateCreateUser } from "../api/middlewares/createUsersMiddleware.js";
+import { validateUserIdentifier } from "../api/middlewares/ValidateUserIdentifier.js";
+import { validateUpdateUser } from "../api/middlewares/updateUserMiddleware.js";
+
 
 const mainRouter = Router();
 
@@ -11,7 +12,9 @@ mainRouter.get("/", (_req: Request, res: Response) => {
 });
 
 mainRouter.post("/createUser", validateCreateUser, createUser);
-mainRouter.get("/getUser/:identifier", validateGetUser, getUser);
+mainRouter.get("/getUser/:identifier", validateUserIdentifier, getUser);
+mainRouter.delete("/deleteUser/:identifier", validateUserIdentifier, deleteUser);
+mainRouter.put("/updateUser/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);
 
 
 

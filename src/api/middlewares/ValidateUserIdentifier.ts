@@ -1,7 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import Joi from 'joi';
 
-export const validateGetUser = (req: Request, res: Response, next: NextFunction) => {
+export const validateUserIdentifier = (req: Request, res: Response, next: NextFunction) => {
     const schema = Joi.object({
         identifier: Joi.string().required(), // Asegura que el identificador sea requerido
     });
