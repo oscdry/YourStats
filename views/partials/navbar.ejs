@@ -1,0 +1,36 @@
+<% if (typeof user === 'undefined') { %>
+<%- include('./modal-login.ejs') %>
+<%- include('./modal-register.ejs') %>
+<% } %>
+
+<nav>
+    <a href="/" id="logo-nav"></a>
+    <ul class="navbar-list">
+        <li><a href="/games">Juegos</a></li>
+        <li><a href="/about">Sobre Nosotros</a></li>
+    </ul>
+
+    <% // Logged in Check %>
+    <% if (typeof user === 'undefined') { %>
+    <ul id="nav-controls">
+        <li>
+            <button type="button" class="secondary" data-bs-toggle="modal"
+                data-bs-target="#modal-login">Inicia
+                sesión</button>
+        </li>
+        <li>
+            <button type="button" class="secondary" data-bs-toggle="modal"
+                data-bs-target="#modal-register">Regístrate</button>
+        </li>
+    </ul>
+
+    <% } else { %>
+    <ul id="nav-controls">
+        <li>
+            <button type="button">Cerrar
+                sesión</button>
+        </li>
+    </ul>
+    <% } %>
+
+</nav>
