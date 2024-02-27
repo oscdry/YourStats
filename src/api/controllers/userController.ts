@@ -1,5 +1,6 @@
 import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
+import { hash } from "bcrypt";
 
 export async function createUser(req: Request, res: Response) {
     const { name, mail, password } = req.body;
@@ -8,39 +9,67 @@ export async function createUser(req: Request, res: Response) {
         const newUserRef = await firestore.collection('users').add({
             name,
             mail,
-            password,
+            // Hash the password
+            hash: await hash(password, 10),
+
         });
-        res.status(201).send({ msg: "Usuario creado correctamente", userId: newUserRef.id });
+        res.status(201).send({ msg: "Usuario creado correctamente" });
     } catch (error) {
         const message = (error as Error).message;
         res.status(500).json({ error: 'There was an error creating the user', details: message });
     };
 }
 
-export async function getUser(req: Request, res: Response) {
-    const { identifier } = req.params; // Ahora se usa "identifier"
 
+export async function getUserByIdentifier(identifier: string, res: Response): Promise<FirebaseUser | null> {
     try {
+
         // Determinar si el identificador es un mail
         if (identifier.includes('@')) {
             // Buscar usuario por mail
             const querySnapshot = await firestore.collection('users').where('mail', '==', identifier).get();
             if (querySnapshot.empty) {
-                return res.status(404).json({ error: 'User not found' });
+                res.status(404).json({ error: 'User not found' });
             }
-            const userData = querySnapshot.docs[0].data();
-            return res.status(200).json(userData);
+
+            const doc = querySnapshot.docs[0].data();
+            const user: FirebaseUser = {
+                id: querySnapshot.docs[0].id,
+                mail: doc.mail,
+                bio: doc.bio,
+                hash: doc.hash,
+                role: doc.role,
+            };
+            return user;
+
         } else {
+
             // Buscar usuario por ID
-            const doc = await firestore.collection('users').doc(identifier).get();
-            if (!doc.exists) {
-                return res.status(404).json({ error: 'User not found' });
+            const query = await firestore.collection('users').doc(identifier).get();
+            if (!query.exists) {
+                res.status(404).json({ error: 'User not found' });
             }
-            return res.status(200).json(doc.data());
+            const doc = query.data();
+            if (!doc) {
+                res.status(500).json({ error: 'An error occurred while fetching the user' });
+                return null;
+            }
+
+            const user: FirebaseUser = {
+                id: query.id,
+                mail: doc.mail,
+                bio: doc.bio,
+                hash: doc.hash,
+                role: doc.role,
+            };
+            return user;
         }
+
     } catch (error) {
+
         const message = (error as Error).message;
         res.status(500).json({ error: 'An error occurred while fetching the user', details: message });
+        return null;
     }
 };
 

@@ -96,7 +96,7 @@ a.divisor
     position: relative;
     display: block;
     width: 65%;
-    height: 2px;
+    height: 1px;
     background-color: var(--black);
     margin: 1rem 0;
 
