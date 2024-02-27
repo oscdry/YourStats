@@ -10,7 +10,7 @@ export async function validateUpdateUser(req: Request, res: Response, next: Next
 
   const schema = Joi.object({
     name: Joi.string().optional(),
-    email: Joi.string().email().optional(),
+    mail: Joi.string().email().optional(),
     password: Joi.string().optional(),
     password_confirmation: Joi.string().when('password', {
       is: Joi.exist(),
