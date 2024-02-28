@@ -10,7 +10,7 @@ POST http://localhost:8080/api/createUser
 Content-Type: application/json
 
 {
-    "name": "John",
+    "username": "john",
     "mail": "a@mail.com",
     "password": "Abc.1234",
     "password_confirmation": "Abc.1234"
@@ -22,7 +22,7 @@ POST http://localhost:8080/api/login
 Content-Type: application/json
 
 {
-    "name": "John",
+    "username": "John",
     "mail": "a@mail.com",
     "password": "Abc.1234"
 }

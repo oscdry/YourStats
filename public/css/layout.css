@@ -496,6 +496,8 @@ label
 {
     border: none;
     box-shadow: var(--shadow);
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-header
@@ -566,13 +568,14 @@ label
 
 .modal-footer
 {
+    width: 100%;
     justify-content: space-around;
 }
 
 .modal-footer>button
 {
     min-width: 125px;
-    max-width: 40%;
+    max-width: 35%;
 }
 
 /* Remove Separators */

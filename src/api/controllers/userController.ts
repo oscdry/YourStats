@@ -1,19 +1,12 @@
 import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { hash } from "bcrypt";
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername } from "../services/FirebaseServices.js";
 
 export async function createUser(req: Request, res: Response) {
-    const { name, mail, password } = req.body;
+    const { username, mail, password } = req.body;
     try {
-        // Add the user to the Firestore database
-        const newUserRef = await firestore.collection('users').add({
-            name,
-            mail,
-            // Hash the password
-            hash: await hash(password, 10),
-
-        });
-        res.status(201).send({ msg: "Usuario creado correctamente" });
+        createFirebaseUser(username, mail, password, '', 0);
     } catch (error) {
         const message = (error as Error).message;
         res.status(500).json({ error: 'There was an error creating the user', details: message });
@@ -21,55 +14,22 @@ export async function createUser(req: Request, res: Response) {
 }
 
 
-export async function getUserByIdentifier(identifier: string, res: Response): Promise<FirebaseUser | null> {
-    try {
+export async function getUserByIdentifier(identifier: string,
+    type: 'email' | 'username' | 'id' = 'id',
+    res: Response): Promise<FirebaseUser | null> {
 
-        // Determinar si el identificador es un mail
-        if (identifier.includes('@')) {
-            // Buscar usuario por mail
-            const querySnapshot = await firestore.collection('users').where('mail', '==', identifier).get();
-            if (querySnapshot.empty) {
-                res.status(404).json({ error: 'User not found' });
-            }
+    console.log('getting user with identifier:', identifier, ', type:', type);
 
-            const doc = querySnapshot.docs[0].data();
-            const user: FirebaseUser = {
-                id: querySnapshot.docs[0].id,
-                mail: doc.mail,
-                bio: doc.bio,
-                hash: doc.hash,
-                role: doc.role,
-            };
-            return user;
 
-        } else {
-
-            // Buscar usuario por ID
-            const query = await firestore.collection('users').doc(identifier).get();
-            if (!query.exists) {
-                res.status(404).json({ error: 'User not found' });
-            }
-            const doc = query.data();
-            if (!doc) {
-                res.status(500).json({ error: 'An error occurred while fetching the user' });
-                return null;
-            }
-
-            const user: FirebaseUser = {
-                id: query.id,
-                mail: doc.mail,
-                bio: doc.bio,
-                hash: doc.hash,
-                role: doc.role,
-            };
-            return user;
-        }
-
-    } catch (error) {
-
-        const message = (error as Error).message;
-        res.status(500).json({ error: 'An error occurred while fetching the user', details: message });
-        return null;
+    switch (type) {
+        case 'email':
+            return await getFirebaseUserByMail(identifier);
+        case 'username':
+            return await getFirebaseUserByUsername(identifier);
+        case 'id':
+            return await getFirebaseUserById(identifier);
+        default:
+            throw new Error('Invalid get user type:', type);
     }
 };
 
@@ -78,36 +38,20 @@ export async function deleteUser(req: Request, res: Response) {
 
     try {
         if (identifier.includes('@')) {
-            // Eliminar usuario por mail
-            const querySnapshot = await firestore.collection('users').where('mail', '==', identifier).get();
-            if (querySnapshot.empty) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            // Suponiendo que el mail es único y solo hay un documento que coincida
-            const userId = querySnapshot.docs[0].id;
-            await firestore.collection('users').doc(userId).delete();
-            return res.status(200).json({ msg: "User deleted successfully" });
+            await deleteFirebaseUserByMail(identifier);
         } else {
-            // Eliminar usuario por ID
-            const doc = await firestore.collection('users').doc(identifier).get();
-            if (!doc.exists) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            await firestore.collection('users').doc(identifier).delete();
-            return res.status(200).json({ msg: "User deleted successfully" });
+            await deleteFirebaseUserById(identifier);
         }
     } catch (error) {
         const message = (error as Error).message;
-        res.status(500).json({ error: 'An error occurred while deleting the user', details: message });
+        throw new Error('An error occurred while deleting the user' + message);
     }
 };
 
 export async function updateUser(req: Request, res: Response) {
     const { identifier } = req.params;
     const updates = {
-        name: req.body.name,
+        username: req.body.username,
         mail: req.body.mail,
         password: req.body.password,
     };

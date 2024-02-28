@@ -24,7 +24,6 @@ app.use(express.json());
 
 console.log("Initializing server...");
 
-app.use(audit());
 app.use(express.static(path.join(__dirname, '../public')));
 
 // EJS
