@@ -1,12 +1,13 @@
+import { config } from "dotenv";
+config();
+
 import path from "path";
 import { fileURLToPath } from 'url';
 import express from "express";
 import expressLayouts from 'express-ejs-layouts';
-import { config } from "dotenv";
 import audit from "express-requests-logger";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-config();
 
 // import { Client, LegacyClient, Auth } from 'osu-web.js';
 // Client for the current API (API v2)
@@ -23,7 +24,6 @@ app.use(express.json());
 
 console.log("Initializing server...");
 
-app.use(audit());
 app.use(express.static(path.join(__dirname, '../public')));
 
 // EJS
