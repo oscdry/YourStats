@@ -57,7 +57,5 @@ app.use(expressLayouts);
 app.use('/api', mainRouter);
 app.use(webRouter);
 
-// console.log(await getUserById(1));
-
 const port = 8080;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
