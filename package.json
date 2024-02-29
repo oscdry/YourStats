@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
+    "dev": "npm run build & npx prisma migrate dev --name init & npm run prisma:generate & npm run start:dev",
     "start": "node ./dist/index.js",
-    "build": "ncp src/views dist/views && tsc",
-    "start:prod": "npm run build && npx prisma migrate dev --name init && npm run prisma:generate && npm run start",
+    "start:dev": "node --watch ./dist/index.js",
+    "build": "tsc",
     "build:dev": "tsc -w",
     "prisma:pull": "prisma db pull",
     "prisma:generate": "prisma generate",
@@ -39,13 +40,18 @@
   "dependencies": {
     "@google-cloud/firestore": "^7.3.0",
     "@prisma/client": "^5.7.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/express-ejs-layouts": "^2.5.4",
     "@types/express-requests-logger": "^3.0.4",
+    "@types/jsonwebtoken": "^9.0.6",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
     "express-requests-logger": "^4.0.0",
-    "osu-web.js": "^1.4.0"
+    "joi": "^17.12.1",
+    "jsonwebtoken": "^9.0.2",
+    "osu-web.js": "^2.0.2"
   }
 }

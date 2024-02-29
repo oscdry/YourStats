@@ -11,8 +11,10 @@
         "moduleResolution": "node",
         "typeRoots": [
             "./node_modules/@types",
-            "./custom-typings"
-        ]
+        ],
+        "baseUrl": ".",
+        "inlineSourceMap": false,
+        "inlineSources": false,
     },
     "include": [
         "src/**/*.ts"

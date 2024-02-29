@@ -1,12 +1,13 @@
+import { config } from "dotenv";
+config();
+
 import path from "path";
 import { fileURLToPath } from 'url';
 import express from "express";
 import expressLayouts from 'express-ejs-layouts';
-import { config } from "dotenv";
 import audit from "express-requests-logger";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-config();
 
 // import { Client, LegacyClient, Auth } from 'osu-web.js';
 // Client for the current API (API v2)
@@ -19,16 +20,16 @@ import webRouter from "./routes/web.js";
 
 const app = express();
 
+app.use(express.json());
+
 console.log("Initializing server...");
 
-app.use(audit());
-
-console.log(__dirname + '../public');
-
 app.use(express.static(path.join(__dirname, '../public')));
+
+// EJS
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
 app.use(expressLayouts);
-app.set('views', path.join(__dirname, 'views'));
 
 // server.get('/hola', async (req: Request, res: Response): Promise<void> => {
 //     res.sendStatus(200);
@@ -55,8 +56,6 @@ app.set('views', path.join(__dirname, 'views'));
 // console.log(JSON.stringify(cs2));
 app.use('/api', mainRouter);
 app.use(webRouter);
-
-//console.log(await getUserById(1));
 
 const port = 8080;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
