@@ -68,10 +68,10 @@ registerSubmit.addEventListener('click', async (e) => {
     const username = registerUsernameInput.value.trim();
     const mail = registerMailInput.value.trim();
     const password = registerPasswordInput.value.trim();
-    const passwordConfirmation = registerPasswordConfirmationInput.value.trim();
+    const password_confirmation = registerPasswordConfirmationInput.value.trim();
 
     // If filled inputs
-    if (username && mail && password && passwordConfirmation) {
+    if (username && mail && password && password_confirmation) {
 
         // Check regex
         // Username
@@ -90,7 +90,7 @@ registerSubmit.addEventListener('click', async (e) => {
             return;
         }
         // Password confirmation
-        if (password !== passwordConfirmation) {
+        if (password !== password_confirmation) {
             errorText.innerHTML = 'Passwords do not match';
             return;
         }
@@ -102,7 +102,7 @@ registerSubmit.addEventListener('click', async (e) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, mail, password, passwordConfirmation })
+                body: JSON.stringify({ username, mail, password, password_confirmation })
             })
 
             if (!response.ok) {
