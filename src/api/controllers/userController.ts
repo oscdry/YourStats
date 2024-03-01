@@ -1,12 +1,22 @@
 import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
-import { hash } from "bcrypt";
+import { generateTokenForUserId } from './tokenController.js';
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername } from "../services/FirebaseServices.js";
+import { RegisterError } from '../Errors/errors.js';
 
 export async function createUser(req: Request, res: Response) {
     const { username, mail, password } = req.body;
     try {
-        createFirebaseUser(username, mail, password, '', 0);
+        const user = await getUserByIdentifier(username, 'username', res);
+        if (user)
+            throw new RegisterError();
+
+        const createUser = await createFirebaseUser(username, mail, password, '', 0);
+        if (!createUser)
+            throw new RegisterError();
+
+        const token = generateTokenForUserId({ id: createUser.id });
+        return res.json({ token });
     } catch (error) {
         const message = (error as Error).message;
         res.status(500).json({ error: 'There was an error creating the user', details: message });

@@ -70,7 +70,7 @@ export const deleteFirebaseUserByMail = async (mail: string): Promise<boolean> =
     return true;
 };
 
-export const createFirebaseUser = async (username: string, mail: string, password: string, bio: string, role: number): Promise<string | null> => {
+export const createFirebaseUser = async (username: string, mail: string, password: string, bio: string, role: number): Promise<FirebaseUser | null> => {
     if (!mail) {
         console.error('No mail provided creating user');
         return null;
@@ -82,8 +82,9 @@ export const createFirebaseUser = async (username: string, mail: string, passwor
         hash: await hash(password, 10),
         bio,
         role,
+    
     });
-    return userRef.id;
+    return buildFirebaseUser(await userRef.get());
 };
 
 const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>): FirebaseUser => {

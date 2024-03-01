@@ -4,3 +4,10 @@ export class LoginError extends Error {
         this.name = 'LoginError';
     }
 }
+
+export class RegisterError extends Error {
+    constructor() {
+        super('Error registering user.');
+        this.name = 'RegisterError';
+    }
+}
