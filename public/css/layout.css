@@ -10,6 +10,7 @@
 
     --shadow: 1px 2px 4px 1px rgba(0, 0, 0, 0.10);
 
+    --input-outline: 1px solid var(--dark-gray);
 }
 
 html
@@ -89,6 +90,11 @@ h2
 h3
 {
     font-size: 36px;
+}
+
+h4
+{
+    margin: 2rem 0;
 }
 
 a.divisor
@@ -201,6 +207,11 @@ a#logo-nav
     justify-content: center;
     gap: 2rem;
     margin: 2rem 0;
+}
+
+.game-selector-grid a
+{
+    color: var(--black);
 }
 
 .game-selector-item
@@ -438,8 +449,7 @@ label
     background-color: var(--gray);
 }
 
-.input-row-labeled,
-.input-row
+.input-row-labeled
 {
     display: flex;
     flex-flow: column nowrap;
@@ -456,7 +466,33 @@ label
 
 }
 
-.input-row-labeled>input
+.input-row
+{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+
+    min-width: 375px;
+    width: 75%;
+
+    padding: 0.25rem;
+    padding-left: 0;
+
+    box-sizing: border-box;
+}
+
+.input-row input
+{
+    padding: 0.25rem;
+    font-size: 18px;
+    border-radius: 5px;
+
+    border: none;
+    outline: var(--input-outline);
+}
+
+.input-row-labeled input
 {
     min-width: 100%;
     width: 100%;
@@ -478,11 +514,59 @@ label
     outline: 0 solid var(--accent-color);
 }
 
-.input-row-labeled>input:focus-visible,
-.input-row-labeled>input:focus
+.input-row-labeled input:focus-visible,
+.input-row-labeled input:focus,
+.input-row input:focus-visible,
+.input-row input:focus
 {
     /* border: 0.15em solid var(--accent-color); */
     outline: 2px solid var(--accent-color);
+}
+
+#game-username-form
+{
+    position: relative;
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    border-radius: 1rem;
+}
+
+#game-username-form>input
+{
+    border-radius: inherit;
+    height: 100%;
+    width: 100%;
+
+    border: none;
+
+    font-size: 18px;
+
+    padding: 0.75rem;
+}
+
+#game-username-form>button
+{
+    position: absolute;
+    border-radius: inherit;
+    right: 0;
+
+    min-width: 150px;
+    width: 15%;
+}
+
+#game-username-form>p.error-text
+{
+    position: absolute;
+    top: 3em;
+    color: red;
+    font-size: 18px;
+
+    align-self: flex-end;
 }
 
 .notfoundpage

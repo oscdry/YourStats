@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { getUserByIdentifier } from "./userController.js";
 import { generateTokenForUserId } from "./tokenController.js";
-import { LoginError } from "../Errors/errors.js";
+import { LoginError } from "../errors/errors.js";
 
 export const LoginUser = async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
