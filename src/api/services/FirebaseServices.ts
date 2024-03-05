@@ -98,3 +98,8 @@ const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<Fir
         role: doc!.role,
     };
 };
+
+export const getAllFirebaseUsers = async (): Promise<FirebaseUser[]> => {
+    const usersRef = await firestore.collection('users').get();
+    return usersRef.docs.map(buildFirebaseUser);
+}

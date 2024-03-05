@@ -1,6 +1,8 @@
 import { config } from "dotenv";
 config();
 
+import adminRouter from "./routes/adminRouter.js";
+
 import path from "path";
 import { fileURLToPath } from 'url';
 import express from "express";
@@ -56,6 +58,7 @@ app.use(expressLayouts);
 // console.log(JSON.stringify(cs2));
 app.use('/api', mainRouter);
 app.use(webRouter);
+app.use('/admin', adminRouter);
 
 const port = 8080;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
