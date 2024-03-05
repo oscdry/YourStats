@@ -11,3 +11,17 @@ export class RegisterError extends Error {
         this.name = 'RegisterError';
     }
 }
+
+export class UserNotFoundError extends Error {
+    constructor() {
+        super('User Not Found.');
+        this.name = 'UserNotFoundError';
+    }
+}
+
+export class InvalidTokenError extends Error {
+    constructor() {
+        super('User Not Found.');
+        this.name = 'UserNotFoundError';
+    }
+}

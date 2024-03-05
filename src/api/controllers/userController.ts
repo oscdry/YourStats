@@ -2,18 +2,18 @@ import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername } from "../services/FirebaseServices.js";
-import { RegisterError } from '../Errors/errors.js';
+import { UserNotFoundError } from '../errors/errors.js';
 
 export async function createUser(req: Request, res: Response) {
     const { username, mail, password } = req.body;
     try {
         const user = await getUserByIdentifier(username, 'username', res);
         if (user)
-            throw new RegisterError();
+            throw new UserNotFoundError();
 
         const createUser = await createFirebaseUser(username, mail, password, '', 0);
         if (!createUser)
-            throw new RegisterError();
+            throw new UserNotFoundError();
 
         const token = generateTokenForUserId({ id: createUser.id });
         return res.json({ token });
@@ -57,6 +57,8 @@ export async function deleteUser(req: Request, res: Response) {
         throw new Error('An error occurred while deleting the user' + message);
     }
 };
+
+
 
 export async function updateUser(req: Request, res: Response) {
     const { identifier } = req.params;

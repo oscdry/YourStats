@@ -9,15 +9,15 @@ const RedirectToHome = () => {
 
 // Login ---------------------------
 const loginSubmit = document.getElementById('login-submit');
-const usernameInput = document.getElementById('login-username-input');
-const passwordInput = document.getElementById('login-password-input');
+const loginUsernameInput = document.getElementById('login-username-input');
+const loginPasswordInput = document.getElementById('login-password-input');
 
 loginSubmit.addEventListener('click', async (e) => {
     e.preventDefault();
 
     const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
+    const username = loginUsernameInput.value.trim();
+    const password = loginPasswordInput.value.trim();
 
     // If filled inputs
     if (username && password) {
@@ -121,5 +121,35 @@ registerSubmit.addEventListener('click', async (e) => {
             errorText.innerHTML = 'Server error, try again later';
             return;
         }
+    }
+});
+
+
+// ---------------------------
+
+// Game input handling
+
+const gameUsernameForm = document.getElementById('game-username-form');
+const gameUsernameInput = document.getElementById('game-username-input');
+
+
+// On submit of the game username form
+gameUsernameForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorText = e.target.querySelector('.error-text');
+
+    const usernameVal = gameUsernameInput.value.trim();
+    if (usernameVal) {
+        // This response either returns 400 or redirects to the stats page
+        const response = await fetch('/lol/stats/' + usernameVal);
+
+        if (!response.ok) {
+            const json = await response.json();
+            errorText.innerHTML = json.error;
+            return;
+        }
+
+        // Redirect to the stats page
+        window.location.href = '/lol/stats/' + usernameVal;
     }
 });
