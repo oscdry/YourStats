@@ -16,22 +16,28 @@ if (!JWT_SECRET) {
  * @returns
  */
 export const verifyTokenOptional = (req: Request, res: Response, next: NextFunction): void => {
-    const token = req.headers.authorization?.split(" ")[1];
+    try {
+        const cookieToken = req.cookies.token || null;
 
-    if (!token) {
-        console.log("No optional token provided");
-        return next();
+        if (!cookieToken) {
+            console.log("No optional token provided");
+            return next();
+        }
+
+        res.locals.user = verifyToken(cookieToken) as TokenPayload;
+
+        if (!res.locals.user) {
+            console.log("No optional token provided");
+            return next();
+        }
+
+        console.log("Token verified for user:", JSON.stringify(res.locals.user));
+        next();
+    } catch (error) {
+        console.error("Error verifying token:", error);
+        next(error);
     }
 
-    res.locals.user = verifyToken(token) as TokenPayload;
-
-    if (!res.locals.user) {
-        console.log("No optional token provided");
-        return next();
-    }
-
-    console.log("Token verified for user:", res.locals.user.username);
-    next();
 };
 
 /**
@@ -43,14 +49,14 @@ export const verifyTokenOptional = (req: Request, res: Response, next: NextFunct
  */
 export const verifyTokenRequired = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
+        const cookieToken = req.cookies.token || null;
 
-        if (!token) {
+        if (!cookieToken) {
             console.log("No required token provided");
             throw new InvalidTokenError();
         }
 
-        res.locals.user = verifyToken(token) as TokenPayload;
+        res.locals.user = verifyToken(cookieToken) as TokenPayload;
     } catch (error) {
         console.error("Error verifying token:", error);
         next(error);

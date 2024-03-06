@@ -22,6 +22,6 @@ export const errorHandler = (error: Error, _req: Request, res: Response, _next: 
         case "UserNotFoundError":
             return res.status(404).json({ error: "User not found" });
         default:
-            return res.status(500).json({ error: "Unknown server error" });
+            break;
     }
 };
