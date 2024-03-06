@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
-import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername } from "../services/FirebaseServices.js";
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserByMail, updateFirebaseUserById } from "../services/FirebaseServices.js";
 import { RegisterError } from '../Errors/errors.js';
 
 export async function createUser(req: Request, res: Response) {
@@ -19,7 +19,7 @@ export async function createUser(req: Request, res: Response) {
         return res.json({ token });
     } catch (error) {
         const message = (error as Error).message;
-        res.status(500).json({ error: 'There was an error creating the user', details: message });
+        throw new Error('An error occurred while deleting the user' + message);
     };
 }
 
@@ -68,28 +68,13 @@ export async function updateUser(req: Request, res: Response) {
 
     try {
         if (identifier.includes('@')) {
-            // Actualizar usuario por email
-            const querySnapshot = await firestore.collection('users').where('email', '==', identifier).get();
-            if (querySnapshot.empty) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            // Actualizar el primer usuario que coincida (email debería ser único)
-            const userId = querySnapshot.docs[0].id;
-            await firestore.collection('users').doc(userId).update(updates);
-            return res.status(200).json({ msg: "User updated successfully" });
+            await updateFirebaseUserByMail(identifier, updates);
         } else {
-            // Actualizar usuario por ID
-            const doc = await firestore.collection('users').doc(identifier).get();
-            if (!doc.exists) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            await firestore.collection('users').doc(identifier).update(updates);
-            return res.status(200).json({ msg: "User updated successfully" });
+            await updateFirebaseUserById(identifier, updates);
         }
+        res.json({ message: "User updated successfully" });
     } catch (error) {
         const message = (error as Error).message;
-        res.status(500).json({ error: 'An error occurred while updating the user', details: message });
+        throw new Error('An error occurred while updating the user' + message);
     }
-};
+}
