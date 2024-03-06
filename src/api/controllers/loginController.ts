@@ -20,7 +20,13 @@ export const LoginUser = async (req: Request, res: Response, next: NextFunction)
         if (!validPassword)
             throw new LoginError();
 
-        const token = generateTokenForUserId({ id: user.id });
+        const payload: TokenPayload = {
+            id: user.id,
+            username: user.username,
+            role: user.role
+        };
+
+        const token = generateTokenForUserId(payload);
         console.log(token);
 
         return res.json({ token });

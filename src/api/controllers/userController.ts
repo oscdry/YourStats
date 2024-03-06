@@ -95,3 +95,8 @@ export async function updateUser(req: Request, res: Response) {
         res.status(500).json({ error: 'An error occurred while updating the user', details: message });
     }
 };
+
+export const LogoutUser = (_req: Request, res: Response) => {
+    res.clearCookie('token');
+    res.sendStatus(200);
+};

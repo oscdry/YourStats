@@ -586,7 +586,7 @@ label
     text-align: center;
 }
 
-/* Bootstrap Overrides */
+/* ------------------ Bootstrap Overrides -------------------- */
 .modal
 {
     z-index: 2000 !important;

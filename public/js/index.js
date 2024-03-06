@@ -1,18 +1,21 @@
 // Auth
-const SaveToken = (token) => {
-    localStorage.setItem('token', token);
-}
+const SaveToken = (token) => document.cookie = `token=${token};`;
+const ClearToken = () => document.cookie = '';
 
-const RedirectToHome = () => {
-    window.location.href = '/';
-}
+const RedirectToHome = () => window.location.href = '/';
+const ReloadPage = () => window.location.reload();
+
+// Regex
+const validateUsername = (username) => /^[a-zA-Z0-9_]{3,16}$/.test(username);
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const validatePassword = (password) => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
 
 // Login ---------------------------
 const loginSubmit = document.getElementById('login-submit');
 const loginUsernameInput = document.getElementById('login-username-input');
 const loginPasswordInput = document.getElementById('login-password-input');
 
-loginSubmit.addEventListener('click', async (e) => {
+loginSubmit?.addEventListener('click', async (e) => {
     e.preventDefault();
 
     const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
@@ -40,7 +43,6 @@ loginSubmit.addEventListener('click', async (e) => {
 
             const json = await response.json();
             const token = json.token;
-            console.log(token);
             SaveToken(token);
             RedirectToHome();
             return;
@@ -52,16 +54,14 @@ loginSubmit.addEventListener('click', async (e) => {
     }
 });
 
-// ---------------------------
-
-// Register
+// Register  ---------------------------
 const registerSubmit = document.getElementById('register-button-submit');
 const registerUsernameInput = document.getElementById('register-username-input');
 const registerMailInput = document.getElementById('register-mail-input');
 const registerPasswordInput = document.getElementById('register-password-input');
 const registerPasswordConfirmationInput = document.getElementById('register-password-confirmation-input');
 
-registerSubmit.addEventListener('click', async (e) => {
+registerSubmit?.addEventListener('click', async (e) => {
     e.preventDefault();
 
     const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
@@ -75,17 +75,17 @@ registerSubmit.addEventListener('click', async (e) => {
 
         // Check regex
         // Username
-        if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
+        if (!validateUsername(username)) {
             errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
             return;
         }
         // Mail
-        if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(mail)) {
+        if (!validateEmail(mail)) {
             errorText.innerHTML = 'Invalid mail';
             return;
         }
         // Password
-        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password)) {
+        if (!validatePassword(password)) {
             errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
             return;
         }
@@ -112,7 +112,6 @@ registerSubmit.addEventListener('click', async (e) => {
 
             const json = await response.json();
             const token = json.token;
-            console.log(token);
             SaveToken(token);
             RedirectToHome();
             return;
@@ -121,6 +120,38 @@ registerSubmit.addEventListener('click', async (e) => {
             errorText.innerHTML = 'Server error, try again later';
             return;
         }
+    }
+});
+
+
+// Logout ---------------------------
+const logoutButton = document.getElementById('logout-button');
+
+logoutButton?.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    try {
+        // Send request to server
+        const response = await fetch('/api/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (!response.ok) {
+            console.error(response.status + ' ' + response.statusText);
+            return;
+        }
+
+        // Delete token
+        ClearToken();
+        ReloadPage();
+        return;
+
+    } catch (error) {
+        console.error('Server error, try again later');
+        return;
     }
 });
 
@@ -134,7 +165,7 @@ const gameUsernameInput = document.getElementById('game-username-input');
 
 
 // On submit of the game username form
-gameUsernameForm.addEventListener('submit', async (e) => {
+gameUsernameForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorText = e.target.querySelector('.error-text');
 
