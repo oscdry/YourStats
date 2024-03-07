@@ -104,7 +104,7 @@ export const getAllFirebaseUsers = async (): Promise<FirebaseUser[]> => {
     return usersRef.docs.map(buildFirebaseUser);
 }
 
-export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number}): Promise<void> => {
+export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number; bio?: string}): Promise<void> => {
     if (!id) {
         throw new Error('No user ID provided for updating');
     }
@@ -128,22 +128,4 @@ export const updateFirebaseUserById = async (id: string, updates: { username?: s
 
     // Actualiza en Firestore
     await firestore.collection('users').doc(id).update(updateData);
-};
-
-export const updateFirebaseUserByMail = async (mail: string, updates: { username?: string; password?: string }): Promise<void> => {
-    if (!mail) {
-        throw new Error('No mail provided for updating');
-    }
-
-    const querySnapshot = await firestore.collection('users').where('mail', '==', mail).get();
-    if (querySnapshot.empty) {
-        throw new Error('User not found updating by mail');
-    }
-
-    const userId = querySnapshot.docs[0].id;
-    const hashPassword = updates.password ? await hash(updates.password, 10) : undefined;
-    await firestore.collection('users').doc(userId).update({
-        ...updates,
-        ...(hashPassword && { hash: hashPassword })
-    });
 };

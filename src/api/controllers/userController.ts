@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
-import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserByMail, updateFirebaseUserById } from "../services/FirebaseServices.js";
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById } from "../services/FirebaseServices.js";
 import { RegisterError } from '../Errors/errors.js';
 
 export async function createUser(req: Request, res: Response) {
@@ -66,14 +66,11 @@ export async function updateUser(req: Request, res: Response) {
         password: req.body.password,
         password_confirmation: req.body.password_confirmation,
         role: req.body.role,
+        bio: req.body.bio
     };
 
     try {
-        if (identifier.includes('@')) {
-            await updateFirebaseUserByMail(identifier, updates);
-        } else {
-            await updateFirebaseUserById(identifier, updates);
-        }
+        await updateFirebaseUserById(identifier, updates);
         res.json({ message: "User updated successfully" });
     } catch (error) {
         const message = (error as Error).message;
