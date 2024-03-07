@@ -17,14 +17,13 @@ export async function createUser(req: Request, res: Response) {
         if (!createUser)
             throw new UserNotFoundError();
 
-        const token = generateTokenForUserId({ id: createUser.id });
+        const token = generateTokenForUserId({ id: createUser.id, username: createUser.username, role: createUser.role });
         return res.json({ token });
     } catch (error) {
         const message = (error as Error).message;
         throw new Error('An error occurred while deleting the user' + message);
     };
-}
-
+};
 
 export async function getUserByIdentifier(identifier: string,
     type: 'email' | 'username' | 'id' = 'id',
