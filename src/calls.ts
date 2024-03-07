@@ -129,7 +129,7 @@ export const LoLGamesByUUIDFilter = async (Gamename: string, fecha1: string, fec
     return json;
 };
 export const LoLGamesLast5days = async (Gamename: string): Promise<string> => {
-    const {puuid} = await RiotDataByName(Gamename);
+    const {puuid} = await RiotDataByName(Gamename); 
 
     const fechaCompleta = new Date ();
     
@@ -188,19 +188,44 @@ export const LoLChampsLast10Games = async (Gamename: string): Promise<string> =>
     return json1;
 };
 
+export const LoLGameChampWin = async (GameID: string, Gamename: string): Promise<{ championName: string, isWinner: boolean } | null> => {
+
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/'+ GameID, {
+        headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
+    });
+
+    if (result.status != 200) { 
+        console.log("Error"); 
+        return null;
+    }
+
+    const json = await result.json();
+    const participant = json.info.participants.find((participant: any) => participant.riotIdGameName === Gamename);
+    
+    if (!participant) {
+        console.log("No se encontró el jugador en la partida");
+        return null;
+    }
+
+    const championName = participant.championName;
+    const isWinner = participant.win;
+    
+    return { championName, isWinner };
+};
 
 export const LoLWinrateChamps = async (Gamename: string): Promise<string> => {
     const {puuid} = await RiotDataByName(Gamename);
 
     const fechaCompleta = new Date ();
     
+    const fechaT1 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());;
     const fechaT2 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());
     fechaT2.setDate(fechaT2.getMonth() - 2);
 
    
 
-    const timestampActual = fechaT2.getTime() / 1000;
-    const timestamp10 = 1704909600;
+    const timestampActual = fechaT1.getTime() / 1000;
+    const timestamp10 = fechaT2.getTime() / 1000;
 
     
     const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/'+ puuid +'/ids?startTime=' + timestamp10 + '&endTime=' +timestampActual + '&start=0&count=10', {
@@ -209,18 +234,22 @@ export const LoLWinrateChamps = async (Gamename: string): Promise<string> => {
 
     if (result.status != 200) { console.log("Error"); }
 
-    const json1 = await result.json();
-    let elementos_array: string[] = [];
-    json1.forEach((elemento : string) => {
-        elementos_array.push(elemento);
-    });
-    for (const elemento of elementos_array) {
-       console.log(await LoLGameChampUser(elemento, Gamename));
+    const matchIds = await result.json();
+    const resultsArray: string[] = [];
+
+    for (const matchId of matchIds) {
+        const result = await LoLGameChampWin(matchId, Gamename);
+        resultsArray.push(JSON.stringify(result));
     }
+    console.log(resultsArray);
+    const winnersCount = resultsArray.filter(result => JSON.parse(result).isWinner).length;
+    console.log("Cantidad de victorias:", winnersCount);
     
-    return json1;
+
 };
-const Gamename = 'OSCDRY'; 
+
+
+const Gamename = 'DonMarios'; 
 const GameID = 'EUW1_6826301175';
 const dia1 = '2024-01-01';
 const dia2 = '2024-02-22';
