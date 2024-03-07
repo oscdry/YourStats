@@ -18,7 +18,7 @@ export const updateUserSchema = Joi.object({
 }).min(1); // Asegura que al menos uno de los campos esté presente
 
 export const createUserSchema = Joi.object({
-    username: Joi.string().required(),
+    username: Joi.string().required().min(3).max(16),
     mail: Joi.string().email().required(),
     password: Joi.string().required(),
     password_confirmation: Joi.required().valid(Joi.ref('password')),
