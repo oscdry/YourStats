@@ -18,6 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import mainRouter from "./routes/mainRouter.js";
 import webRouter from "./routes/web.js";
 import Pino from "./logger.js";
+import { errorHandler } from "./api/middlewares/errorHandler.js";
 
 const app = express();
 
@@ -38,6 +39,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
 app.use(expressLayouts);
+
+
 
 // server.get('/hola', async (req: Request, res: Response): Promise<void> => {
 //     res.sendStatus(200);
@@ -62,9 +65,12 @@ app.use(expressLayouts);
 // const cs2 = await Cs2CallExample("76561198161126716");
 
 // console.log(JSON.stringify(cs2));
+
 app.use('/api', mainRouter);
 app.use(webRouter);
 app.use('/admin', adminRouter);
+
+app.use(errorHandler);
 
 const port = 8080;
 app.listen(port, () => Pino.info(`Server listening on port ${port}`));

@@ -7,6 +7,7 @@ import { getAllFirebaseUsers } from "../api/services/FirebaseServices.js";
 import { errorHandler } from "../api/middlewares/errorHandler.js";
 import { UserNotFoundError } from "../api/errors/errors.js";
 import { verifyTokenOptional } from "../api/middlewares/verifyToken.js";
+import Pino from "../logger.js";
 
 const webRouter = Router();
 
@@ -15,7 +16,6 @@ const NotFoundPage = (_req: Request, res: Response) => {
 };
 
 webRouter.use(verifyTokenOptional);
-
 
 webRouter.get("/", (_req: Request, res: Response) => {
     res.render('index', { title: "Homepage" });
@@ -48,17 +48,16 @@ webRouter.get("/lol/stats/:gamename", async (_req: Request, res: Response, next:
         const loldata = await GetLolUserData(_req.params.gamename);
         if (!loldata) throw new UserNotFoundError();
 
-        console.log("rendering " + loldata.gameName + " stats " + loldata.gamesLast7Days);
+        Pino.info("rendering " + loldata.gameName + " stats " + loldata.gamesLast7Days);
 
         return res.render('./lol/lol-user-stats.ejs', { title: "LoL Stats", loldata });
 
     } catch (error) {
-        console.log("Error getting stats", error.name, error.message);
+        Pino.info("Error getting stats", error.name, error.message);
 
         next(error);
     }
 });
 
-webRouter.use(errorHandler);
 
 export default webRouter;

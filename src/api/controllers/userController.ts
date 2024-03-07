@@ -5,9 +5,13 @@ import { generateTokenForUserId } from './tokenController.js';
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById } from "../services/FirebaseServices.js";
 import { RegisterError } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
+import Pino from "../../logger.js";
 
 export async function createUser(req: Request, res: Response) {
     const { username, mail, password } = req.body;
+
+    Pino.info("UserController Creating User", { username, mail, password });
+
     try {
         const user = await getUserByIdentifier(username, 'username', res);
         if (user)
@@ -21,31 +25,49 @@ export async function createUser(req: Request, res: Response) {
         return res.json({ token });
     } catch (error) {
         const message = (error as Error).message;
-        throw new Error('An error occurred while deleting the user' + message);
+        throw new Error('An error occurred while creating the user' + message);
     };
 };
 
+// Main function to get user by identifier from Firebase Services
 export async function getUserByIdentifier(identifier: string,
-    type: 'email' | 'username' | 'id' = 'id',
-    res: Response): Promise<FirebaseUser | null> {
+    type: 'email' | 'username' | 'id' = 'id'): Promise<FirebaseUser | null> {
 
-    console.log('getting user with identifier:', identifier, ', type:', type);
+    if (!identifier) {
+        Pino.error('No identifier provided getting user by identifier');
+        return null;
+    }
 
+    console.log('Getting user with identifier: ', identifier, ', type:', type);
+
+    let user = null;
 
     switch (type) {
         case 'email':
-            return await getFirebaseUserByMail(identifier);
+            user = await getFirebaseUserByMail(identifier);
+            break;
         case 'username':
-            return await getFirebaseUserByUsername(identifier);
+            user = await getFirebaseUserByUsername(identifier);
+            break;
         case 'id':
-            return await getFirebaseUserById(identifier);
+            user = await getFirebaseUserById(identifier);
+            break;
         default:
             throw new Error('Invalid get user type:', type);
     }
+
+    if (!user) {
+        Pino.error('User not found getting user by identifier:' + identifier, ' + type:', type);
+        return null;
+    }
+
+    return user;
 };
 
 export async function deleteUser(req: Request, res: Response) {
     const { identifier } = req.params;
+
+    Pino.info("UserController Deleting User", { identifier });
 
     try {
         if (identifier.includes('@')) {
@@ -62,6 +84,9 @@ export async function deleteUser(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
     const { identifier } = req.params;
+
+    Pino.info("UserController Updating User", { identifier });
+
     const updates = {
         username: req.body.username,
         mail: req.body.mail,

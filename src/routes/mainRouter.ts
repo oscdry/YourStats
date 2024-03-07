@@ -12,7 +12,6 @@ const mainRouter = Router();
 mainRouter.post("/login", LoginUser);
 mainRouter.post("/logout", LogoutUser);
 mainRouter.post("/register", validateCreateUser, createUser);
-mainRouter.use(errorHandler);
 
 mainRouter.delete("/deleteUser/:identifier", validateUserIdentifier, deleteUser);
 mainRouter.put("/updateUser/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);

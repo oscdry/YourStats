@@ -21,7 +21,7 @@ export class UserNotFoundError extends Error {
 
 export class InvalidTokenError extends Error {
     constructor() {
-        super('User Not Found.');
-        this.name = 'UserNotFoundError';
+        super('Invalid Token');
+        this.name = 'InvalidTokenError';
     }
 }
