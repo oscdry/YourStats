@@ -210,10 +210,17 @@ export const LoLGameChampWin = async (GameID: string, Gamename: string): Promise
         return null;
     }
 
-    const championName = participant.championName;
-    const isWinner = participant.win;
+    const stats = [participant.kills, participant.deaths, participant.assists];
 
-    return { championName, isWinner };
+    const kda = (participant.kills + participant.assists)/participant.deaths;
+    
+    const championName = [participant.championName, participant.championId];
+    const isWinner = participant.win;
+    const arrayItems = [participant.item0, participant.item1 ,participant.item2 ,participant.item3, participant.item4, participant.item5, participant.item5, participant.item6];
+    const gameMode = json.info.gameMode;
+
+
+    return { championName, isWinner, arrayItems, stats, kda, gameMode  };
 };
 
 export const LoLWinrateChamps = async (Gamename: string): Promise<string> => {
