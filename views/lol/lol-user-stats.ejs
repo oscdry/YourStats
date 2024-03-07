@@ -2,10 +2,35 @@
 
 <main>
     <h1>League of Legends</h1>
-    <h2>Estadísticas de <%= loldata.gameName %></h2>
 
-    <div class="lol-rank"></div>
+    <div class="header">
+        <h2>Estadísticas de <%= loldata.gameName %></h2>
+        <div class="lol-rank">
+            <img src="/img/lol/ranks/<%= loldata.tier.toLowerCase() + ".png"%>">
+            <p>
+                <%= loldata.tier %> <%= loldata.rank %>
+            </p>
+        </div>
+    </div>
+
+    <div class="lol-general-stats">
+        <p>Wins: <%= loldata.wins %></p>
+        <p>Losses: <%= loldata.losses %></p>
+        <p>Total: <%= loldata.total %></p>
+    </div>
 
     <h3>Últimos 7 días:</h3>
     <p>Partidas jugadas: <%= loldata.gamesLast7Days %></p>
+
+    <p>
+        <%= loldata.games.length%>
+        últimas partidas:
+    </p>
+    <div class="lol-games-div">
+        <% // Generate a card for each game of the user %>
+        <% loldata.games.forEach(lolgame => { %>
+        <%- include('./lol-game-card.ejs', {lolgame: lolgame}); %>
+        <% }); %>
+    </div>
+
 </main>
