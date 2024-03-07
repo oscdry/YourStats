@@ -1,21 +1,32 @@
-<% // This object receives a (lolGame) object to display a game as a card %>
+<% // This object receives a (lolgame) object to display a game as a card %>
 
 <link rel="stylesheet" href="/css/lol.css">
 
-<div class="lol-game-card">
+<div class="lol-game-card
+    <%= lolgame.isWinner ? 'win' : 'loss' %>
+">
     <div class="lol-game-card-icon">
-        <img src="/img/default.jpg" alt>
+        <img
+            src="/img/lol/champs/<%= lolgame.championIdentifier.championId + ".webp"
+            %>"
+        alt>
     </div>
 
     <div class="lol-game-card-champ">
-        Monkey King
+        <%= lolgame.championIdentifier.championName %>
     </div>
 
     <div class="lol-game-card-kda">
-        0 / 0 / 0
+        <p>
+            K / D / A
+        </p>
+        <p>
+            <%= lolgame.stats.kills %>/<%= lolgame.stats.deaths %>/<%=
+            lolgame.stats.assists %>
+        </p>
     </div>
 
     <p class="lol-game-card-gamemode">
-        Classic
+        <%= lolgame.gameMode %>
     </p>
 </div>
