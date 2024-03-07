@@ -35,7 +35,25 @@ export const LolRanking = async () => {
     console.log(json);
 };
 
-export const LoLMostPlayed = async (Gamename: string): Promise<string> => {
+export const LolRankingDemo = async () => {
+    const result = await fetch(LOL_API_ENDPOINT + 'league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5', {
+        headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
+    });
+    if (result.status !== 200) { console.log("Error"); }
+
+    const json = await result.json();
+
+    const sortedData = json.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
+
+    const topUsers = sortedData.slice(0, 3);
+
+    const summonerDetails = topUsers.map(({ summonerName, leaguePoints }) => ({ summonerName, leaguePoints }));
+    
+
+    return summonerDetails;
+};
+
+export const LoLMostPlayed = async (Gamename: string): Promise<{ championID: number, championPoints: number }[]> => {
     const { puuid } = await RiotDataByName(Gamename);
     const result = await fetch(LOL_API_ENDPOINT + 'champion-mastery/v4/champion-masteries/by-puuid/' + puuid + '/top?count=3', {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
@@ -43,8 +61,11 @@ export const LoLMostPlayed = async (Gamename: string): Promise<string> => {
     if (result.status != 200) { console.log("Error"); }
 
     const json = await result.json();
+    const championsMasteryData = json.map((champion: { championId: number, championPoints: number }) => {
+        return { championID: champion.championId, championPoints: champion.championPoints };
+    });
 
-    return json;
+    return championsMasteryData;
 };
 
 export const RiotDataByName = async (gameName: string): Promise<string | null> => {
@@ -60,15 +81,22 @@ export const RiotDataByName = async (gameName: string): Promise<string | null> =
 
 export const LoLRankById = async (Gamename: string): Promise<string> => {
     const { id } = await RiotDataByName(Gamename);
-    console.log(id);
     const result = await fetch(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + id, {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
     if (result.status != 200) { console.log("Error"); }
 
     const json = await result.json();
-    console.log(json);
-    return json;
+    const entry = Array.isArray(json) ? json[0] : json;
+
+    const tier: string = entry.tier;
+    const rank: string = entry.rank;
+    const points: number = entry.leaguePoints;
+    const wins: number = entry.wins;
+    const loses: number = entry.losses;
+    const total: number = wins + loses;
+
+    return { tier, rank, points, wins, loses, total };
 };
 
 export const LoLGamesByUUID = async (Gamename: string): Promise<string> => {
@@ -129,7 +157,7 @@ export const LoLGamesByUUIDFilter = async (Gamename: string, fecha1: string, fec
     return json;
 };
 
-export const LoLGamesLast5days = async (Gamename: string): Promise<string | null> => {
+export const LoLGamesLast7days = async (Gamename: string): Promise<string | null> => {
     const puuid = await RiotDataByName(Gamename);
     if (!puuid) return null;
 
@@ -137,7 +165,7 @@ export const LoLGamesLast5days = async (Gamename: string): Promise<string | null
 
     const fechaT1 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());;
     const fechaT2 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());
-    fechaT2.setDate(fechaT2.getDate() - 5);
+    fechaT2.setDate(fechaT2.getDate() - 7);
 
 
 
@@ -192,6 +220,9 @@ export const LoLChampsLast10Games = async (gameName: string): Promise<string> =>
     return json1;
 };
 
+
+
+
 export const LoLGameChampWin = async (GameID: string, Gamename: string): Promise<{ championName: string, isWinner: boolean; } | null> => {
 
     const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/' + GameID, {
@@ -211,20 +242,20 @@ export const LoLGameChampWin = async (GameID: string, Gamename: string): Promise
         return null;
     }
 
-    const stats = [participant.kills, participant.deaths, participant.assists];
+    const stats = { kills: participant.kills, deaths: participant.deaths, assists: participant.assists };
 
     const kda = (participant.kills + participant.assists) / participant.deaths;
 
-    const championName = [participant.championName, participant.championId];
+    const championIdentifier = { championName: participant.championName, championId: participant.championId };
     const isWinner = participant.win;
     const arrayItems = [participant.item0, participant.item1, participant.item2, participant.item3, participant.item4, participant.item5, participant.item5, participant.item6];
     const gameMode = json.info.gameMode;
 
+    return { championIdentifier, isWinner, arrayItems, stats, kda, gameMode };
 
-    return { championName, isWinner, arrayItems, stats, kda, gameMode };
 };
 
-export const LoLWinrateChamps = async (Gamename: string): Promise<string> => {
+export const LoLWinrateChamps = async (Gamename: string)  => {
     const { puuid } = await RiotDataByName(Gamename);
 
     const fechaCompleta = new Date();
@@ -246,20 +277,18 @@ export const LoLWinrateChamps = async (Gamename: string): Promise<string> => {
     if (result.status != 200) { console.log("Error"); }
 
     const matchIds = await result.json();
-    const resultsArray: string[] = [];
+    const resultsArray: any[] = [];
 
     for (const matchId of matchIds) {
         const result = await LoLGameChampWin(matchId, Gamename);
-        resultsArray.push(JSON.stringify(result));
+        if (!result) continue;
+        resultsArray.push(result);
     }
-    console.log(resultsArray);
-    const winnersCount = resultsArray.filter(result => JSON.parse(result).isWinner).length;
-    console.log("Cantidad de victorias:", winnersCount);
-
+    return resultsArray;
 };
 
 
-const Gamename = 'DonMarios';
+const Gamename = 'OSCDRY';
 const GameID = 'EUW1_6826301175';
 const dia1 = '2024-01-01';
 const dia2 = '2024-02-22';
@@ -271,16 +300,77 @@ const dia2 = '2024-02-22';
 //console.log(LoLGameDetail(GameID));
 //console.log(LoLGameChampUser(GameID,Gamename));
 //console.log(await LoLGamesLast10days(Gamename));
-// console.log(await LoLWinrateChamps(Gamename));
+//console.log(await LoLWinrateChamps(Gamename));
+//console.log(await LoLRankById(Gamename));
+//console.log(await RiotStatusServer());
+//console.log(await LolRankingDemo());
+//console.log(await LoLMostPlayed(Gamename));
+console
+export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
+    const numGames = await LoLGamesLast7days(gameName);
+    const LoLWinrateChamp = await LoLWinrateChamps(gameName);
+    const userData = await LoLRankById(Gamename);
+    const userPlayed = await LoLMostPlayed(Gamename);
 
-export const GetLolUserData = async (gameName: string): Promise<LoLUserData | null> => {
-    const gamesLast7Days = await LoLGamesLast5days(gameName);
-    if (!gamesLast7Days) return null;
+    const lolData : LoLUserData ={
+        gameName : gameName,
+        gamesLast7Days : numGames,
+        games : LoLWinrateChamp,
+        tier: userData.tier,
+        rank: userData.rank,
+        points: userData.points,
+        wins: userData.wins,
+        loses: userData.loses,
+        total: userData.total,
+        championsMasteryData: userPlayed,        
+    }
+    return  lolData ;
 
-    return { gamesLast7Days, gameName };
 };
 
 interface LoLUserData {
     gamesLast7Days: string;
     gameName: string;
+    games: [
+        championIdentifier: {
+        championName: string,
+        championId: string
+        },
+        isWinner: boolean,
+        stats: {
+            kills: number,
+            deaths: number,
+            assists: number,
+        },
+        gameMode: string,
+        kda: string,
+        arrayItems: number[],
+    ];
+    tier: string;
+    rank: string;
+    points: number;
+    wins: number;
+    loses: number;
+    total: number;
+    championsMasteryData: [
+        championId: number,
+        championPoints: number,
+    ];
+    
+
 };
+
+
+
+
+interface LolHomeData{
+
+    summonerDetails: [
+        summoneName: string,
+        leaguePoints: number,
+    ]
+    
+}
+
+
+console.log(JSON.stringify( await GetLolUserData(Gamename)));
