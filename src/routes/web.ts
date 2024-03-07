@@ -1,6 +1,9 @@
 import { Router, type Response, type Request, NextFunction } from "express";
 import { getFirebaseUserById } from "../api/services/FirebaseServices.js";
 import { GetLolUserData } from "../calls.js";
+
+import { getAllFirebaseUsers } from "../api/services/FirebaseServices.js";
+
 import { errorHandler } from "../api/middlewares/errorHandler.js";
 import { UserNotFoundError } from "../api/errors/errors.js";
 import { verifyTokenOptional } from "../api/middlewares/verifyToken.js";
@@ -25,8 +28,9 @@ webRouter.get("/user/:id", async (_req: Request, res: Response) => {
     res.render('./user.ejs', { title: "User", userView: user });
 });
 
-webRouter.get("/admin", (_req: Request, res: Response) => {
-    res.render('./backoffice/dashboard.ejs', { title: "Admin Panel" });
+webRouter.get("/admin", async (_req: Request, res: Response) => {
+    const users = await getAllFirebaseUsers();
+    res.render('./backoffice/dashboard.ejs', { title: "Admin Panel", users });
 });
 
 webRouter.get("/about", (_req: Request, res: Response) => {

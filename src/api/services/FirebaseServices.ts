@@ -98,3 +98,34 @@ const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<Fir
         role: doc!.role,
     };
 };
+
+export const getAllFirebaseUsers = async (): Promise<FirebaseUser[]> => {
+    const usersRef = await firestore.collection('users').get();
+    return usersRef.docs.map(buildFirebaseUser);
+}
+
+export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number; bio?: string}): Promise<void> => {
+    if (!id) {
+        throw new Error('No user ID provided for updating');
+    }
+
+    const doc = await firestore.collection('users').doc(id).get();
+    if (!doc.exists) {
+        throw new Error('User not found updating by ID');
+    }
+
+    // Extrae password de los updates y guarda el resto en updatesWithoutPassword
+    const { password, ...updatesWithoutPassword } = updates;
+
+    // Solo calcula hashPassword si password no es nulo, indefinido o una cadena vacía
+    const hashPassword = password && password.trim() ? await hash(password, 10) : undefined;
+
+    // Prepara los datos a actualizar, excluyendo el hashPassword si no debe cambiar
+    const updateData = {
+        ...updatesWithoutPassword,
+        ...(hashPassword && { hash: hashPassword }) // Añade hash solo si hashPassword ha sido calculado
+    };
+
+    // Actualiza en Firestore
+    await firestore.collection('users').doc(id).update(updateData);
+};

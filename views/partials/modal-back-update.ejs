@@ -1,0 +1,30 @@
+<div id="modal-back-update" class="modal fade" tabindex="-1"
+    aria-labelledby="modal-register-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modal-register-label">Editar 
+                    Usuario
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <%- include('./components/input-username.ejs',
+                {id:"back-update-username-input"})%>
+                <%- include('./components/input-mail.ejs',
+                {id:"back-update-mail-input"}) %>
+                <%- include('./components/input-password.ejs',
+                {id:"back-update-password-input"}) %>
+                <%- include('./components/input-password-confirmation.ejs',
+                {id:"back-update-password-confirmation-input"}) %>
+                <%- include('./components/input-role.ejs',
+                {id:"back-update-role-input"}) %>
+            </div>
+            <p class="error-text"></p>
+            <div class="modal-footer">
+                <button type="button" class="primary" id="back-update-button-submit">Confirm changes</button>
+            </div>
+        </div>
+    </div>
+</div>
