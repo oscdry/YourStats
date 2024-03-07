@@ -64,6 +64,8 @@ export async function updateUser(req: Request, res: Response) {
         username: req.body.username,
         mail: req.body.mail,
         password: req.body.password,
+        password_confirmation: req.body.password_confirmation,
+        role: req.body.role,
     };
 
     try {

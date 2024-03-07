@@ -1,4 +1,5 @@
-<script type="module" src="../../public/js/backoffice.js"></script>
+<%- include('../partials/modal-back-update.ejs') %>
+
 <main>
     <h1 class="title">Users</h1>
     <table>
@@ -18,7 +19,12 @@
                     <td><%= user.username %></td>
                     <td><%= user.mail %></td>
                     <td><%= user.role %></td>
-                    <td><a href="/admin/users/edit/<%= user.id %>">Edit</a></td>
+                    <td><a data-bs-toggle="modal" data-bs-target="#modal-back-update"
+                        data-id="<%= user.id %>"
+                        data-username="<%= user.username %>"
+                        data-mail="<%= user.mail %>"
+                        data-role="<%= user.role %>"
+                        class="edit-btn">Edit</a></td>
                     <td><a href="/admin/users/delete/<%= user.id %>">Delete</a></td>
                 </tr>
             <% }); %>

@@ -104,7 +104,7 @@ export const getAllFirebaseUsers = async (): Promise<FirebaseUser[]> => {
     return usersRef.docs.map(buildFirebaseUser);
 }
 
-export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string }): Promise<void> => {
+export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number}): Promise<void> => {
     if (!id) {
         throw new Error('No user ID provided for updating');
     }
@@ -114,11 +114,20 @@ export const updateFirebaseUserById = async (id: string, updates: { username?: s
         throw new Error('User not found updating by ID');
     }
 
-    const hashPassword = updates.password ? await hash(updates.password, 10) : undefined;
-    await firestore.collection('users').doc(id).update({
-        ...updates,
-        ...(hashPassword && { hash: hashPassword })
-    });
+    // Extrae password de los updates y guarda el resto en updatesWithoutPassword
+    const { password, ...updatesWithoutPassword } = updates;
+
+    // Solo calcula hashPassword si password no es nulo, indefinido o una cadena vacía
+    const hashPassword = password && password.trim() ? await hash(password, 10) : undefined;
+
+    // Prepara los datos a actualizar, excluyendo el hashPassword si no debe cambiar
+    const updateData = {
+        ...updatesWithoutPassword,
+        ...(hashPassword && { hash: hashPassword }) // Añade hash solo si hashPassword ha sido calculado
+    };
+
+    // Actualiza en Firestore
+    await firestore.collection('users').doc(id).update(updateData);
 };
 
 export const updateFirebaseUserByMail = async (mail: string, updates: { username?: string; password?: string }): Promise<void> => {

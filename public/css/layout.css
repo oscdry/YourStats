@@ -67,6 +67,13 @@ a
     text-decoration: none;
     color: var(--accent-color);
     font-size: 13px;
+    cursor: pointer;
+}
+
+table td a {
+    text-decoration: none;
+    color: var(--accent-color) !important;
+    font-size: 13px;
 }
 
 h1.title
@@ -618,3 +625,4 @@ button::focus
         width: 100%;
     }
 }
+

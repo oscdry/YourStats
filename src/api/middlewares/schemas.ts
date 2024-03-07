@@ -9,6 +9,7 @@ export const getUserSchema = Joi.object({
 export const updateUserSchema = Joi.object({
     username: Joi.string().optional(),
     mail: Joi.string().email().optional(),
+    role: Joi.number().optional().min(0).max(1),
     password: Joi.string().optional(),
     password_confirmation: Joi.string().when('password', {
         is: Joi.exist(),
