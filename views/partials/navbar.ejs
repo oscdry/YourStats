@@ -27,7 +27,12 @@
     <% } else { %>
     <ul id="nav-controls">
         <li>
-            <button type="button">Cerrar
+            <a href="/user/<%= user.id %>">
+                <%= user.username %>
+            </a>
+        </li>
+        <li>
+            <button id="logout-button" type="button" class="secondary">Cerrar
                 sesión</button>
         </li>
     </ul>

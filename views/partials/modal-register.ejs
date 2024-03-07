@@ -9,11 +9,18 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <%- include('./components/input-username.ejs') %>
-                <%- include('./components/input-password.ejs') %>
+                <%- include('./components/input-username.ejs',
+                {id:"register-username-input"})%>
+                <%- include('./components/input-mail.ejs',
+                {id:"register-mail-input"}) %>
+                <%- include('./components/input-password.ejs',
+                {id:"register-password-input"}) %>
+                <%- include('./components/input-password-confirmation.ejs',
+                {id:"register-password-confirmation-input"}) %>
             </div>
+            <p class="error-text"></p>
             <div class="modal-footer">
-                <button type="button" class="primary">Registrarse</button>
+                <button type="button" class="primary" id="register-button-submit">Registrarse</button>
             </div>
         </div>
     </div>

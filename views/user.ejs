@@ -1,1 +1,21 @@
-<h1>User</h1>
+<link rel="stylesheet" href="/css/user.css">
+
+<%- include('./partials/components/banner.ejs') %>
+
+<main class="banner">
+    <div class="profile">
+        <img src="/img/default.jpg" alt="Foto de perfil">
+        <div class="user-title">
+            <h1 class="title"><%= userView.username%></h1>
+            <div class="points-div">
+                <p class="points">
+                    50125
+                </p>
+                Points
+            </div>
+        </div>
+    </div>
+    <p class="bio">
+        <%= userView.bio %>
+    </p>
+</main>

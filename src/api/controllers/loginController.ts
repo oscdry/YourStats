@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { getUserByIdentifier } from "./userController.js";
 import { generateTokenForUserId } from "./tokenController.js";
-import { LoginError } from "../Errors/errors.js";
+import { LoginError } from "../errors/errors.js";
 
 export const LoginUser = async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
@@ -20,7 +20,13 @@ export const LoginUser = async (req: Request, res: Response, next: NextFunction)
         if (!validPassword)
             throw new LoginError();
 
-        const token = generateTokenForUserId({ id: user.id });
+        const payload: TokenPayload = {
+            id: user.id,
+            username: user.username,
+            role: user.role
+        };
+
+        const token = generateTokenForUserId(payload);
         console.log(token);
 
         return res.json({ token });
