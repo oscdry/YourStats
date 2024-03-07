@@ -36,9 +36,19 @@ export const LolRanking = async () => {
     console.log(json);
 };
 
-export const RiotDataByName = async (gameName: string): Promise<string> => {
-    console.log("fetching to " + LOL_API_ENDPOINT + 'summoner/v4/summoners/by-name/' + gameName);
+export const LoLMostPlayed = async (Gamename: string): Promise<string> => {
+    const { puuid } = await RiotDataByName(Gamename);
+    const result = await fetch(LOL_API_ENDPOINT + 'champion-mastery/v4/champion-masteries/by-puuid/' + puuid + '/top?count=3', {
+        headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
+    });
+    if (result.status != 200) { console.log("Error"); }
 
+    const json = await result.json();
+
+    return json;
+};
+
+export const RiotDataByName = async (gameName: string): Promise<string> => {
     const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/by-name/' + gameName, {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
@@ -119,14 +129,14 @@ export const LoLGamesByUUIDFilter = async (Gamename: string, fecha1: string, fec
     console.log(json);
     return json;
 };
-export const LoLGamesLast10days = async (Gamename: string): Promise<string> => {
-    const { puuid } = await RiotDataByName(Gamename);
 
+export const LoLGamesLast5days = async (Gamename: string): Promise<string> => {
+    const { puuid } = await RiotDataByName(Gamename);
     const fechaCompleta = new Date();
 
     const fechaT1 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());;
     const fechaT2 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());
-    fechaT2.setDate(fechaT2.getDate() - 10);
+    fechaT2.setDate(fechaT2.getDate() - 5);
 
 
 
@@ -181,8 +191,83 @@ export const LoLChampsLast10Games = async (gameName: string): Promise<string> =>
     return json1;
 };
 
+export const LoLGameChampWin = async (GameID: string, Gamename: string): Promise<{ championName: string, isWinner: boolean; } | null> => {
+
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/' + GameID, {
+        headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
+    });
+
+    if (result.status != 200) {
+        console.log("Error");
+        return null;
+    }
+
+    const json = await result.json();
+    const participant = json.info.participants.find((participant: any) => participant.riotIdGameName === Gamename);
+
+    if (!participant) {
+        console.log("No se encontró el jugador en la partida");
+        return null;
+    }
+
+    const championName = participant.championName;
+    const isWinner = participant.win;
+
+    return { championName, isWinner };
+};
+
+export const LoLWinrateChamps = async (Gamename: string): Promise<string> => {
+    const { puuid } = await RiotDataByName(Gamename);
+
+    const fechaCompleta = new Date();
+
+    const fechaT1 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());;
+    const fechaT2 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());
+    fechaT2.setDate(fechaT2.getMonth() - 2);
+
+
+
+    const timestampActual = fechaT1.getTime() / 1000;
+    const timestamp10 = fechaT2.getTime() / 1000;
+
+
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + puuid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=10', {
+        headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
+    });
+
+    if (result.status != 200) { console.log("Error"); }
+
+    const matchIds = await result.json();
+    const resultsArray: string[] = [];
+
+    for (const matchId of matchIds) {
+        const result = await LoLGameChampWin(matchId, Gamename);
+        resultsArray.push(JSON.stringify(result));
+    }
+    console.log(resultsArray);
+    const winnersCount = resultsArray.filter(result => JSON.parse(result).isWinner).length;
+    console.log("Cantidad de victorias:", winnersCount);
+
+
+};
+
+
+const Gamename = 'DonMarios';
+const GameID = 'EUW1_6826301175';
+const dia1 = '2024-01-01';
+const dia2 = '2024-02-22';
+
+//console.log(await LoLGamesByUUID(Gamename));
+//console.log(await LoLGamesByUUIDFilter(Gamename,dia1,dia2));
+//console.log(await LoLChampsLast10Games(Gamename));
+//console.log(await LoLMostPlayed(Gamename));
+//console.log(LoLGameDetail(GameID));
+//console.log(LoLGameChampUser(GameID,Gamename));
+//console.log(await LoLGamesLast10days(Gamename));
+console.log(await LoLWinrateChamps(Gamename));
+
 export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
-    const gamesLast7Days = await LoLGamesLast10days(gameName);
+    const gamesLast7Days = await LoLGamesLast5days(gameName);
     return { gamesLast7Days, gameName };
 };
 
@@ -190,14 +275,3 @@ interface LoLUserData {
     gamesLast7Days: string;
     gameName: string;
 };
-
-// const Gamename = 'DonMarios';
-// const GameID = 'EUW1_6826301175';
-// const dia1 = '2024-01-01';
-// const dia2 = '2024-02-22';
-// //console.log(await LoLGamesByUUID(Gamename));
-// //console.log(await LoLGamesByUUIDFilter(Gamename,dia1,dia2));
-// console.log(await LoLChampsLast10Games(Gamename));
-// //console.log(LoLGameDetail(GameID));
-// //console.log(LoLGameChampUser(GameID,Gamename));
-// //console.log(await LoLGamesLast10days(Gamename));
