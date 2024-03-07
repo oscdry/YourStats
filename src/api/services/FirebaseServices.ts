@@ -1,5 +1,7 @@
 import firestore from "../db/firebaseConnections.js";
 import { hash } from "bcrypt";
+import { UserNotFoundError } from "../errors/errors.js";
+import Pino from "../../logger.js";
 
 export const getFirebaseUserById = async (id: string): Promise<FirebaseUser | null> => {
     if (!id) {
@@ -9,7 +11,7 @@ export const getFirebaseUserById = async (id: string): Promise<FirebaseUser | nu
 
     const userRef = await firestore.collection('users').doc(id).get();
     if (!userRef.exists) {
-        console.error('User not found getting by ID');
+        Pino.error('User not found getting by ID');
         return null;
     };
     return buildFirebaseUser(userRef);
@@ -23,7 +25,7 @@ export const getFirebaseUserByMail = async (mail: string): Promise<FirebaseUser 
 
     const userRef = await firestore.collection('users').where('mail', '==', mail).get();
     if (userRef.empty) {
-        console.error('Users not found getting by mail');
+        Pino.error('FB Service Users not found getting by mail');
         return null;
     };
     return buildFirebaseUser(userRef.docs[0]);
@@ -31,13 +33,13 @@ export const getFirebaseUserByMail = async (mail: string): Promise<FirebaseUser 
 
 export const getFirebaseUserByUsername = async (username: string): Promise<FirebaseUser | null> => {
     if (!username) {
-        console.error('No mail provided getting by username');
+        Pino.error('No mail provided getting by username');
         return null;
     };
 
     const userRef = await firestore.collection('users').where('username', '==', username).get();
     if (userRef.empty) {
-        console.error('Users not found getting by username');
+        Pino.error('Users not found getting by username: ' + username);
         return null;
     };
     return buildFirebaseUser(userRef.docs[0]);
@@ -55,13 +57,13 @@ export const deleteFirebaseUserById = async (id: string): Promise<boolean> => {
 
 export const deleteFirebaseUserByMail = async (mail: string): Promise<boolean> => {
     if (!mail) {
-        console.error('No mail provided deleting by mail');
+        Pino.error('No mail provided deleting by mail');
         return false;
     };
 
     const userRef = await firestore.collection('users').where('mail', '==', mail).get();
     if (userRef.empty) {
-        console.error('Users not found deleting by mail');
+        Pino.error('Users not found deleting by mail');
         return false;
     };
 
@@ -82,7 +84,7 @@ export const createFirebaseUser = async (username: string, mail: string, passwor
         hash: await hash(password, 10),
         bio,
         role,
-    
+
     });
     return buildFirebaseUser(await userRef.get());
 };
@@ -102,16 +104,16 @@ const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<Fir
 export const getAllFirebaseUsers = async (): Promise<FirebaseUser[]> => {
     const usersRef = await firestore.collection('users').get();
     return usersRef.docs.map(buildFirebaseUser);
-}
+};
 
-export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number; bio?: string}): Promise<void> => {
+export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number; bio?: string; }): Promise<void> => {
     if (!id) {
-        throw new Error('No user ID provided for updating');
+        throw new UserNotFoundError();
     }
 
     const doc = await firestore.collection('users').doc(id).get();
     if (!doc.exists) {
-        throw new Error('User not found updating by ID');
+        throw new UserNotFoundError();
     }
 
     // Extrae password de los updates y guarda el resto en updatesWithoutPassword

@@ -1,19 +1,27 @@
 import { NextFunction, Request, Response } from "express";
+import Pino from "../../logger.js";
 
 /**
  * Handles errors that are encountered in the application in order
  * to send them to the client in an expected format.
- * @param error
+ * @param err
  * @param _req
  * @param res
  * @param _next
  * @author @polcondal
  */
-export const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFunction) => {
-    console.error("Caught Error of type", error.name, error instanceof Error ? error.message : error);
+export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    if (!err)
+        Pino.fatal("Caught Error is null or undefined");
 
-    switch (error.name) {
+
+    Pino.warn("Caught Error of type: " + err.name + " | " + (err instanceof Error ? err.message : err));
+
+    switch (err.name) {
         case "InvalidTokenError":
+            // If invalid token error, clear the token cookie and redirect to home
+            // If this is not done, an infinite loop will occur
+            res.clearCookie("token");
             return res.redirect("/");
         case "LoginError":
             return res.status(400).json({ error: "Invalid username or password" });
@@ -24,4 +32,7 @@ export const errorHandler = (error: Error, _req: Request, res: Response, _next: 
         default:
             break;
     }
+
+    if (!err.name)
+        return res.status(500).json({ error: "Internal Server Error" });
 };

@@ -3,7 +3,7 @@ import Joi from 'joi';
 import { getUserSchema } from "./schemas.js";
 
 export const validateUserIdentifier = (req: Request, res: Response, next: NextFunction) => {
-
+    Pino.info("validateUserIdentifier " + JSON.stringify(req.params));
     const { error } = getUserSchema.validate(req.params);
 
     if (error)

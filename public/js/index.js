@@ -27,6 +27,7 @@ loginSubmit?.addEventListener('click', async (e) => {
         //TODO: Check regex
 
         try {
+            console.log('Sending request to server');
             // Send request to server
             const response = await fetch('/api/login', {
                 method: 'POST',
@@ -36,18 +37,28 @@ loginSubmit?.addEventListener('click', async (e) => {
                 body: JSON.stringify({ username, password })
             })
 
-            if (!response.ok) {
-                errorText.innerHTML = json.error;
+            if (!response.ok && response.status != 400) {
+                errorText.innerHTML = 'An error occurred...';
+                console.error(response.status + ' ' + response.statusText);
                 return;
             }
 
             const json = await response.json();
+
+            // API returns 400 if the user is not found
+            // Which is not an error
+            if (response.status === 400) {
+                errorText.innerHTML = json.error;
+                return;
+            }
+
             const token = json.token;
             SaveToken(token);
             RedirectToHome();
             return;
 
         } catch (error) {
+            console.error(error);
             errorText.innerHTML = 'Server error, try again later';
             return;
         }
@@ -134,13 +145,13 @@ const backUpdatePasswordConfirmationInput = document.getElementById('back-update
 
 let currentUserId = null;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Seleccionar todos los botones de editar
     const editButtons = document.querySelectorAll('.edit-btn');
 
     // Añadir un listener a cada botón de editar
-    editButtons.forEach(button => {
-        button.addEventListener('click', function() {
+    editButtons?.forEach(button => {
+        button.addEventListener('click', function () {
             // Obtener los datos del usuario desde los atributos data-*
             const username = this.getAttribute('data-username');
             const mail = this.getAttribute('data-mail');
@@ -161,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-backUpdateSubmit.addEventListener('click', async (e) => {
+backUpdateSubmit?.addEventListener('click', async (e) => {
     e.preventDefault();
 
     const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
@@ -217,14 +228,14 @@ backUpdateSubmit.addEventListener('click', async (e) => {
             }
 
             window.location.reload('/admin');
-            
+
 
         } catch (error) {
             errorText.innerHTML = 'Server error, try again later';
             return;
         }
     } else if (username && mail && role) {
-        
+
         // Username
         if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
             errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
@@ -257,7 +268,7 @@ backUpdateSubmit.addEventListener('click', async (e) => {
             }
 
             window.location.reload('/admin');
-            
+
 
         } catch (error) {
             errorText.innerHTML = 'Server error, try again later';
