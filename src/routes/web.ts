@@ -1,6 +1,6 @@
 import { Router, type Response, type Request, NextFunction } from "express";
 import { getFirebaseUserById } from "../api/services/FirebaseServices.js";
-import { GetLolUserData, LoLGamesLast10days } from "../calls.js";
+import { GetLolUserData } from "../calls.js";
 import { errorHandler } from "../api/middlewares/errorHandler.js";
 import { UserNotFoundError } from "../api/errors/errors.js";
 import { verifyTokenOptional } from "../api/middlewares/verifyToken.js";
@@ -12,7 +12,6 @@ const NotFoundPage = (_req: Request, res: Response) => {
 };
 
 webRouter.use(verifyTokenOptional);
-webRouter.use(errorHandler);
 
 
 webRouter.get("/", (_req: Request, res: Response) => {
@@ -43,16 +42,19 @@ webRouter.get("/lol/stats/:gamename", async (_req: Request, res: Response, next:
     try {
 
         const loldata = await GetLolUserData(_req.params.gamename);
-        if (!loldata) return next(new UserNotFoundError());
+        if (!loldata) throw new UserNotFoundError();
 
         console.log("rendering " + loldata.gameName + " stats " + loldata.gamesLast7Days);
 
         return res.render('./lol/lol-user-stats.ejs', { title: "LoL Stats", loldata });
 
     } catch (error) {
+        console.log("Error getting stats", error.name, error.message);
+
         next(error);
     }
 });
 
+webRouter.use(errorHandler);
 
 export default webRouter;
