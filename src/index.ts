@@ -6,6 +6,7 @@ import adminRouter from "./routes/adminRouter.js";
 import path from "path";
 import { fileURLToPath } from 'url';
 import express from "express";
+import cookieParser from "cookie-parser";
 import expressLayouts from 'express-ejs-layouts';
 import audit from "express-requests-logger";
 
@@ -15,13 +16,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Client for the current API (API v2)
 // const client = new Client('eUPnOYKsnu4dBD6BJzjtsrtFpf91r7LFK7MTkbAa');
 
-import { RiotPUUIDByTagName, RiotCallExample, Cs2CallExample } from "./calls.js";
 import mainRouter from "./routes/mainRouter.js";
 // import { getUserById } from "./api/controllers/userController.js";
 import webRouter from "./routes/web.js";
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 
 console.log("Initializing server...");
