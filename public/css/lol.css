@@ -1,0 +1,42 @@
+.lol-game-card
+{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-right: 5rem;
+
+    width: 45%;
+    max-width: 45%;
+    min-height: 100px;
+    max-height: 150px;
+
+    background-color: var(--gray);
+
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.lol-game-card-champ
+{
+    margin-left: 0;
+}
+
+.lol-game-card-icon
+{
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.lol-game-card-icon img
+{
+    margin: 0;
+
+    object-fit: contain;
+    width: 100px;
+    height: 100px;
+}
+
+.lol-rank
+{}

@@ -12,6 +12,7 @@
         "baseUrl": ".",
         "inlineSourceMap": false,
         "inlineSources": false,
+        "noEmitOnError": false,
     },
     "include": [
         "src/**/*.ts"

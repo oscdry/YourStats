@@ -1,11 +1,17 @@
 import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
-import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername } from "../services/FirebaseServices.js";
+
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById } from "../services/FirebaseServices.js";
+import { RegisterError } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
+import Pino from "../../logger.js";
 
 export async function createUser(req: Request, res: Response) {
     const { username, mail, password } = req.body;
+
+    Pino.info("UserController Creating User", { username, mail, password });
+
     try {
         const user = await getUserByIdentifier(username, 'username', res);
         if (user)
@@ -15,36 +21,53 @@ export async function createUser(req: Request, res: Response) {
         if (!createUser)
             throw new UserNotFoundError();
 
-        const token = generateTokenForUserId({ id: createUser.id });
+        const token = generateTokenForUserId({ id: createUser.id, username: createUser.username, role: createUser.role });
         return res.json({ token });
     } catch (error) {
         const message = (error as Error).message;
-        res.status(500).json({ error: 'There was an error creating the user', details: message });
+        throw new Error('An error occurred while creating the user' + message);
     };
-}
+};
 
-
+// Main function to get user by identifier from Firebase Services
 export async function getUserByIdentifier(identifier: string,
-    type: 'email' | 'username' | 'id' = 'id',
-    res: Response): Promise<FirebaseUser | null> {
+    type: 'email' | 'username' | 'id' = 'id'): Promise<FirebaseUser | null> {
 
-    console.log('getting user with identifier:', identifier, ', type:', type);
+    if (!identifier) {
+        Pino.error('No identifier provided getting user by identifier');
+        return null;
+    }
 
+    console.log('Getting user with identifier: ', identifier, ', type:', type);
+
+    let user = null;
 
     switch (type) {
         case 'email':
-            return await getFirebaseUserByMail(identifier);
+            user = await getFirebaseUserByMail(identifier);
+            break;
         case 'username':
-            return await getFirebaseUserByUsername(identifier);
+            user = await getFirebaseUserByUsername(identifier);
+            break;
         case 'id':
-            return await getFirebaseUserById(identifier);
+            user = await getFirebaseUserById(identifier);
+            break;
         default:
             throw new Error('Invalid get user type:', type);
     }
+
+    if (!user) {
+        Pino.error('User not found getting user by identifier:' + identifier, ' + type:', type);
+        return null;
+    }
+
+    return user;
 };
 
 export async function deleteUser(req: Request, res: Response) {
     const { identifier } = req.params;
+
+    Pino.info("UserController Deleting User", { identifier });
 
     try {
         if (identifier.includes('@')) {
@@ -59,40 +82,26 @@ export async function deleteUser(req: Request, res: Response) {
 };
 
 
-
 export async function updateUser(req: Request, res: Response) {
     const { identifier } = req.params;
+
+    Pino.info("UserController Updating User", { identifier });
+
     const updates = {
         username: req.body.username,
         mail: req.body.mail,
         password: req.body.password,
+        password_confirmation: req.body.password_confirmation,
+        role: req.body.role,
+        bio: req.body.bio
     };
 
     try {
-        if (identifier.includes('@')) {
-            // Actualizar usuario por email
-            const querySnapshot = await firestore.collection('users').where('email', '==', identifier).get();
-            if (querySnapshot.empty) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            // Actualizar el primer usuario que coincida (email debería ser único)
-            const userId = querySnapshot.docs[0].id;
-            await firestore.collection('users').doc(userId).update(updates);
-            return res.status(200).json({ msg: "User updated successfully" });
-        } else {
-            // Actualizar usuario por ID
-            const doc = await firestore.collection('users').doc(identifier).get();
-            if (!doc.exists) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            await firestore.collection('users').doc(identifier).update(updates);
-            return res.status(200).json({ msg: "User updated successfully" });
-        }
+        await updateFirebaseUserById(identifier, updates);
+        res.json({ message: "User updated successfully" });
     } catch (error) {
         const message = (error as Error).message;
-        res.status(500).json({ error: 'An error occurred while updating the user', details: message });
+        throw new Error('An error occurred while updating the user' + message);
     }
 };
 

@@ -1,9 +1,13 @@
 import { Router, type Response, type Request, NextFunction } from "express";
 import { getFirebaseUserById } from "../api/services/FirebaseServices.js";
-import { GetLolUserData, LoLGamesLast10days } from "../calls.js";
+import { GetLolUserData } from "../calls.js";
+
+import { getAllFirebaseUsers } from "../api/services/FirebaseServices.js";
+
 import { errorHandler } from "../api/middlewares/errorHandler.js";
 import { UserNotFoundError } from "../api/errors/errors.js";
 import { verifyTokenOptional } from "../api/middlewares/verifyToken.js";
+import Pino from "../logger.js";
 
 const webRouter = Router();
 
@@ -12,8 +16,6 @@ const NotFoundPage = (_req: Request, res: Response) => {
 };
 
 webRouter.use(verifyTokenOptional);
-webRouter.use(errorHandler);
-
 
 webRouter.get("/", (_req: Request, res: Response) => {
     res.render('index', { title: "Homepage" });
@@ -26,8 +28,9 @@ webRouter.get("/user/:id", async (_req: Request, res: Response) => {
     res.render('./user.ejs', { title: "User", userView: user });
 });
 
-webRouter.get("/admin", (_req: Request, res: Response) => {
-    res.render('./backoffice/dashboard.ejs', { title: "Admin Panel" });
+webRouter.get("/admin", async (_req: Request, res: Response) => {
+    const users = await getAllFirebaseUsers();
+    res.render('./backoffice/dashboard.ejs', { title: "Admin Panel", users });
 });
 
 webRouter.get("/about", (_req: Request, res: Response) => {
@@ -43,13 +46,15 @@ webRouter.get("/lol/stats/:gamename", async (_req: Request, res: Response, next:
     try {
 
         const loldata = await GetLolUserData(_req.params.gamename);
-        if (!loldata) return next(new UserNotFoundError());
+        if (!loldata) throw new UserNotFoundError();
 
-        console.log("rendering " + loldata.gameName + " stats " + loldata.gamesLast7Days);
+        Pino.info("rendering " + loldata.gameName + " stats " + loldata.gamesLast7Days);
 
         return res.render('./lol/lol-user-stats.ejs', { title: "LoL Stats", loldata });
 
     } catch (error) {
+        Pino.info("Error getting stats", error.name, error.message);
+
         next(error);
     }
 });

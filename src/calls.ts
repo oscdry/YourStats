@@ -3,7 +3,6 @@ const RIOT_API_ENDPOINT = "https://europe.api.riotgames.com";
 const OSU_API_ENDPOINT = "https://osu.ppy.sh/api/v2/";
 
 import { config } from "dotenv";
-import { UserNotFoundError } from "./api/errors/errors.js";
 
 config();
 
@@ -69,11 +68,11 @@ export const LoLMostPlayed = async (Gamename: string): Promise<{ championID: num
     return championsMasteryData;
 };
 
-export const RiotDataByName = async (gameName: string): Promise<string> => {
+export const RiotDataByName = async (gameName: string): Promise<string | null> => {
     const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/by-name/' + gameName, {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
-    if (result.status != 200) { throw new UserNotFoundError(); }
+    if (result.status != 200) { return null; }
 
     const json = await result.json();
 
@@ -158,8 +157,10 @@ export const LoLGamesByUUIDFilter = async (Gamename: string, fecha1: string, fec
     return json;
 };
 
-export const LoLGamesLast7days = async (Gamename: string): Promise<string> => {
-    const { puuid } = await RiotDataByName(Gamename);
+export const LoLGamesLast7days = async (Gamename: string): Promise<string | null> => {
+    const puuid = await RiotDataByName(Gamename);
+    if (!puuid) return null;
+
     const fechaCompleta = new Date();
 
     const fechaT1 = new Date(fechaCompleta.getFullYear(), fechaCompleta.getMonth(), fechaCompleta.getDate());;
@@ -250,8 +251,8 @@ export const LoLGameChampWin = async (GameID: string, Gamename: string): Promise
     const arrayItems = [participant.item0, participant.item1, participant.item2, participant.item3, participant.item4, participant.item5, participant.item5, participant.item6];
     const gameMode = json.info.gameMode;
 
-
     return { championIdentifier, isWinner, arrayItems, stats, kda, gameMode };
+
 };
 
 export const LoLWinrateChamps = async (Gamename: string)  => {
@@ -283,9 +284,6 @@ export const LoLWinrateChamps = async (Gamename: string)  => {
         if (!result) continue;
         resultsArray.push(result);
     }
-    //console.log(resultsArray);
-    //console.log("Cantidad de victorias:", winnersCount);
-
     return resultsArray;
 };
 
@@ -327,6 +325,7 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
         championsMasteryData: userPlayed,        
     }
     return  lolData ;
+
 };
 
 interface LoLUserData {

@@ -1,3 +1,4 @@
+<%- include('../partials/modal-back-update.ejs') %>
 
 <main>
     <h1 class="title">Users</h1>
@@ -5,26 +6,28 @@
 
         <tbody>
             <thead>
+                <td>ID</td>
                 <td>Username</td>
-                <td>Email</td>
+                <td>Mail</td>
                 <td>Role</td>
-                <td>Created At</td>
+                <td></td>
+                <td></td>
             </thead>
-            <tr>
-
-                <td>
-                    Pepe
-                </td>
-                <td>
-                    pepe@mail.com
-                </td>
-                <td>
-                    Admin
-                </td>
-                <td>
-                    2021-10-05
-                </td>
-            </tr>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user.id %></td>
+                    <td><%= user.username %></td>
+                    <td><%= user.mail %></td>
+                    <td><%= user.role %></td>
+                    <td><a data-bs-toggle="modal" data-bs-target="#modal-back-update"
+                        data-id="<%= user.id %>"
+                        data-username="<%= user.username %>"
+                        data-mail="<%= user.mail %>"
+                        data-role="<%= user.role %>"
+                        class="edit-btn">Edit</a></td>
+                    <td><a href="/admin/users/delete/<%= user.id %>">Delete</a></td>
+                </tr>
+            <% }); %>
         </tbody>
     </table>
 </main>
