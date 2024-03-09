@@ -15,6 +15,9 @@ mainRouter.post("/register", validateCreateUser, createUser);
 
 mainRouter.delete("/deleteUser/:identifier", validateUserIdentifier, deleteUser);
 mainRouter.put("/updateUser/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);
+mainRouter.get("/getUser/:identifier", validateUserIdentifier, (req) => {
+  const user = getUserByIdentifier(req.params.identifier, 'id');
+});
 
 
 

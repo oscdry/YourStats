@@ -13,7 +13,7 @@ export async function createUser(req: Request, res: Response) {
     Pino.info("UserController Creating User", { username, mail, password });
 
     try {
-        const user = await getUserByIdentifier(username, 'username', res);
+        const user = await getUserByIdentifier(username, 'username');
         if (user)
             throw new UserNotFoundError();
 
