@@ -25,3 +25,17 @@ export class InvalidTokenError extends Error {
         this.name = 'InvalidTokenError';
     }
 }
+
+export class EmailUsed extends Error {
+    constructor() {
+        super('Error registering user.');
+        this.name = 'This email is already provided'
+    }
+}
+
+export class UsernameUsed extends Error {
+    constructor() {
+        super('Error registering user.');
+        this.name = 'This username is already provided'
+    }
+}

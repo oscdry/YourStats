@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
 
-import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById } from "../services/FirebaseServices.js";
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers} from "../services/FirebaseServices.js";
 import { RegisterError } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
 import Pino from "../../logger.js";
@@ -109,3 +109,9 @@ export const LogoutUser = (_req: Request, res: Response) => {
     res.clearCookie('token');
     res.sendStatus(200);
 };
+
+export const getAllUsers = async (_req: Request, res: Response) => {
+    const users = await getAllFirebaseUsers();
+    res.json(users);
+}
+
