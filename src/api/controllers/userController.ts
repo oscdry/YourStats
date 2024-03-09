@@ -1,13 +1,13 @@
-import { type Request, type Response } from 'express';
+import { type Request, type Response, NextFunction} from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
 
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers} from "../services/FirebaseServices.js";
-import { RegisterError } from '../errors/errors.js';
+import { EmailUsed, RegisterError, UsernameUsed } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
 import Pino from "../../logger.js";
 
-export async function createUser(req: Request, res: Response) {
+export async function createUser(req: Request, res: Response, next:NextFunction) {
     const { username, mail, password } = req.body;
 
     Pino.info("UserController Creating User", { username, mail, password });
@@ -15,7 +15,11 @@ export async function createUser(req: Request, res: Response) {
     try {
         const user = await getUserByIdentifier(username, 'username');
         if (user)
-            throw new UserNotFoundError();
+            throw new UsernameUsed();
+
+        const userMail = await getUserByIdentifier(mail, 'email');
+        if (userMail)
+            throw new EmailUsed();
 
         const createUser = await createFirebaseUser(username, mail, password, '', 0);
         if (!createUser)
@@ -24,8 +28,7 @@ export async function createUser(req: Request, res: Response) {
         const token = generateTokenForUserId({ id: createUser.id, username: createUser.username, role: createUser.role });
         return res.json({ token });
     } catch (error) {
-        const message = (error as Error).message;
-        throw new Error('An error occurred while creating the user' + message);
+        next(new RegisterError());
     };
 };
 
