@@ -29,4 +29,10 @@
     <p class="lol-game-card-gamemode">
         <%= lolgame.gameMode %>
     </p>
+
+    <div class="lol-game-items">
+        <% lolgame.arrayItems.forEach(id => { %>
+        <%- include('./lol-game-item-card.ejs', {id}); %>
+        <% }); %>
+    </div>
 </div>
