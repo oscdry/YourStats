@@ -4,6 +4,7 @@ const OSU_API_ENDPOINT = "https://osu.ppy.sh/api/v2/";
 
 import { config } from "dotenv";
 import { UserNotFoundError } from "./api/errors/errors.js";
+import Pino from "./logger.js";
 
 config();
 
@@ -86,22 +87,39 @@ export const RiotDataByName = async (gameName: string): Promise<RiotData | null>
     });
     if (result.status != 200) { throw new UserNotFoundError(); }
 
-
     const json = await result.json();
     return json;
 };
 
-export const LoLRankById = async (Gamename: string): Promise<string> => {
-    const { id } = await RiotDataByName(Gamename);
+export const LoLRankById = async (Gamename: string): Promise<object | null> => {
+    const lolData = await RiotDataByName(Gamename);
+    if (!lolData) {
+        Pino.warn("No se encontró el usuario " + Gamename
+            + " en la base de datos de Riot");
+        return null;
+    };
+
+    Pino.trace("Found " + Gamename + " in the Riot database LolRankById");
+
+    const id = lolData.id;
+    console.log(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + id);
+
     const result = await fetch(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + id, {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
     if (result.status != 200) { console.log("Error"); }
 
+    console.log(JSON.stringify(result));
+
+
     const json = await result.json();
+
+    Pino.trace(JSON.stringify(json));
     const entry = Array.isArray(json) ? json[0] : json;
 
-    const tier: string = entry.tier;
+    Pino.trace(JSON.stringify(entry) + entry);
+
+    const tier: string | undefined = entry.tier;
     const rank: string = entry.rank;
     const points: number = entry.leaguePoints;
     const wins: number = entry.wins;
@@ -232,9 +250,6 @@ export const LoLChampsLast10Games = async (gameName: string): Promise<string> =>
     return json1;
 };
 
-
-
-
 export const LoLGameChampWin = async (GameID: string, puuid: string):
     Promise<{ championName: string, isWinner: boolean; } | null> => {
 
@@ -302,7 +317,6 @@ export const LoLWinrateChamps = async (Gamename: string) => {
 };
 
 
-const Gamename = 'OSCDRY';
 const GameID = 'EUW1_6826301175';
 const dia1 = '2024-01-01';
 const dia2 = '2024-02-22';
@@ -323,8 +337,8 @@ console;
 export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
     const numGames = await LoLGamesLast7days(gameName);
     const LoLWinrateChamp = await LoLWinrateChamps(gameName);
-    const userData = await LoLRankById(Gamename);
-    const userPlayed = await LoLMostPlayed(Gamename);
+    const userData = await LoLRankById(gameName);
+    const userPlayed = await LoLMostPlayed(gameName);
 
     const lolData: LoLUserData = {
         gamesLast7Days: numGames,
@@ -338,6 +352,8 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
         total: userData.total,
         championsMasteryData: userPlayed,
     };
+
+    Pino.debug(JSON.stringify(lolData));
     return lolData;
 
 };
@@ -387,4 +403,4 @@ interface LolHomeData {
 }
 
 
-console.log(JSON.stringify(await GetLolUserData(Gamename)));
+// console.log(JSON.stringify(await GetLolUserData(Gamename)));
