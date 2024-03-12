@@ -277,6 +277,40 @@ backUpdateSubmit?.addEventListener('click', async (e) => {
     }
 });
 
+// backoffice search user by username
+
+const searchBtn = document.getElementById('back-search-button');
+const searchInput = document.getElementById('back-search-mail-input');
+const errorSearch = document.getElementById('error-search-back');
+
+document.addEventListener('DOMContentLoaded', function() {
+    searchBtn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevenir el envío del formulario para realizar la búsqueda con JavaScript
+        const userEmail = searchInput.value.trim(); // Obtener el valor del input y eliminar espacios en blanco al principio y al final
+        const userRows = document.querySelectorAll('.user-row'); // Seleccionar todas las filas de usuarios
+
+        let found = false; // Indicador si se encontró el usuario
+
+        userRows.forEach(row => {
+            const mailCell = row.cells[2].textContent; // Asumiendo que el correo está en la tercera celda
+            if(mailCell === userEmail) {
+                // Si el correo coincide, mostrar solo esa fila y marcar que se encontró el usuario
+                row.style.display = '';
+                found = true;
+            } else {
+                // Si no coincide, ocultar la fila
+                row.style.display = 'none';
+            }
+        });
+
+        // Si después de la búsqueda no se encontró ningún usuario, mostrar mensaje de error
+        if (!found) {
+            errorSearch.textContent = 'No user found with that email';
+        } else {
+            errorSearch.textContent = ''; // Limpiar el mensaje de error si se encontró al usuario
+        }
+    });
+});
 
 // Logout ---------------------------
 const logoutButton = document.getElementById('logout-button');

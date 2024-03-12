@@ -1,6 +1,8 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import Joi from 'joi';
 import { getUserSchema } from "./schemas.js";
+import Pino from '../../logger.js';
+
 
 export const validateUserIdentifier = (req: Request, res: Response, next: NextFunction) => {
     Pino.info("validateUserIdentifier " + JSON.stringify(req.params));
