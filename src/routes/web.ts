@@ -53,7 +53,7 @@ webRouter.get("/lol/stats/:gamename", async (_req: Request, res: Response, next:
         return res.render('./lol/lol-user-stats.ejs', { title: "LoL Stats", loldata });
 
     } catch (error) {
-        Pino.info("Error getting stats", error.name, error.message);
+        Pino.info("Error getting stats: " + error);
 
         next(error);
     }
