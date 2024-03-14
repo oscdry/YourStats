@@ -1,30 +1,37 @@
 <% // This file takes a (loldata) object to show the stats %>
 
 <main>
-    <h1>League of Legends</h1>
+    <div class="d-flex flex-row justify-center gap-3">
+        <%- include('../partials/components/back-button.ejs', {href : '/lol'});
+        %>
+        <h2>League of Legends</h2>
+    </div>
 
-    <div class="header">
-        <h2>Estadísticas de <%= loldata.gameName %></h2>
+    <div class="header my-5">
+        <div class="d-flex flex-row flex-wrap">
+            <h2>Estadísticas de <%= loldata.gameName %></h2>
+
+            <div class="lol-general-stats">
+                <p>Victorias: <%= loldata.wins %></p>
+                <p>Perdidas: <%= loldata.losses %></p>
+                <p>Total: <%= loldata.total %></p>
+            </div>
+        </div>
+
         <div class="lol-rank">
-            <img src="/img/lol/ranks/<%= loldata.tier.toLowerCase() + ".png"%>">
+            <img
+                src="/img/lol/ranks/<%= loldata.tier.toLowerCase() + ".png"%>">
             <p>
                 <%= loldata.tier %> <%= loldata.rank %>
             </p>
         </div>
     </div>
 
-    <div class="lol-general-stats">
-        <p>Wins: <%= loldata.wins %></p>
-        <p>Losses: <%= loldata.losses %></p>
-        <p>Total: <%= loldata.total %></p>
-    </div>
-
-    <h3>Últimos 7 días:</h3>
+    <h3 class="py-3">Últimos 7 días:</h3>
     <p>Partidas jugadas: <%= loldata.gamesLast7Days %></p>
 
-    <p>
-        <%= loldata.games.length%>
-        últimas partidas:
+    <p class="py-2">
+        Últimas <%= loldata.games.length%> partidas:
     </p>
     <div class="lol-games-div">
         <% // Generate a card for each game of the user %>
