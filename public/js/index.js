@@ -289,6 +289,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const userEmail = searchInput.value.trim(); // Obtener el valor del input y eliminar espacios en blanco al principio y al final
         const userRows = document.querySelectorAll('.user-row'); // Seleccionar todas las filas de usuarios
 
+        // Verificar si el input está en blanco
+        if (userEmail === '') {
+            // Mostrar todas las filas y no mostrar mensaje de error
+            userRows.forEach(row => {
+                row.style.display = '';
+            });
+            errorSearch.textContent = ''; // Asegurarse de que no se muestre el mensaje de error
+            return; // Salir de la función para no ejecutar el código de búsqueda
+        }
+
         let found = false; // Indicador si se encontró el usuario
 
         userRows.forEach(row => {
@@ -311,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
 // Logout ---------------------------
 const logoutButton = document.getElementById('logout-button');
 
@@ -372,3 +381,19 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
         window.location.href = '/lol/stats/' + usernameVal;
     }
 });
+
+// update username in user view
+
+const changeUserName = document.getElementById('changeUserNameBtn');
+const father = document.getElementById('user-title');
+
+    changeUserName.addEventListener('click', function () {
+        const userName = document.getElementById('currentUserName').value;
+        const inputChange = document.createElement('input');
+        const cancelBtn = document.createElement('button');
+        inputChange.parentChild = father;
+        cancelBtn.parentChild = father;
+        inputChange.value = userName;
+        cancelBtn.textContent = 'Cancel';
+        changeUserName.textContent = 'Save';
+    });
