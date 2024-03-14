@@ -2,9 +2,17 @@
 
 <main>
     <h1 class="title">Users</h1>
+    <!--search by username-->
+    <form action="get">
+        <%- include('../partials/components/input-mail.ejs',
+        {id:"back-search-mail-input"})%>
+        <button id="back-search-button" type="submit" class="primary">Search</button>
+        <p id="error-search-back" class="error-text"></p>
+    </form>
     <table>
 
         <tbody>
+            
             <thead>
                 <td>ID</td>
                 <td>Username</td>
@@ -14,7 +22,7 @@
                 <td></td>
             </thead>
             <% users.forEach(user => { %>
-                <tr>
+                <tr class="user-row">
                     <td><%= user.id %></td>
                     <td><%= user.username %></td>
                     <td><%= user.mail %></td>
