@@ -70,26 +70,6 @@ export const LoLMostPlayed = async (Gamename: string): Promise<{ championID: num
     return championsMasteryData;
 };
 
-interface RiotData {
-    id: string,
-    accountId: string,
-    puuid: string,
-    name: string,
-    profileIconId: number,
-    revisionDate: number,
-    summonerLevel: number;
-
-}
-
-export const RiotDataByName = async (gameName: string): Promise<RiotData | null> => {
-    const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/by-name/' + gameName, {
-        headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
-    });
-    if (result.status != 200) { throw new UserNotFoundError(); }
-
-    const json = await result.json();
-    return json;
-};
 
 export const LoLRankById = async (Gamename: string): Promise<object | null> => {
     const lolData = await RiotDataByName(Gamename);
