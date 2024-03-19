@@ -45,7 +45,6 @@ export const getFirebaseUserByUsername = async (username: string): Promise<Fireb
         return null;
     };
 
-    Pino.trace(userRef.docs[0])
     return buildFirebaseUser(userRef.docs[0]);
 };
 
@@ -95,8 +94,6 @@ export const createFirebaseUser = async (username: string, mail: string, passwor
 
 const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>): FirebaseUser => {
     const doc = querySnapshot.data();
-
-    Pino.debug(querySnapshot)
     return {
         id: querySnapshot.id,
         username: doc!.username,

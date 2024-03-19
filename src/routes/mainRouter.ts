@@ -8,6 +8,7 @@ import { validateUserIdentifier } from "../api/middlewares/validateUserIdentifie
 import { errorHandler } from "../api/middlewares/errorHandler.js";
 import { updateFirebaseUserById, updateFirebaseUserName } from "../api/services/FirebaseServices.js";
 import { verifyTokenOptional } from "../api/middlewares/verifyToken.js";
+import Pino from "../logger.js";
 
 
 const mainRouter = Router();
@@ -18,12 +19,10 @@ mainRouter.post("/register", validateCreateUser, createUser);
 
 mainRouter.delete("/deleteUser/:identifier", validateUserIdentifier, deleteUser);
 mainRouter.put("/update-user/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);
-mainRouter.get("/get-user/:identifier", validateUserIdentifier, (req, res) => {
-  const user = getUserByIdentifier(req.params.identifier, 'username');
-
-return   res.json(user)
-  
-
+mainRouter.get("/get-user/:identifier", validateUserIdentifier,  async (req, res, next) => {
+  const user = await getUserByIdentifier(req.params.identifier, 'username');
+  Pino.trace(JSON.stringify(user));
+  return res.json(user);
 });
 mainRouter.get("/get-all-users", getAllUsers);
 

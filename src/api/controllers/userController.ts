@@ -64,6 +64,8 @@ export async function getUserByIdentifier(identifier: string,
         return null;
     }
 
+    Pino.debug('User found getting user by identifier:' + identifier + ' + type:' + type + ' user:' + user);
+
     return user;
 };
 
