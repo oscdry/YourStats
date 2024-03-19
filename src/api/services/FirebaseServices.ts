@@ -37,11 +37,15 @@ export const getFirebaseUserByUsername = async (username: string): Promise<Fireb
         return null;
     };
 
+    Pino.debug("getting by username: " + username)
+
     const userRef = await firestore.collection('users').where('username', '==', username).get();
     if (userRef.empty) {
         Pino.error('Users not found getting by username: ' + username);
         return null;
     };
+
+    Pino.trace(userRef.docs[0])
     return buildFirebaseUser(userRef.docs[0]);
 };
 
@@ -91,6 +95,8 @@ export const createFirebaseUser = async (username: string, mail: string, passwor
 
 const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>): FirebaseUser => {
     const doc = querySnapshot.data();
+
+    Pino.debug(querySnapshot)
     return {
         id: querySnapshot.id,
         username: doc!.username,
@@ -131,3 +137,12 @@ export const updateFirebaseUserById = async (id: string, updates: { username?: s
     // Actualiza en Firestore
     await firestore.collection('users').doc(id).update(updateData);
 };
+
+export const updateFirebaseUserName = async (id: string, updates: { username?: string; }): Promise<void> => {
+    if (updates.username) {
+        await firestore.collection('users').doc(id).update({
+            username: updates.username
+        });
+    }
+    await firestore.collection('users').doc(id).update(updates);
+}

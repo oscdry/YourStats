@@ -283,8 +283,7 @@ const searchBtn = document.getElementById('back-search-button');
 const searchInput = document.getElementById('back-search-mail-input');
 const errorSearch = document.getElementById('error-search-back');
 
-document.addEventListener('DOMContentLoaded', function() {
-    searchBtn.addEventListener('click', function(event) {
+    searchBtn?.addEventListener('click', function(event) {
         event.preventDefault(); // Prevenir el envío del formulario para realizar la búsqueda con JavaScript
         const userEmail = searchInput.value.trim(); // Obtener el valor del input y eliminar espacios en blanco al principio y al final
         const userRows = document.querySelectorAll('.user-row'); // Seleccionar todas las filas de usuarios
@@ -320,7 +319,6 @@ document.addEventListener('DOMContentLoaded', function() {
             errorSearch.textContent = ''; // Limpiar el mensaje de error si se encontró al usuario
         }
     });
-});
 // Logout ---------------------------
 const logoutButton = document.getElementById('logout-button');
 
@@ -384,16 +382,81 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 
 // update username in user view
 
-const changeUserName = document.getElementById('changeUserNameBtn');
-const father = document.getElementById('user-title');
+const changeUserNameBtn = document.getElementById('changeUserNameBtn');
+const currentUserName = document.getElementById('currentUserName');
+const userTitle = document.querySelector('.user-title');
 
-    changeUserName.addEventListener('click', function () {
-        const userName = document.getElementById('currentUserName').value;
-        const inputChange = document.createElement('input');
-        const cancelBtn = document.createElement('button');
-        inputChange.parentChild = father;
-        cancelBtn.parentChild = father;
-        inputChange.value = userName;
-        cancelBtn.textContent = 'Cancel';
-        changeUserName.textContent = 'Save';
+changeUserNameBtn?.addEventListener('click', function () {
+    const userName = currentUserName.textContent;
+    const userId = userTitle.getAttribute('data-user-id');
+
+    // Create input field
+    const inputChange = document.createElement('input');
+    inputChange.value = userName;
+    userTitle.insertBefore(inputChange, changeUserNameBtn);
+
+    // Hide current username display
+    currentUserName.style.display = 'none';
+
+    // Hide changeUserNameBtn
+    changeUserNameBtn.style.display = 'none';
+
+    // Create save button
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save';
+    userTitle.appendChild(saveBtn);
+
+    // Create cancel button
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    userTitle.appendChild(cancelBtn);
+
+    // Add event listener for cancel button
+    cancelBtn.addEventListener('click', function() {
+        // Remove input field
+        inputChange.remove();
+
+        // Show current username display
+        currentUserName.style.display = 'block';
+
+        // Show changeUserNameBtn
+        changeUserNameBtn.style.display = 'inline';
+
+        // Remove save and cancel buttons
+        saveBtn.remove();
+        cancelBtn.remove();
     });
+
+    // Add event listener for save button
+    saveBtn.addEventListener('click', function() {
+        // Update username
+        const newUserName = inputChange.value;
+
+        // Your AJAX call to update the username
+        fetch(`/api/update-user-username/${userId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ username: newUserName }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(async response => {
+            if (response.ok) {
+                // Reload the view after successful update
+                const json = await response.json();
+                const token = json.token;
+                ClearToken();
+                SaveToken(token);
+                window.location.reload();
+                return;
+            } else {
+                // Handle error response
+                console.error('Failed to update username');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        // window.location.reload();
+    });
+});

@@ -1,10 +1,13 @@
 import { Request, Response, Router } from "express";
-import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers } from "../api/controllers/userController.js";
+import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName } from "../api/controllers/userController.js";
 import { validateCreateUser } from "../api/middlewares/validateCreateUsers.js";
 import { validateUpdateUser } from "../api/middlewares/validateUpdateUser.js";
+import { validateNameUserUpdate } from "../api/middlewares/validateNameUserUpdate.js";
 import { LoginUser } from "../api/controllers/loginController.js";
 import { validateUserIdentifier } from "../api/middlewares/validateUserIdentifier.js";
 import { errorHandler } from "../api/middlewares/errorHandler.js";
+import { updateFirebaseUserById, updateFirebaseUserName } from "../api/services/FirebaseServices.js";
+import { verifyTokenOptional } from "../api/middlewares/verifyToken.js";
 
 
 const mainRouter = Router();
@@ -14,18 +17,23 @@ mainRouter.post("/logout", LogoutUser);
 mainRouter.post("/register", validateCreateUser, createUser);
 
 mainRouter.delete("/deleteUser/:identifier", validateUserIdentifier, deleteUser);
-mainRouter.put("/updateUser/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);
-mainRouter.get("/getUser/:identifier", validateUserIdentifier, (req) => {
+mainRouter.put("/update-user/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);
+mainRouter.get("/get-user/:identifier", validateUserIdentifier, (req, res) => {
   const user = getUserByIdentifier(req.params.identifier, 'username');
-  return user;
+
+return   res.json(user)
+  
+
 });
-mainRouter.get("/getAllUsers", getAllUsers);
+mainRouter.get("/get-all-users", getAllUsers);
 
 mainRouter.get("/users/search/:identifier", validateUserIdentifier, (req) => {
   const user = getUserByIdentifier(req.params.identifier, 'email');
   return user;
 });
+mainRouter.use(verifyTokenOptional);
 
+mainRouter.put("/update-user-username/:identifier", validateUserIdentifier, validateNameUserUpdate, updateUserName);
 
 
 export default mainRouter;

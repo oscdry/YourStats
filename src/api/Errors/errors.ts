@@ -26,16 +26,23 @@ export class InvalidTokenError extends Error {
     }
 }
 
-export class EmailUsed extends Error {
+export class EmailUsedError extends Error {
     constructor() {
-        super('Error registering user.');
-        this.name = 'This email is already provided'
+        super('This email is already provided');
+        this.name = 'Email used'
     }
 }
 
-export class UsernameUsed extends Error {
+export class UsernameUsedError extends Error {
     constructor() {
-        super('Error registering user.');
-        this.name = 'This username is already provided'
+        super('This username is already provided');
+        this.name = 'Username used'
+    }
+}
+
+export class updateUsernameError extends Error {
+    constructor() {
+        super('Error updating username');
+        this.name = 'Update username'
     }
 }
