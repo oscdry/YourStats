@@ -21,7 +21,7 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
         case "InvalidTokenError":
             // If invalid token error, clear the token cookie and redirect to home
             // If this is not done, an infinite loop will occur
-            res.clearCookie("token");
+            res.clearCookie("token           m");
             return res.redirect("/");
         case "LoginError":
             return res.status(400).json({ error: "Invalid username or password" });
@@ -32,6 +32,8 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
         default:
             break;
     }
+
+    Pino.error("Unkown error: " + (err instanceof Error ? err.message : err));
 
     if (!err.name)
         return res.status(500).json({ error: "Internal Server Error" });

@@ -48,7 +48,7 @@ main
     width: 95%;
 
     margin: 0 auto;
-    padding: 1.5rem;
+    padding: 2rem 4rem;
     margin-top: 15vh;
 
     background-color: var(--white);
@@ -710,4 +710,29 @@ button::focus
     {
         width: 100%;
     }
+}
+
+a.icon
+{
+    position: relative;
+    display: block;
+}
+
+i
+{
+    position: relative;
+    display: block;
+
+    width: 50px;
+    height: 50px;
+}
+
+.icon-glyph-left
+{
+    background-image: url('/img/glyph-left.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+
 }

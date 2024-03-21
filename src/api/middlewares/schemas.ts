@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 export const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+const usernameRegex = /^\S*$/;
 
 export const getUserSchema = Joi.object({
     identifier: Joi.string().required(), // Asegura que el identificador sea requerido
@@ -23,4 +24,8 @@ export const createUserSchema = Joi.object({
     mail: Joi.string().email().required(),
     password: Joi.string().required(),
     password_confirmation: Joi.required().valid(Joi.ref('password')),
+});
+
+export const updateUsernameSchema = Joi.object({
+    username: Joi.string().required().min(3).max(16).regex(usernameRegex)
 });
