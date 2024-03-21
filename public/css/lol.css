@@ -137,12 +137,14 @@ img.lol-item-icon
     height: 38px;
 }
 
-.win
+div.lol-item-icon-empty
 {
-    background-color: rgb(172, 255, 172);
-}
+    max-width: 38px;
+    max-height: 38px;
+    width: 38px;
+    height: 38px;
 
-.loss
-{
-    background-color: rgb(255, 178, 178);
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: var(--black);
 }

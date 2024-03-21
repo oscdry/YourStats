@@ -1,3 +1,7 @@
 <% // This component takes a (id) item to show an item used in a game %>
 
+<% if (id != 0) { %>
 <img class="lol-item-icon" src="/img/lol/items/<%= id + ".png.webp" %>" alt>
+<% } else { %>
+<div class="lol-item-icon-empty"></div>
+<% } %>

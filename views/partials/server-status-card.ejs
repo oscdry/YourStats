@@ -1,0 +1,20 @@
+<head>
+    <link rel="stylesheet" href="/css/lol.css">
+</head>
+
+<div class="server-status-card">
+    <p class="server-name">
+        <%= server.name %>
+    </p>
+
+    <p>Estado: </p>
+    <i class="server-status-icon
+        <%=server.incidents.length === 0 ? 'win' : 'loss' %>">
+    </i>
+
+    <p>
+        <%= server.maintenances.length === 0 ? 'Operativo' : 'En mantenimiento'
+        %>
+    </p>
+
+</div>

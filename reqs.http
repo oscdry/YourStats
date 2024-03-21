@@ -26,3 +26,9 @@ Content-Type: application/json
     "mail": "a@mail.com",
     "password": "Abc.1234"
 }
+
+###
+
+// LOL testing
+
+POST http://localhost:8080/api/getLolUserData/OSCDRY
