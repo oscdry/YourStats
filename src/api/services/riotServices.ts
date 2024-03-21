@@ -1,6 +1,7 @@
 import { UserNotFoundError } from "../errors/errors";
 
 const LOL_API_ENDPOINT = "https://euw1.api.riotgames.com/lol/"; 
+const RIOT_API_ENDPOINT = "https://europe.api.riotgames.com";
 
 interface RiotData {
     id: string,

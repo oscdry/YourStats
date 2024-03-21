@@ -72,20 +72,19 @@ export const LoLMostPlayed = async (Gamename: string): Promise<{ championID: num
 
 //Muestra datos de Usuario como: Partidas gnadas,perdidas, totales,puntos de liga , rango y tier
 
-export const LoLRankById = async (Gamename: string): Promise<object | null> => {
-    const lolData = await RiotDataByName(Gamename);
-    if (!lolData) {
-        Pino.warn("No se encontró el usuario " + Gamename
+export const LoLRankById = async (Id: string): Promise<object | null> => {
+    if (!Id) {
+        Pino.warn("No se encontró el usuario " + Puiid
             + " en la base de datos de Riot");
         return null;
     };
 
-    Pino.trace("Found " + Gamename + " in the Riot database LolRankById");
+    Pino.trace("Found " + Id + " in the Riot database LolRankById");
 
-    const id = lolData.id;
-    console.log(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + id);
+    
+    console.log(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + Id);
 
-    const result = await fetch(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + id, {
+    const result = await fetch(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + Id, {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
     if (result.status != 200) { console.log("Error"); }
@@ -112,9 +111,8 @@ export const LoLRankById = async (Gamename: string): Promise<object | null> => {
 
 //Muestra las ultimas diez partidas
 
-export const LoLGamesByUUID = async (Gamename: string): Promise<string> => {
-    const { puuid } = await RiotDataByName(Gamename);
-    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + puuid + '/ids?start=0&count=10', {
+export const LoLGamesByUUID = async (Puiid: string): Promise<string> => {
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + Puiid + '/ids?start=0&count=10', {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
     if (result.status != 200) { console.log("Error"); }
@@ -141,7 +139,7 @@ export const LoLGameDetail = async (GameID: string): Promise<string> => {
 
 //Busca que campeón jugo el usuario en cada partida jugada
 
-export const LoLGameChampUser = async (GameID: string, Gamename: string): Promise<string> => {
+export const LoLGameChampUser = async (GameID: string, Puiid: string): Promise<string> => {
     const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/' + GameID, {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
@@ -149,7 +147,7 @@ export const LoLGameChampUser = async (GameID: string, Gamename: string): Promis
     if (result.status != 200) { console.log("Error"); }
 
     const json = await result.json();
-    const participant = json.info.participants.find((participant: any) => participant.riotIdGameName === Gamename);
+    const participant = json.info.participants.find((participant: any) => participant.puiid === Puiid);
     if (!participant) {
         console.log("No se encontró el jugador en la partida");
     }
@@ -160,8 +158,7 @@ export const LoLGameChampUser = async (GameID: string, Gamename: string): Promis
 //Filtro de partidas por fecha de inicio y fecha final
 
 
-export const LoLGamesByUUIDFilter = async (Gamename: string, fecha1: string, fecha2: string): Promise<string> => {
-    const { puuid } = await RiotDataByName(Gamename);
+export const LoLGamesByUUIDFilter = async (Puiid: string, fecha1: string, fecha2: string): Promise<string> => {
     const fechaT1 = new Date(fecha1);
     const fechaT2 = new Date(fecha2);
 
@@ -170,7 +167,7 @@ export const LoLGamesByUUIDFilter = async (Gamename: string, fecha1: string, fec
 
     // console.log(timestampInicio);
     // console.log(timestampFinal);
-    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + puuid + '/ids?startTime=' + timestampInicio + '&endTime=' + timestampFinal + '&start=0&count=10', {
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + Puiid + '/ids?startTime=' + timestampInicio + '&endTime=' + timestampFinal + '&start=0&count=10', {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
     if (result.status != 200) { console.log("Error"); }
@@ -182,9 +179,8 @@ export const LoLGamesByUUIDFilter = async (Gamename: string, fecha1: string, fec
 
 //Numero de partidas jugadas los últimos 7 dias
 
-export const LoLGamesLast7days = async (Gamename: string): Promise<string | null> => {
-    const { puuid } = await RiotDataByName(Gamename);
-    if (!puuid) return null;
+export const LoLGamesLast7days = async (Puiid: string): Promise<string | null> => {
+    if (!Puiid) return null;
 
     const fechaCompleta = new Date();
 
@@ -198,9 +194,9 @@ export const LoLGamesLast7days = async (Gamename: string): Promise<string | null
     const timestamp10 = fechaT2.getTime() / 1000;
 
 
-    console.log("fetching to " + RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + puuid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=100');
+    console.log("fetching to " + RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + Puiid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=100');
 
-    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + puuid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=100', {
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + Puiid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=100', {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
 
@@ -214,8 +210,7 @@ export const LoLGamesLast7days = async (Gamename: string): Promise<string | null
 
 //Ultimas 10 partidas con detalle de cada una
 
-export const LoLChampsLast10Games = async (gameName: string): Promise<string> => {
-    const { puuid } = await RiotDataByName(gameName);
+export const LoLChampsLast10Games = async (Puiid: string): Promise<string> => {
 
     const fechaCompleta = new Date();
 
@@ -229,7 +224,7 @@ export const LoLChampsLast10Games = async (gameName: string): Promise<string> =>
     const timestamp10 = fechaT2.getTime() / 1000;
 
 
-    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + puuid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=10', {
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + Puiid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=10', {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
 
@@ -241,7 +236,7 @@ export const LoLChampsLast10Games = async (gameName: string): Promise<string> =>
         elementos_array.push(elemento);
     });
     for (const elemento of elementos_array) {
-        console.log(await LoLGameChampUser(elemento, gameName));
+        console.log(await LoLGameChampUser(elemento, Puiid));
     }
 
     return json1;
@@ -283,8 +278,7 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
     return { championIdentifier, isWinner, arrayItems, stats, kda, gameMode };
 };
 
-export const LoLWinrateChamps = async (Gamename: string) => {
-    const { puuid } = await RiotDataByName(Gamename);
+export const LoLWinrateChamps = async (Puiid: string) => {
 
     const fechaCompleta = new Date();
 
@@ -298,17 +292,17 @@ export const LoLWinrateChamps = async (Gamename: string) => {
     const timestamp10 = fechaT2.getTime() / 1000;
 
 
-    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + puuid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=10', {
+    const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/by-puuid/' + Puiid + '/ids?startTime=' + timestamp10 + '&endTime=' + timestampActual + '&start=0&count=10', {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
 
-    if (result.status != 200) { console.log("Error"); }
+    if (result.status != 200) { console.log("Error"); } 
 
     const matchIds = await result.json();
     const resultsArray: any[] = [];
 
     for (const matchId of matchIds) {
-        const result = await LoLGameChampWin(matchId, puuid);
+        const result = await LoLGameChampWin(matchId, Puiid);
         if (!result) continue;
         resultsArray.push(result);
     }
