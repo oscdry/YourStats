@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName } from "../api/controllers/userController.js";
+import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, updateUserBio } from "../api/controllers/userController.js";
 import { validateCreateUser } from "../api/middlewares/validateCreateUsers.js";
 import { validateUpdateUser } from "../api/middlewares/validateUpdateUser.js";
 import { validateNameUserUpdate } from "../api/middlewares/validateNameUserUpdate.js";
@@ -38,6 +38,7 @@ mainRouter.get("/users/search/:identifier", validateUserIdentifier, (req) => {
 mainRouter.use(verifyTokenOptional);
 
 mainRouter.put("/update-user-username/:identifier", validateUserIdentifier, validateNameUserUpdate, updateUserName);
+mainRouter.put("/update-user-bio/:identifier", validateUserIdentifier, updateUserBio);
 
 
 export default mainRouter;
