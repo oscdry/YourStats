@@ -2,8 +2,8 @@ const LOL_API_ENDPOINT = "https://euw1.api.riotgames.com/lol/";
 const RIOT_API_ENDPOINT = "https://europe.api.riotgames.com";
 
 import { config } from "dotenv";
-import { UserNotFoundError } from "./api/errors/errors.js";
-import Pino from "./logger.js";
+import Pino from "../../logger.js";
+import { RiotDataByName } from "./riotServices.js";
 
 config();
 
@@ -55,14 +55,14 @@ export const LolRankingDemo = async () => {
 
 //Esta muestra los tres campeones mas jugados de cada usuario
 
-export const LoLMostPlayed = async (Gamename: string): Promise<{ championID: number, championPoints: number; }[]> => {
-    const { puuid } = await RiotDataByName(Gamename);
+export const LoLMostPlayed = async (puuid: string): Promise<{ championID: number, championPoints: number; }[]> => {
     const result = await fetch(LOL_API_ENDPOINT + 'champion-mastery/v4/champion-masteries/by-puuid/' + puuid + '/top?count=3', {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
     if (result.status != 200) { console.log("Error"); }
 
     const json = await result.json();
+    console.log(json);
     const championsMasteryData = json.map((champion: { championId: number, championPoints: number; }) => {
         return { championID: champion.championId, championPoints: champion.championPoints };
     });
@@ -350,10 +350,13 @@ interface LoLGameChampWinResponse {
 //console.log(await LoLMostPlayed(Gamename));
 
 export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
-    const numGames = await LoLGamesLast7days(gameName);
-    const LoLWinrateChamp = await LoLWinrateChamps(gameName);
-    const userData = await LoLRankById(gameName);
-    const userPlayed = await LoLMostPlayed(gameName);
+    const data = await RiotDataByName(gameName);
+    const puuid = data?.puuid;
+    const summerId = data?.id;
+    const numGames = await LoLGamesLast7days(puuid);
+    const LoLWinrateChamp = await LoLWinrateChamps(puuid);
+    const userData = await LoLRankById(summerId);
+    const userPlayed = await LoLMostPlayed(puuid);
 
     const lolData: LoLUserData = {
         gamesLast7Days: numGames,
