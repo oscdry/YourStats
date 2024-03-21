@@ -5,7 +5,7 @@ import { validateUpdateUser } from "../api/middlewares/validateUpdateUser.js";
 import { LoginUser } from "../api/controllers/loginController.js";
 import { validateUserIdentifier } from "../api/middlewares/validateUserIdentifier.js";
 import { errorHandler } from "../api/middlewares/errorHandler.js";
-
+import { GetLolUserData } from "src/api/services/lolServices.js";
 
 const mainRouter = Router();
 
@@ -20,6 +20,7 @@ mainRouter.get("/getUser/:identifier", validateUserIdentifier, (req) => {
   return user;
 });
 mainRouter.get("/getAllUsers", getAllUsers);
+mainRouter.post("/getLoLuserData", GetLolUserData);
 
 mainRouter.get("/users/search/:identifier", validateUserIdentifier, (req) => {
   const user = getUserByIdentifier(req.params.identifier, 'email');
