@@ -81,7 +81,7 @@ export const LoLRankById = async (Id: string): Promise<object | null> => {
 
     Pino.trace("Found " + Id + " in the Riot database LolRankById");
 
-    
+
     console.log(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + Id);
 
     const result = await fetch(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + Id, {
@@ -242,7 +242,7 @@ export const LoLChampsLast10Games = async (Puiid: string): Promise<string> => {
     return json1;
 };
 
-// Detalle ultimas 10 partidas con estadísticas incluidas, los items, si ganó,
+// Detalle ultimas 10 partidas con estadísticas incluidas, los items, si ganó,etc
 
 
 export const LoLGameChampWin = async (GameID: string, puuid: string):
@@ -274,11 +274,73 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
     const isWinner = participant.win;
     const arrayItems = [participant.item0, participant.item1, participant.item2, participant.item3, participant.item4, participant.item5, participant.item6];
     const gameMode = json.info.gameMode;
+    const teamID = participant.teamId;
+    let enemyteamID = 1;
+    if (teamID == 200) {
+        enemyteamID = 100;
+    } else if (teamID == 100) {
+        enemyteamID = 200;
+    }
+    const teamPosition = participant.teamPosition;
+    const arrayCompañeros: { [nombre: string]: string } = {};
+    const arrayRivales: { [nombre: string]: string } = {};
+    if (gameMode == 'ARAM') {
+        json.info.participants.forEach((p: any) => {
+            if (p.teamId === teamID) {
+                arrayCompañeros[p.summonerName] = p.championId;
+            }
+        });
+        json.info.participants.forEach((p: any) => {
+            if (p.teamId === enemyteamID) {
+                arrayRivales[p.summonerName] = p.championId;
+            }
+        });
+    } else {
+        json.info.participants.forEach((p: any) => {
+            if (p.teamId === teamID) {
+                if (p.teamPosition === 'TOP') {
+                    arrayCompañeros[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'JUNGLE') {
 
-    return { championIdentifier, isWinner, arrayItems, stats, kda, gameMode };
+                    arrayCompañeros[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'MIDDLE') {
+
+                    arrayCompañeros[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'BOTTOM') {
+
+                    arrayCompañeros[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'UTILITY') {
+
+                    arrayCompañeros[p.summonerName] = p.championId;
+                }
+            }
+        });
+        json.info.participants.forEach((p: any) => {
+            if (p.teamId === enemyteamID) {
+                if (p.teamPosition === 'TOP') {
+                    arrayRivales[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'JUNGLE') {
+
+                    arrayRivales[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'MIDDLE') {
+
+                    arrayRivales[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'BOTTOM') {
+
+                    arrayRivales[p.summonerName] = p.championId;
+                } else if (p.teamPosition === 'UTILITY') {
+
+                    arrayRivales[p.summonerName] = p.championId;
+                }
+            }
+        });
+
+    }
+
+    return { championIdentifier, isWinner, arrayItems, stats, kda, gameMode, teamID, teamPosition, arrayCompañeros, arrayRivales };
 };
 
-export const LoLWinrateChamps = async (Puiid: string) => {
+export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
 
     const fechaCompleta = new Date();
 
@@ -296,7 +358,7 @@ export const LoLWinrateChamps = async (Puiid: string) => {
         headers: { "X-Riot-Token": process.env.RIOT_API_KEY! }
     });
 
-    if (result.status != 200) { console.log("Error"); } 
+    if (result.status != 200) { console.log("Error"); }
 
     const matchIds = await result.json();
     const resultsArray: any[] = [];
@@ -306,11 +368,34 @@ export const LoLWinrateChamps = async (Puiid: string) => {
         if (!result) continue;
         resultsArray.push(result);
     }
+    //const countPosition = resultsArray.teamPosition; 
+
+    const teammatesPlayed: { [name: string]: number } = {};
+
+    resultsArray.forEach(game => {
+        const teammatesinGame = game.arrayCompañeros;
+
+        for (const name in teammatesinGame) {
+            if (teammatesinGame.hasOwnProperty(name)) {
+                if (teammatesPlayed[name]) {
+                    teammatesPlayed[name]++;
+                } else {
+                    teammatesPlayed[name] = 1;
+                }
+            }
+        }
+    });
+    
+    const teamFilter: [string, number][] = Object.entries(teammatesPlayed);
+    teamFilter.sort((a, b) => b[1] - a[1]);
+    const mostPlayed = teamFilter.slice(0, 4);
+    const threeMost = mostPlayed.filter(([nombre, _]) => nombre !== gameName);
     return resultsArray;
 };
 
 
 const GameID = 'EUW1_6826301175';
+const aramID = "EUW1_6870379282";
 const dia1 = '2024-01-01';
 const dia2 = '2024-02-22';
 
@@ -330,12 +415,13 @@ interface ChampionIdentifier {
 interface LoLGameChampWinResponse {
     championIdentifier: ChampionIdentifier;
     isWinner: boolean;
-    arrayItems: number[]; 
+    arrayItems: number[];
     stats: ChampionStats;
     kda: number;
     gameMode: string;
 }
-
+const Gamename = "OSCDRY";
+const puuid = "g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0Pykk_oUd4ne9aw";
 //console.log(await LoLGamesByUUID(Gamename));
 //console.log(await LoLGamesByUUIDFilter(Gamename,dia1,dia2));
 //console.log(await LoLChampsLast10Games(Gamename));
@@ -343,7 +429,8 @@ interface LoLGameChampWinResponse {
 //console.log(LoLGameDetail(GameID));
 //console.log(LoLGameChampUser(GameID,Gamename));
 //console.log(await LoLGamesLast10days(Gamename));
-//console.log(await LoLWinrateChamps(Gamename));
+console.log(await LoLWinrateChamps(puuid, Gamename));
+//console.log(await LoLGameChampWin(aramID, puuid));
 //console.log(await LoLRankById(Gamename));
 //console.log(await RiotStatusServer());
 //console.log(await LolRankingDemo());
@@ -393,6 +480,11 @@ interface LoLUserData {
         gameMode: string,
         kda: string,
         arrayItems: number[],
+        teamID: string,
+        teamPosition: string,
+        arrayCompañeros: string[],
+        arrayRivales: string[],
+
     ];
     tier: string;
     rank: string;
@@ -421,4 +513,4 @@ interface LolHomeData {
 }
 
 
-// console.log(JSON.stringify(await GetLolUserData(Gamename)));
+//console.log(JSON.stringify(await GetLolUserData(Gamename)));
