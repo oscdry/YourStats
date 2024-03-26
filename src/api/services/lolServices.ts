@@ -282,62 +282,82 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
         enemyteamID = 200;
     }
     const teamPosition = participant.teamPosition;
-    const arrayCompañeros: { [nombre: string]: string } = {};
-    const arrayRivales: { [nombre: string]: string } = {};
+    const arrayTeammates: { [nombre: string]: string } = {};
+    const arrayRivals: { [nombre: string]: string } = {};
     if (gameMode == 'ARAM') {
         json.info.participants.forEach((p: any) => {
             if (p.teamId === teamID) {
-                arrayCompañeros[p.summonerName] = p.championId;
+                arrayTeammates
+                [p.summonerName] = p.championId;
             }
         });
         json.info.participants.forEach((p: any) => {
             if (p.teamId === enemyteamID) {
-                arrayRivales[p.summonerName] = p.championId;
+                arrayRivals[p.summonerName] = p.championId;
             }
         });
     } else {
         json.info.participants.forEach((p: any) => {
             if (p.teamId === teamID) {
                 if (p.teamPosition === 'TOP') {
-                    arrayCompañeros[p.summonerName] = p.championId;
+                    arrayTeammates
+                    [p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'JUNGLE') {
 
-                    arrayCompañeros[p.summonerName] = p.championId;
+                    arrayTeammates
+                    [p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'MIDDLE') {
 
-                    arrayCompañeros[p.summonerName] = p.championId;
+                    arrayTeammates
+                    [p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'BOTTOM') {
 
-                    arrayCompañeros[p.summonerName] = p.championId;
+                    arrayTeammates
+                    [p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'UTILITY') {
 
-                    arrayCompañeros[p.summonerName] = p.championId;
+                    arrayTeammates
+                    [p.summonerName] = p.championId;
                 }
             }
         });
         json.info.participants.forEach((p: any) => {
             if (p.teamId === enemyteamID) {
                 if (p.teamPosition === 'TOP') {
-                    arrayRivales[p.summonerName] = p.championId;
+                    arrayRivals[p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'JUNGLE') {
 
-                    arrayRivales[p.summonerName] = p.championId;
+                    arrayRivals[p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'MIDDLE') {
 
-                    arrayRivales[p.summonerName] = p.championId;
+                    arrayRivals[p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'BOTTOM') {
 
-                    arrayRivales[p.summonerName] = p.championId;
+                    arrayRivals[p.summonerName] = p.championId;
                 } else if (p.teamPosition === 'UTILITY') {
 
-                    arrayRivales[p.summonerName] = p.championId;
+                    arrayRivals[p.summonerName] = p.championId;
                 }
             }
         });
 
     }
+    let arrayBlue: { [nombre: string]: string } = {};
+    let arrayRed: { [nombre: string]: string } = {};
+    if (teamID == 100) {
+        arrayBlue = arrayTeammates;
+        arrayRed = arrayRivals;
+    } else if (teamID == 200) {
+        arrayBlue = arrayRivals;
+        arrayRed = arrayTeammates;
+    }
 
-    return { championIdentifier, isWinner, arrayItems, stats, kda, gameMode, teamID, teamPosition, arrayCompañeros, arrayRivales };
+
+
+    return {
+        championIdentifier, isWinner, arrayItems, stats, kda, gameMode, teamID, teamPosition, arrayTeammates
+        , arrayBlue, arrayRed
+    };
 };
 
 export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
@@ -368,12 +388,13 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
         if (!result) continue;
         resultsArray.push(result);
     }
-    //const countPosition = resultsArray.teamPosition; 
 
     const teammatesPlayed: { [name: string]: number } = {};
 
+
     resultsArray.forEach(game => {
-        const teammatesinGame = game.arrayCompañeros;
+        const teammatesinGame = game.arrayTeammates
+            ;
 
         for (const name in teammatesinGame) {
             if (teammatesinGame.hasOwnProperty(name)) {
@@ -385,12 +406,48 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
             }
         }
     });
-    
+
+    const teamPositionCount: { [position: string]: number } = {};
+    const teamAramPositionCount: { [position: string]: number } = {};
+      
+    resultsArray.forEach(game => {
+        const position = game.teamPosition;
+        if (position) {
+            if (teamPositionCount[position]) {
+                teamPositionCount[position]++;
+            } else {
+                teamPositionCount[position] = 1;
+            }
+        }
+    });
+
+    let totalPositions = 0;
+    resultsArray.forEach(game => {
+        let position = game.teamPosition;
+        if (position) {
+          if (teamAramPositionCount[position]) {
+            teamAramPositionCount[position]++;
+          } else {
+            teamAramPositionCount[position] = 1;
+          }
+          
+          totalPositions++;
+        }
+      });
+
+      const aramDifference = 10 - totalPositions;
+      if (aramDifference > 0) {
+        teamPositionCount['ARAM'] = aramDifference;
+      }
+      console.log(totalPositions);
+      console.log(teamPositionCount);
+
     const teamFilter: [string, number][] = Object.entries(teammatesPlayed);
     teamFilter.sort((a, b) => b[1] - a[1]);
     const mostPlayed = teamFilter.slice(0, 4);
-    const threeMost = mostPlayed.filter(([nombre, _]) => nombre !== gameName);
-    return resultsArray;
+    const friendsMost = mostPlayed.filter(([nombre, _]) => nombre !== gameName);
+
+    return {resultsArray, friendsMost, teamPositionCount};
 };
 
 
@@ -429,7 +486,7 @@ const puuid = "g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0P
 //console.log(LoLGameDetail(GameID));
 //console.log(LoLGameChampUser(GameID,Gamename));
 //console.log(await LoLGamesLast10days(Gamename));
-console.log(await LoLWinrateChamps(puuid, Gamename));
+//console.log(await LoLWinrateChamps(puuid, Gamename));
 //console.log(await LoLGameChampWin(aramID, puuid));
 //console.log(await LoLRankById(Gamename));
 //console.log(await RiotStatusServer());
@@ -441,7 +498,7 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
     const puuid = data?.puuid;
     const summerId = data?.id;
     const numGames = await LoLGamesLast7days(puuid);
-    const LoLWinrateChamp = await LoLWinrateChamps(puuid);
+    const LoLWinrateChamp = await LoLWinrateChamps(puuid, gameName);
     const userData = await LoLRankById(summerId);
     const userPlayed = await LoLMostPlayed(puuid);
 
@@ -482,8 +539,11 @@ interface LoLUserData {
         arrayItems: number[],
         teamID: string,
         teamPosition: string,
-        arrayCompañeros: string[],
-        arrayRivales: string[],
+        arrayTeammates: string[],
+        arrayBlue: string[], 
+        arrayRed: string[],
+        friendsMost: [string, number][],
+        teamPositionCount: { [position: string]: number }
 
     ];
     tier: string;
@@ -513,4 +573,4 @@ interface LolHomeData {
 }
 
 
-//console.log(JSON.stringify(await GetLolUserData(Gamename)));
+console.log(JSON.stringify(await GetLolUserData(Gamename)));
