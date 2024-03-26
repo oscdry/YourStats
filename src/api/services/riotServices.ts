@@ -23,6 +23,7 @@ export const RiotPUUIDByTagName = async (gameName: string, tagLine: string): Pro
     if (result.status != 200) { console.log("Error"); return ""; }
 
     const json = await result.json();
+    
     return json["puuid"];
 
     

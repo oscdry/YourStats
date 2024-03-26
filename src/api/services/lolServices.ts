@@ -43,9 +43,11 @@ export const LolRankingDemo = async () => {
 
     const json = await result.json();
 
+    
+
     const sortedData = json.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
 
-    const topUsers = sortedData.slice(0, 3);
+    const topUsers = sortedData.slice(0, 5);
 
     const summonerDetails = topUsers.map(({ summonerName, leaguePoints }) => ({ summonerName, leaguePoints }));
 
@@ -450,6 +452,59 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
     return {resultsArray, friendsMost, teamPositionCount};
 };
 
+export function getLastChamps(): Record<string, number> {
+    const playersData: Record<string, number> = {
+        Smolder: 901,
+        Huawei: 910,
+        Briar: 233,
+        Naafiri: 950,
+        Milio: 902
+    };
+
+    return playersData;
+}
+
+export function getPopularSkins() {
+    const popularSkins: Skin[] = [
+        {
+            champName: "Ezreal",
+            skinURL: "https://www.mobafire.com/images/champion/skins/portrait/ezreal-pulsefire.jpg",
+            skinName: "Pulsefire Ezreal",
+            skinNombre: "Ezreal Pulso de Fuego",
+            price: 3250
+        },
+        {
+            champName: "Ahri",
+            skinURL: "https://www.mobafire.com/images/champion/skins/portrait/ahri-foxfire.jpg",
+            skinName: "Foxfire Ahri",
+            skinNombre: "Ahri Raposa Ígnea",
+            price: 975
+        },
+        {
+            champName: "Udyr",
+            skinURL: "https://www.mobafire.com/images/champion/skins/portrait/udyr-spirit-guard.jpg",
+            skinName: "Spirit Guard Udyr",
+            skinNombre: "Udyr Guardián de los Espíritus",
+            price: 3250
+        },
+        {
+            champName: "Justicar Aatrox",
+            skinURL: "https://www.mobafire.com/images/champion/skins/portrait/aatrox-justicar.jpg",
+            skinName: "Justicar Aatrox",
+            skinNombre: "Aatrox Justicia Suprema",
+            price: 975
+        },
+        {
+            champName: "Soul Reaver Draven",
+            skinURL: "Uhttps://www.mobafire.com/images/champion/skins/portrait/draven-soul-reaver.jpg",
+            skinName: "Soul Reaver Draven",
+            skinNombre: "Draven Segador de Almas",
+            price: 1350
+        },
+    ]
+    return popularSkins;
+}
+
 
 const GameID = 'EUW1_6826301175';
 const aramID = "EUW1_6870379282";
@@ -477,7 +532,7 @@ interface LoLGameChampWinResponse {
     kda: number;
     gameMode: string;
 }
-const Gamename = "OSCDRY";
+const Gamename = "Pau00x";
 const puuid = "g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0Pykk_oUd4ne9aw";
 //console.log(await LoLGamesByUUID(Gamename));
 //console.log(await LoLGamesByUUIDFilter(Gamename,dia1,dia2));
@@ -495,6 +550,9 @@ const puuid = "g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0P
 
 export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
     const data = await RiotDataByName(gameName);
+    const urlImage = 'https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/';
+    const preIcon = data?.profileIconId
+    const iconID = urlImage + preIcon + '.png';
     const puuid = data?.puuid;
     const summerId = data?.id;
     const numGames = await LoLGamesLast7days(puuid);
@@ -503,6 +561,7 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
     const userPlayed = await LoLMostPlayed(puuid);
 
     const lolData: LoLUserData = {
+        iconID: iconID,
         gamesLast7Days: numGames,
         gameName: gameName,
         games: LoLWinrateChamp,
@@ -521,6 +580,7 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
 };
 
 interface LoLUserData {
+    iconID : string;
     gamesLast7Days: string;
     gameName: string;
     games: [
@@ -560,17 +620,48 @@ interface LoLUserData {
 
 };
 
+export const GetLolHomeData = async (): Promise<LolHomeData> => {
 
+    const ranking = await LolRankingDemo();
+    const list = getLastChamps();
+    const skins = getPopularSkins();
 
+    const LolHomeData : LolHomeData = {
+        summonerDetails : ranking,
+        champList : list,
+        popularSkins : skins,
 
+    };
+    Pino.debug(JSON.stringify(LolHomeData));
+    return LolHomeData;
+}
 interface LolHomeData {
 
     summonerDetails: [
-        summoneName: string,
-        leaguePoints: number,
+        summoners: {
+            summoneName: string,
+            leaguePoints: number,
+        }
+        
     ];
+    champList: [
+        champs: {
+            champName: string,
+            champId: number,
+        }
+    ];
+
+    popularSkins: [
+        skins: {
+            champName: string,
+            skinURL: string,
+            skinName: string,
+            skinNombre: string,
+            price: number,
+        }
+    ]
 
 }
 
-
-console.log(JSON.stringify(await GetLolUserData(Gamename)));
+console.log(await GetLolHomeData());
+//console.log(JSON.stringify(await GetLolUserData(Gamename)));
