@@ -532,7 +532,7 @@ interface LoLGameChampWinResponse {
     kda: number;
     gameMode: string;
 }
-const Gamename = "Pau00x";
+const Gamename = "OSCDRY";
 const puuid = "g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0Pykk_oUd4ne9aw";
 //console.log(await LoLGamesByUUID(Gamename));
 //console.log(await LoLGamesByUUIDFilter(Gamename,dia1,dia2));
@@ -644,7 +644,7 @@ interface LolHomeData {
         }
         
     ];
-    champList: [
+        champList: [
         champs: {
             champName: string,
             champId: number,
@@ -663,5 +663,5 @@ interface LolHomeData {
 
 }
 
-console.log(await GetLolHomeData());
-//console.log(JSON.stringify(await GetLolUserData(Gamename)));
+//console.log(await GetLolHomeData());
+console.log(JSON.stringify(await GetLolUserData(Gamename)));
