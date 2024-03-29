@@ -4,6 +4,8 @@ const RIOT_API_ENDPOINT = "https://europe.api.riotgames.com";
 import { config } from "dotenv";
 import Pino from "../../logger.js";
 import { RiotDataByName } from "./riotServices.js";
+import { getSkinsChamp } from "./lolSkinsServices.js";
+import { list } from "./lolChampService.js";
 
 config();
 
