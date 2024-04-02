@@ -1,0 +1,18 @@
+<%- include('../partials/components/banner.ejs') %>
+
+<main class="banner">
+    <h1 class="title">Brawl Stars</h1>
+    <%- include('../partials/components/game-input-username.ejs') %>
+
+    <% const server = {
+    id: 'EUW1',
+    name: 'EU West',
+    maintenances: [],
+    incidents: []
+    } %>
+
+    <div class="d-flex ">
+        <%- include('../partials/server-status-card.ejs', {server}) %>
+    </div>
+
+</main>

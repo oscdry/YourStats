@@ -39,6 +39,11 @@ webRouter.get("/about", (_req: Request, res: Response) => {
     res.render('./about.ejs', { title: "Contacto" });
 });
 
+// Brawl Stars
+webRouter.get("/brawl", (_req: Request, res: Response) => {
+    res.render('./brawl/index.ejs', { title: "Brawl Stars" });
+});
+
 // League of Legends
 webRouter.get("/lol", (_req: Request, res: Response) => {
     res.render('./lol/index.ejs', { title: "LoL" });
