@@ -45,7 +45,7 @@ export const LolRankingDemo = async () => {
 
     const json = await result.json();
 
-    
+
 
     const sortedData = json.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
 
@@ -127,7 +127,7 @@ export const LoLGamesByUUID = async (Puiid: string): Promise<string> => {
 };
 
 
-//Muestra los detalles de cada partida 
+//Muestra los detalles de cada partida
 
 export const LoLGameDetail = async (GameID: string): Promise<string> => {
 
@@ -286,8 +286,8 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
         enemyteamID = 200;
     }
     const teamPosition = participant.teamPosition;
-    const arrayTeammates: { [nombre: string]: string } = {};
-    const arrayRivals: { [nombre: string]: string } = {};
+    const arrayTeammates: { [nombre: string]: string; } = {};
+    const arrayRivals: { [nombre: string]: string; } = {};
     if (gameMode == 'ARAM') {
         json.info.participants.forEach((p: any) => {
             if (p.teamId === teamID) {
@@ -346,8 +346,8 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
         });
 
     }
-    let arrayBlue: { [nombre: string]: string } = {};
-    let arrayRed: { [nombre: string]: string } = {};
+    let arrayBlue: { [nombre: string]: string; } = {};
+    let arrayRed: { [nombre: string]: string; } = {};
     if (teamID == 100) {
         arrayBlue = arrayTeammates;
         arrayRed = arrayRivals;
@@ -393,7 +393,7 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
         resultsArray.push(result);
     }
 
-    const teammatesPlayed: { [name: string]: number } = {};
+    const teammatesPlayed: { [name: string]: number; } = {};
 
 
     resultsArray.forEach(game => {
@@ -411,9 +411,9 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
         }
     });
 
-    const teamPositionCount: { [position: string]: number } = {};
-    const teamAramPositionCount: { [position: string]: number } = {};
-      
+    const teamPositionCount: { [position: string]: number; } = {};
+    const teamAramPositionCount: { [position: string]: number; } = {};
+
     resultsArray.forEach(game => {
         const position = game.teamPosition;
         if (position) {
@@ -429,29 +429,29 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
     resultsArray.forEach(game => {
         let position = game.teamPosition;
         if (position) {
-          if (teamAramPositionCount[position]) {
-            teamAramPositionCount[position]++;
-          } else {
-            teamAramPositionCount[position] = 1;
-          }
-          
-          totalPositions++;
-        }
-      });
+            if (teamAramPositionCount[position]) {
+                teamAramPositionCount[position]++;
+            } else {
+                teamAramPositionCount[position] = 1;
+            }
 
-      const aramDifference = 10 - totalPositions;
-      if (aramDifference > 0) {
+            totalPositions++;
+        }
+    });
+
+    const aramDifference = 10 - totalPositions;
+    if (aramDifference > 0) {
         teamPositionCount['ARAM'] = aramDifference;
-      }
-      console.log(totalPositions);
-      console.log(teamPositionCount);
+    }
+    console.log(totalPositions);
+    console.log(teamPositionCount);
 
     const teamFilter: [string, number][] = Object.entries(teammatesPlayed);
     teamFilter.sort((a, b) => b[1] - a[1]);
     const mostPlayed = teamFilter.slice(0, 4);
     const friendsMost = mostPlayed.filter(([nombre, _]) => nombre !== gameName);
 
-    return {resultsArray, friendsMost, teamPositionCount};
+    return { resultsArray, friendsMost, teamPositionCount };
 };
 
 export function getLastChamps(): Record<string, number> {
@@ -503,7 +503,7 @@ export function getPopularSkins() {
             skinNombre: "Draven Segador de Almas",
             price: 1350
         },
-    ]
+    ];
     return popularSkins;
 }
 
@@ -553,7 +553,7 @@ const puuid = "g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0P
 export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
     const data = await RiotDataByName(gameName);
     const urlImage = 'https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/';
-    const preIcon = data?.profileIconId
+    const preIcon = data?.profileIconId;
     const iconID = urlImage + preIcon + '.png';
     const puuid = data?.puuid;
     const summerId = data?.id;
@@ -582,7 +582,7 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
 };
 
 interface LoLUserData {
-    iconID : string;
+    iconID: string;
     gamesLast7Days: string;
     gameName: string;
     games: [
@@ -602,10 +602,10 @@ interface LoLUserData {
         teamID: string,
         teamPosition: string,
         arrayTeammates: string[],
-        arrayBlue: string[], 
+        arrayBlue: string[],
         arrayRed: string[],
         friendsMost: [string, number][],
-        teamPositionCount: { [position: string]: number }
+        teamPositionCount: { [position: string]: number; }
 
     ];
     tier: string;
@@ -618,8 +618,6 @@ interface LoLUserData {
         championId: number,
         championPoints: number,
     ];
-
-
 };
 
 export const GetLolHomeData = async (): Promise<LolHomeData> => {
@@ -628,15 +626,15 @@ export const GetLolHomeData = async (): Promise<LolHomeData> => {
     const list = getLastChamps();
     const skins = getPopularSkins();
 
-    const LolHomeData : LolHomeData = {
-        summonerDetails : ranking,
-        champList : list,
-        popularSkins : skins,
+    const LolHomeData: LolHomeData = {
+        summonerDetails: ranking,
+        champList: list,
+        popularSkins: skins,
 
     };
     Pino.debug(JSON.stringify(LolHomeData));
     return LolHomeData;
-}
+};
 interface LolHomeData {
 
     summonerDetails: [
@@ -644,9 +642,9 @@ interface LolHomeData {
             summoneName: string,
             leaguePoints: number,
         }
-        
+
     ];
-        champList: [
+    champList: [
         champs: {
             champName: string,
             champId: number,
@@ -661,7 +659,7 @@ interface LolHomeData {
             skinNombre: string,
             price: number,
         }
-    ]
+    ];
 
 }
 

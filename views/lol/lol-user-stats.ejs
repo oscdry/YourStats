@@ -36,6 +36,35 @@
     <h3 class="py-3">Últimos 7 días:</h3>
     <p>Partidas jugadas: <%= loldata.gamesLast7Days %></p>
 
+    <%# Positions Chart %>
+    <div>
+        <p>Posiciones jugadas: </p>
+        <canvas id="positionChart"></canvas>
+        <script type="module">
+            var ctx = document.getElementById('positionChart').getContext('2d');
+            var chartData = <%- JSON.stringify(lolPositionsChartData) %>;
+            var myChart = new Chart(ctx, chartData);
+        </script>
+    </div>
+
+    <%# Top 3 Champions %>
+    <div>
+        <p>Top 3 Campeones:</p>
+        <div class="lol-user-champions-top">
+            <% loldata.championsMasteryData.forEach(champion => { %>
+            <div class="lol-champion-card">
+                <img src="/img/lol/champs/<%= champion.championID + ".webp" %>">
+                <div class="d-flex flex-column justify-content-center">
+                    <p>Puntos de maestría</p>
+
+                    <p><%= champion.championPoints %></p>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+
+    </div>
+
     <p class="py-2">
         Últimas <%= loldata.games.length%> partidas:
     </p>
@@ -46,11 +75,4 @@
         <% }); %>
     </div>
 
-    <%# Positions Chart %>
-    <canvas id="positionChart"></canvas>
-    <script type="module">
-        var ctx = document.getElementById('positionChart').getContext('2d');
-        var chartData = <%- JSON.stringify(loldata.games.teamPositionCount) %>;
-        var myChart = new Chart(ctx, chartData);
-    </script>
 </main>

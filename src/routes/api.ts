@@ -18,7 +18,7 @@ mainRouter.post("/login", LoginUser);
 mainRouter.post("/logout", LogoutUser);
 mainRouter.post("/register", validateCreateUser, createUser);
 
-mainRouter.delete("/deleteUser/:identifier", validateUserIdentifier, deleteUser);
+mainRouter.delete("/delete-user/:identifier", validateUserIdentifier, deleteUser);
 mainRouter.put("/update-user/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);
 mainRouter.get("/get-user/:identifier", validateUserIdentifier, async (req, res, next) => {
   const user = await getUserByIdentifier(req.params.identifier, 'username');

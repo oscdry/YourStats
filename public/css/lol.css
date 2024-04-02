@@ -47,6 +47,49 @@
     margin-left: 0;
 }
 
+.lol-user-champions-top
+{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    gap: 1rem;
+
+}
+
+.lol-champion-card
+{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 30%;
+    height: 100%;
+
+    background-color: var(--gray);
+    box-shadow: var(--shadow);
+
+    border-radius: 10px;
+    overflow: hidden;
+
+}
+
+.lol-champion-card img
+{
+    object-fit: contain;
+    width: 135px;
+    height: 135px;
+}
+
+.lol-champion-card>p
+{
+
+    padding: 0.5rem;
+}
+
 .lol-game-card-icon
 {
     max-width: 100px;

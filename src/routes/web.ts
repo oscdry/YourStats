@@ -9,6 +9,7 @@ import { UserNotFoundError } from "../api/errors/errors.js";
 import { verifyTokenOptional } from "../api/middlewares/verifyToken.js";
 import Pino from "../logger.js";
 import { lolTestData } from "../api/services/lolTestData.js";
+import { type } from "os";
 
 const webRouter = Router();
 
@@ -52,7 +53,26 @@ webRouter.get("/lol", (_req: Request, res: Response) => {
 //! Testing routes
 webRouter.get("/lol/stats/asd", async (_req: Request, res: Response, next: NextFunction) => {
 
-    return res.render('./lol/lol-user-stats.ejs', { title: "LoL Stats", loldata: lolTestData });
+    const lolPositionsChartData = {
+        type: 'pie',
+        data: {
+            labels: Object.keys(lolTestData.games.teamPositionCount),
+            datasets: [{
+                label: 'Position',
+                data: Object.values(lolTestData.games.teamPositionCount),
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(153, 102, 255)'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    };
+
+    return res.render('./lol/lol-user-stats.ejs', { title: "LoL Stats", loldata: lolTestData, lolPositionsChartData });
 });
 
 webRouter.get("/lol/stats/chart", async (_req: Request, res: Response, next: NextFunction) => {
@@ -127,6 +147,8 @@ webRouter.get("/lol/stats/chart", async (_req: Request, res: Response, next: Nex
             }]
         }
     };
+
+
 
     res.render('./lol/lol-user-stats.ejs', { title: "LoL Stats Chart", loldata: lolTestData, chartdata: dataDonut });
 });
