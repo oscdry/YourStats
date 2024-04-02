@@ -15,6 +15,7 @@
     <div class="header my-5">
         <div class="d-flex flex-column flex-wrap">
             <h2>Estadísticas de <%= loldata.gameName %></h2>
+            <img src="<%= loldata.iconID %>">
 
             <div class="lol-general-stats">
                 <p>Victorias: <%= loldata.wins %></p>
@@ -45,11 +46,11 @@
         <% }); %>
     </div>
 
-    <!-- <%# Chart %>
-    <canvas id="myChart"></canvas>
+    <%# Positions Chart %>
+    <canvas id="positionChart"></canvas>
     <script type="module">
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var chartData = <%- // JSON.stringify(chartdata) %>;
+        var ctx = document.getElementById('positionChart').getContext('2d');
+        var chartData = <%- JSON.stringify(loldata.games.teamPositionCount) %>;
         var myChart = new Chart(ctx, chartData);
-    </script> -->
+    </script>
 </main>

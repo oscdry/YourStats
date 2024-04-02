@@ -1,104 +1,121 @@
 export const lolTestData = {
-    gamesLast7Days: 15,
+    iconID: "https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/6584.png",
+    gamesLast7Days: 24,
     gameName: "OSCDRY",
-    games: [
-        {
-            championIdentifier: {
-                championName: "Senna",
-                championId: 235
+    games: {
+        resultsArray: [
+            {
+                championIdentifier: {
+                    championName: "Nami",
+                    championId: 267
+                },
+                isWinner: true,
+                arrayItems: [
+                    3870,
+                    4005,
+                    2065,
+                    1028,
+                    3158,
+                    3108,
+                    3364
+                ],
+                stats: {
+                    kills: 0,
+                    deaths: 5,
+                    assists: 15
+                },
+                kda: 3,
+                gameMode: "CLASSIC",
+                teamID: 100,
+                teamPosition: "UTILITY",
+                arrayTeammates: {
+                    wynnibear: 106,
+                    Sora974yt: 33,
+                    "LFF GOD KAMO": 777,
+                    JCBigPoppa: 236,
+                    OSCDRY: 267
+                },
+                arrayBlue: {
+                    wynnibear: 106,
+                    Sora974yt: 33,
+                    "LFF GOD KAMO": 777,
+                    JCBigPoppa: 236,
+                    OSCDRY: 267
+                },
+                arrayRed: {
+                    ursomagro739: 254,
+                    SlursMan: 238,
+                    "": 4,
+                    "Fra8╬║vZ": 29,
+                    hokax3: 3
+                }
             },
-            isWinner: true,
-            arrayItems: [
-                3142,
-                6676,
-                3094,
-                0,
-                3009,
-                6694,
-                6694,
-                3363
+            {
+                championIdentifier: {
+                    championName: "Renata",
+                    championId: 888
+                },
+                isWinner: false,
+                arrayItems: [
+                    3158,
+                    2055,
+                    3876,
+                    4642,
+                    0,
+                    0,
+                    3364
+                ],
+                stats: {
+                    kills: 0,
+                    deaths: 5,
+                    assists: 0
+                },
+                kda: 0,
+                gameMode: "CLASSIC",
+                teamID: 200,
+                teamPosition: "UTILITY",
+                arrayTeammates: {
+                    "Its Nasty": 164,
+                    "F L E X ": 120,
+                    BesnikTNO: 136,
+                    Gameschlacht: 360,
+                    OSCDRY: 888
+                },
+                arrayBlue: {
+                    "─îamuga": 96,
+                    "Spasitelj Isus": 35,
+                    "": 4,
+                    Trellus: 421,
+                    Cudomix: 26
+                },
+                arrayRed: {
+                    "Its Nasty": 164,
+                    "F L E X PRO": 120,
+                    BesnikTNO: 136,
+                    Gameschlacht: 360,
+                    OSCDRY: 888
+                }
+            }
+        ],
+        friendsMost: [
+            [
+                "wynnibear",
+                1
             ],
-            stats: {
-                kills: 13,
-                deaths: 4,
-                assists: 10
-            },
-            kda: 5.75,
-            gameMode: "CLASSIC"
-        },
-        {
-            championIdentifier: {
-                championName: "Kaisa",
-                championId: 145
-            },
-            isWinner: true,
-            arrayItems: [
-                6675,
-                6672,
-                3006,
-                3036,
-                3046,
-                1029,
-                1029,
-                3363
+            [
+                "Sora974yt",
+                1
             ],
-            stats: {
-                kills: 16,
-                deaths: 3,
-                assists: 4
-            },
-            kda: 6.666666666666667,
-            gameMode: "CLASSIC"
-        },
-        {
-            championIdentifier: {
-                championName: "Caitlyn",
-                championId: 51
-            },
-            isWinner: true,
-            arrayItems: [
-                6672,
-                3006,
-                3036,
-                3031,
-                3091,
-                3046,
-                3046,
-                3363
-            ],
-            stats: {
-                kills: 10,
-                deaths: 7,
-                assists: 18
-            },
-            kda: 4,
-            gameMode: "CLASSIC"
-        },
-        {
-            championIdentifier: {
-                championName: "Kaisa",
-                championId: 145
-            },
-            isWinner: true,
-            arrayItems: [
-                3031,
-                3006,
-                3087,
-                1018,
-                6672,
-                1053,
-                1053,
-                3340
-            ],
-            stats: {
-                kills: 7,
-                deaths: 7,
-                assists: 10
-            },
-            kda: 2.4285714285714284,
-            gameMode: "CLASSIC"
+            [
+                "LFF GOD KAMO ",
+                1
+            ]
+        ],
+        teamPositionCount: {
+            UTILITY: 2,
+            ARAM: 8
         }
-    ],
+    },
     tier: "PLATINUM",
     rank: "IV",
     points: 12,
@@ -112,11 +129,11 @@ export const lolTestData = {
         },
         {
             championID: 150,
-            championPoints: 79682
+            championPoints: 80643
         },
         {
             championID: 412,
-            championPoints: 73339
+            championPoints: 75172
         }
     ]
 };

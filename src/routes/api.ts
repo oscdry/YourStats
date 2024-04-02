@@ -20,13 +20,13 @@ mainRouter.post("/register", validateCreateUser, createUser);
 
 mainRouter.delete("/deleteUser/:identifier", validateUserIdentifier, deleteUser);
 mainRouter.put("/update-user/:identifier", validateUserIdentifier, validateUpdateUser, updateUser);
-mainRouter.get("/get-user/:identifier", validateUserIdentifier,  async (req, res, next) => {
+mainRouter.get("/get-user/:identifier", validateUserIdentifier, async (req, res, next) => {
   const user = await getUserByIdentifier(req.params.identifier, 'username');
   Pino.trace(JSON.stringify(user));
   return res.json(user);
 });
 mainRouter.get("/get-all-users", getAllUsers);
-mainRouter.post("/getLoLuserData/:username", async (req, res) =>{
+mainRouter.post("/lol-data/:username", async (req, res) => {
   const userName = req.params.username;
   return res.json(await GetLolUserData(userName));
 });
