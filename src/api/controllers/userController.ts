@@ -2,8 +2,8 @@ import { type Request, type Response, NextFunction} from 'express';
 import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
 
-import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName} from "../services/FirebaseServices.js";
-import { EmailUsedError, RegisterError, UsernameUsedError, updateUsernameError } from '../errors/errors.js';
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio} from "../services/FirebaseServices.js";
+import { EmailUsedError, RegisterError, UsernameUsedError, updateUserBioError, updateUsernameError } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
 import Pino from "../../logger.js";
 
@@ -144,6 +144,24 @@ export async function updateUserName(req: Request, res: Response, next: NextFunc
 
     } catch (error) {
         error = new updateUsernameError();
+        next(error);
+    }
+};
+
+export async function updateUserBio(req: Request, res: Response, next: NextFunction) {
+    const { identifier } = req.params;
+
+    Pino.info("UserController Updating User", { identifier });
+
+    const updates = {
+        bio: req.body.bio
+    };
+
+    try {
+        await updateFirebaseUserBio(identifier, updates);
+        res.json({ message: "User updated successfully" });
+    } catch (error) {
+        // error = new updateUserBioError();
         next(error);
     }
 };

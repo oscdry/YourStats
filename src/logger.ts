@@ -1,7 +1,5 @@
 import { Response } from "express";
 import * as pino from "pino";
-// import expressPino from "pino-http";
-
 
 const Pino: pino.Logger = pino.pino({
     transport: {
@@ -27,7 +25,6 @@ function getCurrentDate(): Date {
     }
     return currentDate;
 }
-
 
 // FIXME: remove this once I'm done testing
 Pino.level = "trace";
