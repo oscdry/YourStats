@@ -1,11 +1,9 @@
 const BRAWL_API_ENDPOINT = "https://api.brawlstars.com/v1/";
 
-const playerTagEX = "#ROGQUJQC2";
+const playerTagEX = "#YCQLVQV";
 
 import { config } from "dotenv";
-import Pino from "../../logger.js";
 config();
-import {brawlerList} from "./brawlList.js";
 
 export const brawlRecentBattle = async (battletag: string) => {
     const newBattletag = battletag.substring(1);
@@ -44,5 +42,5 @@ export const brawlInfo = async (battletag: string) => {
 };
 
 
-
 console.log(await brawlRecentBattle(playerTagEX));
+console.log(await brawlInfo(playerTagEX));

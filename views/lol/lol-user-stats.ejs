@@ -35,7 +35,7 @@
     </p>
     <div class="lol-games-div">
         <% // Generate a card for each game of the user %>
-        <% loldata.games.forEach(lolgame => { %>
+        <% loldata.games.resultsArray.forEach(lolgame => { %>
         <%- include('./lol-game-card.ejs', {lolgame: lolgame}); %>
         <% }); %>
     </div>
