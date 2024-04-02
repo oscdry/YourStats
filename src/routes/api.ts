@@ -26,7 +26,7 @@ mainRouter.get("/get-user/:identifier", validateUserIdentifier, async (req, res,
   return res.json(user);
 });
 mainRouter.get("/get-all-users", getAllUsers);
-mainRouter.post("/lol-data/:username", async (req, res) => {
+mainRouter.get("/lol-data/:username", async (req, res) => {
   const userName = req.params.username;
   return res.json(await GetLolUserData(userName));
 });

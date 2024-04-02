@@ -36,4 +36,4 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LT
 
 // LOL testing
 
-POST http://localhost:8080/api/getLolUserData/OSCDRY
+POST http://localhost:8080/api/lol-data/OSCDRY
