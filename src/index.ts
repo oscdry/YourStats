@@ -15,7 +15,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Client for the current API (API v2)
 // const client = new Client('eUPnOYKsnu4dBD6BJzjtsrtFpf91r7LFK7MTkbAa');
 
-import mainRouter from "./routes/mainRouter.js";
+import mainRouter from "./routes/api.js";
 import webRouter from "./routes/web.js";
 import Pino from "./logger.js";
 import { errorHandler } from "./api/middlewares/errorHandler.js";

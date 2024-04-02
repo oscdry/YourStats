@@ -1,6 +1,6 @@
 import { Router, type Response, type Request, NextFunction } from "express";
 import { getFirebaseUserById } from "../api/services/FirebaseServices.js";
-import { GetLolUserData } from "../calls.js";
+import { GetLolUserData } from "../api/services/lolServices.js";
 
 import { getAllFirebaseUsers } from "../api/services/FirebaseServices.js";
 

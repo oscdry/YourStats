@@ -39,8 +39,8 @@
         Últimas <%= loldata.games.length%> partidas:
     </p>
     <div class="lol-games-div">
-        <%# Generate a card for each game of the user %>
-        <% loldata.games.forEach(lolgame => { %>
+        <% // Generate a card for each game of the user %>
+        <% loldata.games.resultsArray.forEach(lolgame => { %>
         <%- include('./lol-game-card.ejs', {lolgame: lolgame}); %>
         <% }); %>
     </div>
