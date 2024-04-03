@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import Pino from "../../logger.js";
+import { NextFunction, Request, Response } from 'express';
+import Pino from '../../logger.js';
 
 /**
  * Handles errors that are encountered in the application in order
@@ -11,31 +11,32 @@ import Pino from "../../logger.js";
  * @author @polcondal
  */
 export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-    if (!err)
-        Pino.fatal("Caught Error is null or undefined");
+	if (!err)
+		Pino.fatal('Caught Error is null or undefined');
 
 
-    Pino.warn("Caught Error of type: " + err.name + " | " + (err instanceof Error ? err.message : err));
+	Pino.warn('Caught Error of type: ' + err.name + ' | ' + (err instanceof Error ? err.message : err));
 
-    switch (err.name) {
-        case "InvalidTokenError":
-            // If invalid token error, clear the token cookie and redirect to home
-            // If this is not done, an infinite loop will occur
-            res.clearCookie("token           m");
-            return res.redirect("/");
+	switch (err.name) {
+		case 'InvalidTokenError':
 
-        case "LoginError":
-            return res.status(400).json({ error: "Invalid username or password" });
-        case "RegisterError":
-            return res.status(500).json({ error: "Error registering user" });
-        case "UserNotFoundError":
-            return res.status(404).json({ error: "User not found" });
-        default:
-            break;
-    }
+			// If invalid token error, clear the token cookie and redirect to home
+			// If this is not done, an infinite loop will occur
+			res.clearCookie('token           m');
+			return res.redirect('/');
 
-    Pino.error("Unkown error: " + (err instanceof Error ? err.message : err));
+		case 'LoginError':
+			return res.status(400).json({ error: 'Invalid username or password' });
+		case 'RegisterError':
+			return res.status(500).json({ error: 'Error registering user' });
+		case 'UserNotFoundError':
+			return res.status(404).json({ error: 'User not found' });
+		default:
+			break;
+	}
 
-    if (!err.name)
-        return res.status(500).json({ error: "Internal Server Error" });
+	Pino.error('Unknown error: ' + (err instanceof Error ? err.message : err));
+
+	if (!err.name)
+		return res.status(500).json({ error: 'Internal Server Error' });
 };

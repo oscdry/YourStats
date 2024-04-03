@@ -1,16 +1,16 @@
-import { Response } from "express";
-import * as pino from "pino";
+import { Response } from 'express';
+import * as pino from 'pino';
 
 const Pino: pino.Logger = pino.pino({
-    transport: {
-        target: "pino-pretty",
-        options: {
-            colorize: true,
-            ignore: "pid,hostname",
-            minimumLevel: "trace",
-            useLevelLabels: true,
-        },
-    }
+	transport: {
+		target: 'pino-pretty',
+		options: {
+			colorize: true,
+			ignore: 'pid,hostname',
+			minimumLevel: 'trace',
+			useLevelLabels: true
+		}
+	}
 });
 
 let currentDate: Date;
@@ -20,37 +20,37 @@ let currentDate: Date;
  * @returns The current updated date
  */
 function getCurrentDate(): Date {
-    if (!currentDate) {
-        currentDate = new Date();
-    }
-    return currentDate;
+	if (!currentDate) {
+		currentDate = new Date();
+	}
+	return currentDate;
 }
 
 // FIXME: remove this once I'm done testing
-Pino.level = "trace";
+Pino.level = 'trace';
 
 export function logError(message: string): void {
 
-    const error = new Error();
-    const stack = error.stack?.split("\n");
+	const error = new Error();
+	const stack = error.stack?.split('\n');
 
-    const stackInfo = stack!
-        .slice(2) // Skip the first two stack entries (which are the logWithStackTrace function and the Error constructor)
-        .map((line: string) => line.trim())
-        .join("\n");
+	const stackInfo = stack!
+		.slice(2) // Skip the first two stack entries (which are the logWithStackTrace function and the Error constructor)
+		.map((line: string) => line.trim())
+		.join('\n');
 
-    Pino.error(`${message} | STACK: ${stackInfo} `);
+	Pino.error(`${message} | STACK: ${stackInfo} `);
 }
 
 export {
-    getCurrentDate, Pino as default,
+	getCurrentDate, Pino as default
 };
 
 export const {
-    trace,
-    debug,
-    info,
-    warn,
-    error,
-    fatal,
+	trace,
+	debug,
+	info,
+	warn,
+	error,
+	fatal
 } = Pino;
