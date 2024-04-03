@@ -16,53 +16,55 @@ const loginUsernameInput = document.getElementById('login-username-input');
 const loginPasswordInput = document.getElementById('login-password-input');
 
 loginSubmit?.addEventListener('click', async (e) => {
-    e.preventDefault();
+	e.preventDefault();
 
-    const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
-    const username = loginUsernameInput.value.trim();
-    const password = loginPasswordInput.value.trim();
+	const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
+	const username = loginUsernameInput.value.trim();
+	const password = loginPasswordInput.value.trim();
 
-    // If filled inputs
-    if (username && password) {
-        //TODO: Check regex
+	// If filled inputs
+	if (username && password) {
 
-        try {
-            console.log('Sending request to server');
-            // Send request to server
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            })
+		//TODO: Check regex
 
-            if (!response.ok && response.status != 400) {
-                errorText.innerHTML = 'An error occurred...';
-                console.error(response.status + ' ' + response.statusText);
-                return;
-            }
+		try {
+			console.log('Sending request to server');
 
-            const json = await response.json();
+			// Send request to server
+			const response = await fetch('/api/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username, password })
+			});
 
-            // API returns 400 if the user is not found
-            // Which is not an error
-            if (response.status === 400) {
-                errorText.innerHTML = json.error;
-                return;
-            }
+			if (!response.ok && response.status != 400) {
+				errorText.innerHTML = 'An error occurred...';
+				console.error(response.status + ' ' + response.statusText);
+				return;
+			}
 
-            const token = json.token;
-            SaveToken(token);
-            RedirectToHome();
-            return;
+			const json = await response.json();
 
-        } catch (error) {
-            console.error(error);
-            errorText.innerHTML = 'Server error, try again later';
-            return;
-        }
-    }
+			// API returns 400 if the user is not found
+			// Which is not an error
+			if (response.status === 400) {
+				errorText.innerHTML = json.error;
+				return;
+			}
+
+			const token = json.token;
+			SaveToken(token);
+			RedirectToHome();
+			return;
+
+		} catch (error) {
+			console.error(error);
+			errorText.innerHTML = 'Server error, try again later';
+			return;
+		}
+	}
 });
 
 // Register  ---------------------------
@@ -73,281 +75,101 @@ const registerPasswordInput = document.getElementById('register-password-input')
 const registerPasswordConfirmationInput = document.getElementById('register-password-confirmation-input');
 
 registerSubmit?.addEventListener('click', async (e) => {
-    e.preventDefault();
+	e.preventDefault();
 
-    const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
-    const username = registerUsernameInput.value.trim();
-    const mail = registerMailInput.value.trim();
-    const password = registerPasswordInput.value.trim();
-    const password_confirmation = registerPasswordConfirmationInput.value.trim();
+	const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
+	const username = registerUsernameInput.value.trim();
+	const mail = registerMailInput.value.trim();
+	const password = registerPasswordInput.value.trim();
+	const password_confirmation = registerPasswordConfirmationInput.value.trim();
 
-    // If filled inputs
-    if (username && mail && password && password_confirmation) {
+	// If filled inputs
+	if (username && mail && password && password_confirmation) {
 
-        // Check regex
-        // Username
-        if (!validateUsername(username)) {
-            errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
-            return;
-        }
-        // Mail
-        if (!validateEmail(mail)) {
-            errorText.innerHTML = 'Invalid mail';
-            return;
-        }
-        // Password
-        if (!validatePassword(password)) {
-            errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
-            return;
-        }
-        // Password confirmation
-        if (password !== password_confirmation) {
-            errorText.innerHTML = 'Passwords do not match';
-            return;
-        }
+		// Check regex
+		// Username
+		if (!validateUsername(username)) {
+			errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
+			return;
+		}
 
-        try {
-            // Send request to server
-            const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, mail, password, password_confirmation })
-            })
+		// Mail
+		if (!validateEmail(mail)) {
+			errorText.innerHTML = 'Invalid mail';
+			return;
+		}
 
-            if (!response.ok) {
-                errorText.innerHTML = json.error;
-                return;
-            }
+		// Password
+		if (!validatePassword(password)) {
+			errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
+			return;
+		}
 
-            const json = await response.json();
-            const token = json.token;
-            SaveToken(token);
-            RedirectToHome();
-            return;
+		// Password confirmation
+		if (password !== password_confirmation) {
+			errorText.innerHTML = 'Passwords do not match';
+			return;
+		}
 
-        } catch (error) {
-            errorText.innerHTML = 'Server error, try again later';
-            return;
-        }
-    }
+		try {
+
+			// Send request to server
+			const response = await fetch('/api/register', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username, mail, password, password_confirmation })
+			});
+
+			if (!response.ok) {
+				errorText.innerHTML = json.error;
+				return;
+			}
+
+			const json = await response.json();
+			const token = json.token;
+			SaveToken(token);
+			RedirectToHome();
+			return;
+
+		} catch (error) {
+			errorText.innerHTML = 'Server error, try again later';
+			return;
+		}
+	}
 });
 
-// backoffice update
-
-const backUpdateSubmit = document.getElementById('back-update-button-submit');
-const backUpdateUsernameInput = document.getElementById('back-update-username-input');
-const backUpdateMailInput = document.getElementById('back-update-mail-input');
-const backUpdateRoleInput = document.getElementById('back-update-role-input');
-const backUpdatePasswordInput = document.getElementById('back-update-password-input');
-const backUpdatePasswordConfirmationInput = document.getElementById('back-update-password-confirmation-input');
-
-let currentUserId = null;
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Seleccionar todos los botones de editar
-    const editButtons = document.querySelectorAll('.edit-btn');
-
-    // Añadir un listener a cada botón de editar
-    editButtons?.forEach(button => {
-        button.addEventListener('click', function () {
-            // Obtener los datos del usuario desde los atributos data-*
-            const username = this.getAttribute('data-username');
-            const mail = this.getAttribute('data-mail');
-            const role = this.getAttribute('data-role');
-            const userId = this.getAttribute('data-id');
-
-            // Establecer los valores en el formulario del modal
-            backUpdateUsernameInput.value = username;
-            backUpdateMailInput.value = mail;
-            backUpdateRoleInput.value = role;
-            currentUserId = userId;
-
-
-            // Agrega aquí un campo oculto o una variable para almacenar el userId si planeas usarlo
-            // Por ejemplo, podrías tener un input oculto en tu formulario para el userId
-            // document.getElementById('back-update-user-id').value = userId;
-        });
-    });
-});
-
-backUpdateSubmit?.addEventListener('click', async (e) => {
-    e.preventDefault();
-
-    const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
-    const username = backUpdateUsernameInput.value.trim();
-    const mail = backUpdateMailInput.value.trim();
-    const password = backUpdatePasswordInput.value.trim();
-    const password_confirmation = backUpdatePasswordConfirmationInput.value.trim();
-    const role = backUpdateRoleInput.value.trim();
-
-    // If filled inputs
-    if (username && mail && password && password_confirmation && role) {
-        // Check regex
-        // Username
-        if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
-            errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
-            return;
-        }
-        // Mail
-        if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(mail)) {
-            errorText.innerHTML = 'Invalid mail';
-            return;
-        }
-        // Password
-        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password)) {
-            errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
-            return;
-        }
-        // Password confirmation
-        if (password !== password_confirmation) {
-            errorText.innerHTML = 'Passwords do not match';
-            return;
-        }
-
-        // Role
-        if (role <= 0 && role >= 1) {
-            errorText.innerHTML = 'Invalid role';
-            return;
-        }
-
-        try {
-            // Send request to server
-            const response = await fetch(`/admin/users/update/${currentUserId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, mail, password, password_confirmation, role })
-            })
-
-            if (!response.ok) {
-                errorText.innerHTML = json.error;
-                return;
-            }
-
-            window.location.reload('/admin');
-
-
-        } catch (error) {
-            errorText.innerHTML = 'Server error, try again later';
-            return;
-        }
-    } else if (username && mail && role) {
-
-        // Username
-        if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
-            errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
-            return;
-        }
-        // Mail
-        if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(mail)) {
-            errorText.innerHTML = 'Invalid mail';
-            return;
-        }
-        // Role
-        if (role <= 0 && role >= 1) {
-            errorText.innerHTML = 'Invalid role';
-            return;
-        }
-
-        try {
-            // Send request to server
-            const response = await fetch(`/admin/users/update/${currentUserId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, mail, role })
-            })
-
-            if (!response.ok) {
-                errorText.innerHTML = json.error;
-                return;
-            }
-
-            window.location.reload('/admin');
-
-
-        } catch (error) {
-            errorText.innerHTML = 'Server error, try again later';
-            return;
-        }
-    }
-});
-
-// backoffice search user by username
-
-const searchBtn = document.getElementById('back-search-button');
-const searchInput = document.getElementById('back-search-mail-input');
-const errorSearch = document.getElementById('error-search-back');
-
-    searchBtn?.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevenir el envío del formulario para realizar la búsqueda con JavaScript
-        const userEmail = searchInput.value.trim(); // Obtener el valor del input y eliminar espacios en blanco al principio y al final
-        const userRows = document.querySelectorAll('.user-row'); // Seleccionar todas las filas de usuarios
-
-        // Verificar si el input está en blanco
-        if (userEmail === '') {
-            // Mostrar todas las filas y no mostrar mensaje de error
-            userRows.forEach(row => {
-                row.style.display = '';
-            });
-            errorSearch.textContent = ''; // Asegurarse de que no se muestre el mensaje de error
-            return; // Salir de la función para no ejecutar el código de búsqueda
-        }
-
-        let found = false; // Indicador si se encontró el usuario
-
-        userRows.forEach(row => {
-            const mailCell = row.cells[2].textContent; // Asumiendo que el correo está en la tercera celda
-            if(mailCell === userEmail) {
-                // Si el correo coincide, mostrar solo esa fila y marcar que se encontró el usuario
-                row.style.display = '';
-                found = true;
-            } else {
-                // Si no coincide, ocultar la fila
-                row.style.display = 'none';
-            }
-        });
-
-        // Si después de la búsqueda no se encontró ningún usuario, mostrar mensaje de error
-        if (!found) {
-            errorSearch.textContent = 'No user found with that email';
-        } else {
-            errorSearch.textContent = ''; // Limpiar el mensaje de error si se encontró al usuario
-        }
-    });
 // Logout ---------------------------
 const logoutButton = document.getElementById('logout-button');
 
 logoutButton?.addEventListener('click', async (e) => {
-    e.preventDefault();
+	e.preventDefault();
 
-    try {
-        // Send request to server
-        const response = await fetch('/api/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+	try {
 
-        if (!response.ok) {
-            console.error(response.status + ' ' + response.statusText);
-            return;
-        }
+		// Send request to server
+		const response = await fetch('/api/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
 
-        // Delete token
-        ClearToken();
-        ReloadPage();
-        return;
+		if (!response.ok) {
+			console.error(response.status + ' ' + response.statusText);
+			return;
+		}
 
-    } catch (error) {
-        console.error('Server error, try again later');
-        return;
-    }
+		// Delete token
+		ClearToken();
+		ReloadPage();
+		return;
+
+	} catch (error) {
+		console.error('Server error, try again later');
+		return;
+	}
 });
 
 
@@ -358,176 +180,31 @@ logoutButton?.addEventListener('click', async (e) => {
 const gameUsernameForm = document.getElementById('game-username-form');
 const gameUsernameInput = document.getElementById('game-username-input');
 
-
 // On submit of the game username form
 gameUsernameForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const errorText = e.target.querySelector('.error-text');
+	e.preventDefault();
+	const errorText = e.target.querySelector('.error-text');
 
-    const usernameVal = gameUsernameInput.value.trim();
-    if (usernameVal) {
-        // This response either returns 400 or redirects to the stats page
-        const response = await fetch('/lol/stats/' + usernameVal);
+	const usernameVal = gameUsernameInput.value.trim();
+	if (usernameVal) {
 
-        if (!response.ok) {
-            const json = await response.json();
-            errorText.innerHTML = json.error;
-            return;
-        }
+		// This response either returns 400 or redirects to the stats page
+		const response = await fetch('/api/riot-user/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ username: usernameVal })
+		});
 
-        // Redirect to the stats page
-        window.location.href = '/lol/stats/' + usernameVal;
-    }
+		if (!response.ok) {
+			const json = await response.json();
+			errorText.innerHTML = json.error;
+			return;
+		}
+
+		// Redirect to the stats page
+		window.location.href = '/lol/stats/' + usernameVal;
+	}
 });
-
-// update username in user view
-
-const changeUserNameBtn = document.getElementById('changeUserNameBtn');
-const currentUserName = document.getElementById('currentUserName');
-const userTitle = document.querySelector('.user-title');
-
-changeUserNameBtn?.addEventListener('click', function () {
-    const userName = currentUserName.textContent;
-    const userId = userTitle.getAttribute('data-user-id');
-
-    // Create input field
-    const inputChange = document.createElement('input');
-    inputChange.value = userName;
-    userTitle.insertBefore(inputChange, changeUserNameBtn);
-
-    // Hide current username display
-    currentUserName.style.display = 'none';
-
-    // Hide changeUserNameBtn
-    changeUserNameBtn.style.display = 'none';
-
-    // Create save button
-    const saveBtn = document.createElement('button');
-    saveBtn.textContent = 'Save';
-    userTitle.appendChild(saveBtn);
-
-    // Create cancel button
-    const cancelBtn = document.createElement('button');
-    cancelBtn.textContent = 'Cancel';
-    userTitle.appendChild(cancelBtn);
-
-    // Add event listener for cancel button
-    cancelBtn.addEventListener('click', function() {
-        // Remove input field
-        inputChange.remove();
-
-        // Show current username display
-        currentUserName.style.display = 'block';
-
-        // Show changeUserNameBtn
-        changeUserNameBtn.style.display = 'inline';
-
-        // Remove save and cancel buttons
-        saveBtn.remove();
-        cancelBtn.remove();
-    });
-
-    // Add event listener for save button
-    saveBtn.addEventListener('click', function() {
-        // Update username
-        const newUserName = inputChange.value;
-
-        // Your AJAX call to update the username
-        fetch(`/api/update-user-username/${userId}`, {
-            method: 'PUT',
-            body: JSON.stringify({ username: newUserName }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(async response => {
-            if (response.ok) {
-                // Reload the view after successful update
-                const json = await response.json();
-                const token = json.token;
-                ClearToken();
-                SaveToken(token);
-                window.location.reload();
-                return;
-            } else {
-                // Handle error response
-                console.error('Failed to update username');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-});
-
-// update user Bio in user view
-const changeUserBioBtn = document.getElementById('changeUserBioBtn');
-const currentUserBio = document.getElementById('currentUserBio');
-const userBio = document.querySelector('.bio-info');
-
-changeUserBioBtn?.addEventListener('click', function () {
-    const userBioText = currentUserBio.textContent;
-    const userId = userTitle.getAttribute('data-user-id');
-
-    // Create textarea field
-    const textareaChange = document.createElement('textarea');
-    textareaChange.value = userBioText;
-    userBio.insertBefore(textareaChange, changeUserBioBtn);
-
-    // Hide current bio display
-    currentUserBio.style.display = 'none';
-
-    // Hide changeUserBioBtn
-    changeUserBioBtn.style.display = 'none';
-
-    // Create save button
-    const saveBtn = document.createElement('button');
-    saveBtn.textContent = 'Save';
-    userBio.appendChild(saveBtn);
-
-    // Create cancel button
-    const cancelBtn = document.createElement('button');
-    cancelBtn.textContent = 'Cancel';
-    userBio.appendChild(cancelBtn);
-
-    // Add event listener for cancel button
-    cancelBtn.addEventListener('click', function() {
-        // Remove textarea field
-        textareaChange.remove();
-
-        // Show current bio display
-        currentUserBio.style.display = 'block';
-
-        // Show changeUserBioBtn
-        changeUserBioBtn.style.display = 'inline';
-
-        // Remove save and cancel buttons
-        saveBtn.remove();
-        cancelBtn.remove();
-    });
-
-    // Add event listener for save button
-    saveBtn.addEventListener('click', async function() {
-        // Update bio
-        const newUserBio = textareaChange.value;
-        try {
-            const response = await fetch(`/api/update-user-bio/${userId}`, {
-                method: 'PUT',
-                body: JSON.stringify({ bio: newUserBio }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Failed to update bio');
-            }
-            // Assume here that we do not need to handle a JSON response or a token update
-            window.location.reload();
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
-});
-
-
 
