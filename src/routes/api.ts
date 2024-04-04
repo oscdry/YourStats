@@ -12,9 +12,16 @@ import { verifyTokenOptional } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
 import { RiotDataByName } from '../api/services/riotServices.js';
 import { riotUserExists, sendLolData } from '../api/controllers/lolController.js';
+import { HandleContactForm } from '../api/controllers/contactFormController.js';
+import { JoiValidate } from '../api/middlewares/joiValidate.js';
+import { contactFormSchema } from '../api/middlewares/schemas.js';
 
 
 const apiRouter = Router();
+
+// Contact form
+apiRouter.post('/contact-form',
+	JoiValidate(contactFormSchema), HandleContactForm);
 
 // Auth
 apiRouter.post('/login', LoginUser);
@@ -44,5 +51,6 @@ apiRouter.get('/get-all-users', getAllUsers);
 apiRouter.post('/riot-user/', riotUserExists);
 
 apiRouter.get('/lol-data/:username', sendLolData);
+
 
 export default apiRouter;

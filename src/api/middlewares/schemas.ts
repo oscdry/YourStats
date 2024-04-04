@@ -7,6 +7,13 @@ export const getUserSchema = Joi.object({
 	identifier: Joi.string().required() // Asegura que el identificador sea requerido
 });
 
+export const contactFormSchema = Joi.object({
+	user_id: Joi.number().optional(),
+	email: Joi.string().email().required(),
+	username: Joi.string().required(),
+	content: Joi.string().required()
+});
+
 export const updateUserSchema = Joi.object({
 	username: Joi.string().optional(),
 	mail: Joi.string().email().optional(),

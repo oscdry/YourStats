@@ -1,3 +1,11 @@
+<%
+const banners = [
+"/img/banners/lol-a.jpg",
+"/img/banners/lol-b.jpg",
+]
+
+%>
+
 <div class="banner">
     <h3>
         Tus estadísticas, al instante
@@ -8,4 +16,5 @@
     <p>
 
     </p>
+    <img src="<%=banners[Math.floor(Math.random() * banners.length)]%>" alt>
 </div>
