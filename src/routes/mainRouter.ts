@@ -26,9 +26,9 @@ mainRouter.get("/get-user/:identifier", validateUserIdentifier,  async (req, res
   return res.json(user);
 });
 mainRouter.get("/get-all-users", getAllUsers);
-mainRouter.post("/getLoLuserData/:username", async (req, res , next) =>{
-  const userName = req.params.username;
-  return res.json(await GetLolUserData(userName));
+mainRouter.post("/get-lol-user-data/:userlol", async (req, res , next) =>{ //username en el LoL no de el usuario de nuestra cuenta
+  const userlol = req.params.userlol;
+  return res.json(await GetLolUserData(userlol));
 });
 
 mainRouter.get("/users/search/:identifier", validateUserIdentifier, (req) => {
