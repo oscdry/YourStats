@@ -37,13 +37,8 @@ export const verifyTokenOptional = (req: Request, res: Response, next: NextFunct
 		next();
 
 	} catch (error) {
-		Pino.debug('Error verifying token:', error);
-
-		// On error catch, check if the error is a token expired error
-		// It redirects the user and clears token
-		if (error instanceof jwt.TokenExpiredError) {
-			next(new InvalidTokenError());
-		}
+		Pino.debug('Error verifying optional token:', error);
+		next();
 	}
 };
 
@@ -65,8 +60,13 @@ export const verifyTokenRequired = (req: Request, res: Response, next: NextFunct
 
 		res.locals.user = verifyToken(cookieToken) as TokenPayload;
 	} catch (error) {
-		console.error('Error verifying token:', error);
-		next(error);
+		Pino.warn('Error verifying Required token:', error);
+
+		// On error catch, check if the error is a token expired error
+		// It redirects the user and clears token
+		if (error instanceof jwt.TokenExpiredError) {
+			next(new InvalidTokenError());
+		}
 	}
 };
 

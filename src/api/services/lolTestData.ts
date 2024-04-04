@@ -84,7 +84,7 @@ export const lolTestData = {
 				arrayBlue: {
 					'─îamuga': 96,
 					'Spasitelj Isus': 35,
-					'': 4,
+					'hola': 4,
 					Trellus: 421,
 					Cudomix: 26
 				},
