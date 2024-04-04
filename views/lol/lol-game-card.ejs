@@ -1,8 +1,12 @@
-<% // This object receives a (lolgame) object to display a game as a card %>
+<%# This object receives a (lolgame) object to display a game as a card %>
+<%# Along with the username, and the index of the game in the array %>
 
-<div class="lol-game-card
-    <%= lolgame.isWinner ? 'win' : 'loss' %>
-">
+<head>
+    <script src="/js/lol-user-stats.js" type="module" defer></script>
+</head>
+
+<div data-bs-toggle="modal" data-bs-target="#modal-lol-game-<%= index %>"
+    class="lol-game-card <%= lolgame.isWinner ? 'win' : 'loss' %>">
     <div class="lol-game-card-icon">
         <img
             src="/img/lol/champs/<%= lolgame.championIdentifier.championId + ".webp"
@@ -11,7 +15,21 @@
     </div>
 
     <div class="lol-game-card-champ">
-        <%= lolgame.championIdentifier.championName %>
+        <p>
+            <%= lolgame.championIdentifier.championName %>
+        </p>
+    </div>
+
+    <div class="lol-game-kd-ratio">
+        <p>
+            <%= lolgame.kda %>
+        </p>
+    </div>
+
+    <div class="lol-game-position">
+        <p>
+            <%= lolgame.teamPosition %>
+        </p>
     </div>
 
     <div class="lol-game-card-kda">
@@ -32,5 +50,46 @@
         <% lolgame.arrayItems.forEach(id => { %>
         <%- include('./lol-game-item-card.ejs', {id}); %>
         <% }); %>
+    </div>
+</div>
+
+<%# Game Modal (hidden by default) %>
+<div id="modal-lol-game-<%= index %>" class="modal fade lol-game-info-modal"
+    tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="lol-game-info-modal-team team-blue">
+                    <p>Equipo Azul</p>
+
+                    <% // Generate a card for each user in the game %>
+                    <% for (const key in lolgame.arrayBlue) { %>
+                    <div class="lol-game-card team-member">
+                        <img
+                            src="/img/lol/champs/<%= lolgame.arrayBlue[key] %>.webp"
+                            alt>
+                        <p class="team-member-name">
+                            <%= key %>
+                        </p>
+                    </div>
+                    <% } %>
+                </div>
+
+                <div class="lol-game-info-modal-team team-red">
+                    <p>Equipo Rojo</p>
+
+                    <% for (const key in lolgame.arrayRed) { %>
+                    <div class="lol-game-card team-member">
+                        <img
+                            src="/img/lol/champs/<%= lolgame.arrayRed[key] %>.webp"
+                            alt>
+                        <p class="team-member-name">
+                            <%= key %>
+                        </p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
