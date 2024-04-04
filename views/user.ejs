@@ -17,8 +17,10 @@
             </div>
         </div>
     </div>
-    <p class="bio">
-        <%= userView.bio %>
-    </p>
-    <button class="primary"><i class="fa-solid fa-pencil"></i></button>
+    <div class="bio-info">
+        <p id="currentUserBio" class="bio">
+            <%= userView.bio %>
+        </p>
+        <button id="changeUserBioBtn" class="primary"><i class="fa-solid fa-pencil"></i></button>
+    </div>
 </main>

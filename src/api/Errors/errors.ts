@@ -46,3 +46,10 @@ export class updateUsernameError extends Error {
         this.name = 'Update username'
     }
 }
+
+export class updateUserBioError extends Error {
+    constructor() {
+        super('Error updating Bio for user');
+        this.name = 'Update Bio'
+    }
+}

@@ -64,6 +64,16 @@ main.banner
     margin-top: 0;
 }
 
+section
+{
+    margin: 2rem 0;
+}
+
+section h2
+{
+    margin: 0.5rem 0;
+}
+
 a
 {
     text-decoration: none;
@@ -196,8 +206,34 @@ a#logo-nav
     background-position: center;
 }
 
-/* Game selector */
+.server-status-card
+{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
 
+    width: 33%;
+    gap: 1rem;
+    padding: 1rem;
+
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+
+    transform: scale(1);
+
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, transform 0.10s ease-in-out;
+}
+
+i.server-status-icon
+{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+/* Game selector */
 .game-selector
 {
     display: flex;
@@ -392,6 +428,8 @@ button.primary
     min-width: 125px;
     width: 100%;
     min-height: 50px;
+
+    max-width: 250px;
     margin: 1rem 0;
     padding: 0.5rem;
 
@@ -735,4 +773,16 @@ i
     background-position: center;
 
 
+}
+
+.win,
+div.lol-game-card.win
+{
+    background-color: rgb(172, 255, 172);
+}
+
+.loss,
+div.lol-game-card.loss
+{
+    background-color: rgb(255, 178, 178);
 }

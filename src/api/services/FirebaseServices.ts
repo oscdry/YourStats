@@ -143,3 +143,12 @@ export const updateFirebaseUserName = async (id: string, updates: { username?: s
     }
     await firestore.collection('users').doc(id).update(updates);
 }
+
+export const updateFirebaseUserBio = async (id: string, updates: { bio?: string; }): Promise<void> => {
+    if (updates.bio) {
+        await firestore.collection('users').doc(id).update({
+            bio: updates.bio
+        });
+    }
+    await firestore.collection('users').doc(id).update(updates);
+}

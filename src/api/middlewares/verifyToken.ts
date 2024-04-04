@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { InvalidTokenError } from "../errors/errors.js";
+import Pino from "../../logger.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -14,6 +15,7 @@ if (!JWT_SECRET) {
  * @param res
  * @param next
  * @returns
+ * @author @polcondal
  */
 export const verifyTokenOptional = (req: Request, res: Response, next: NextFunction): void => {
     try {
@@ -33,11 +35,16 @@ export const verifyTokenOptional = (req: Request, res: Response, next: NextFunct
 
         console.log("Token verified for user:", JSON.stringify(res.locals.user));
         next();
-    } catch (error) {
-        console.error("Error verifying token:", error);
-        next(error);
-    }
 
+    } catch (error) {
+        Pino.debug("Error verifying token:", error);
+
+        // On error catch, check if the error is a token expired error
+        // It redirects the user and clears token
+        if (error instanceof jwt.TokenExpiredError) {
+            next(new InvalidTokenError());
+        }
+    }
 };
 
 /**

@@ -2,7 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { getUserByIdentifier } from '../controllers/userController.js';
 import { UsernameUsedError } from '../errors/errors.js';
 import { updateUsernameSchema } from './schemas.js';
-
+// Si el username existe en la base de datos no deja ponerlo
 export async function validateNameUserUpdate(req: Request, res: Response, next: NextFunction) {
   const { username } = req.body;
 

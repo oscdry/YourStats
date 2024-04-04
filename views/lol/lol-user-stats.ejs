@@ -1,4 +1,9 @@
-<% // This file takes a (loldata) object to show the stats %>
+<%# This file takes a (loldata) object to show the stats %>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" type="module"></script>
+    <link rel="stylesheet" href="/css/lol.css">
+</head>
 
 <main>
     <div class="d-flex flex-row justify-center gap-3">
@@ -8,7 +13,7 @@
     </div>
 
     <div class="header my-5">
-        <div class="d-flex flex-row flex-wrap">
+        <div class="d-flex flex-column flex-wrap">
             <h2>Estadísticas de <%= loldata.gameName %></h2>
 
             <div class="lol-general-stats">
@@ -35,9 +40,16 @@
     </p>
     <div class="lol-games-div">
         <% // Generate a card for each game of the user %>
-        <% loldata.games.forEach(lolgame => { %>
+        <% loldata.games.resultsArray.forEach(lolgame => { %>
         <%- include('./lol-game-card.ejs', {lolgame: lolgame}); %>
         <% }); %>
     </div>
 
+    <!-- <%# Chart %>
+    <canvas id="myChart"></canvas>
+    <script type="module">
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chartData = <%- // JSON.stringify(chartdata) %>;
+        var myChart = new Chart(ctx, chartData);
+    </script> -->
 </main>

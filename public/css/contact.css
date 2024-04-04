@@ -1,0 +1,29 @@
+.contact-user-div
+{
+    display: flex;
+    flex-direction: row wrap;
+    justify-content: center;
+    align-items: center;
+
+    gap: 2rem;
+
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+
+}
+
+.contact-user
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.contact-user img
+{
+    width: 150px;
+    height: 150px;
+    border-radius: 4%;
+}

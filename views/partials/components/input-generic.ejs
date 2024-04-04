@@ -1,0 +1,9 @@
+<%# label: type of input, e.g. text, email, etc. %>
+<%# labelText: text to show as label %>
+<%# id: id of the input %>
+
+<div class="input-row-labeled">
+    <label for="<%= label %>"><%= labelText %></label>
+    <input type="<%= label %>" name="<%= label %>"
+        id="<%= typeof id !== 'undefined' ? id : '' %>" required>
+</div>
