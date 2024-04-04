@@ -665,5 +665,5 @@ interface LolHomeData {
 
 }
 
-//console.log(await GetLolHomeData());
-console.log(JSON.stringify(await GetLolUserData(Gamename)));
+console.log(await GetLolHomeData());
+//console.log(JSON.stringify(await GetLolUserData(Gamename)));
