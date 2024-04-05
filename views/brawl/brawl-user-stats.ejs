@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="/css/brawl.css">
 </head>
 
-<%- include('../partials/components/banner.ejs', {mode: "brawl"}) %>
+<%- include('../partials/components/banner.ejs', {mode: "brawl", hide : true}) %>
 
 <main>
     <%- include('../partials/components/game-stats-header.ejs', {name:
@@ -28,7 +28,7 @@
         <div class="brawl-victory-stats">
             <%- include('./brawl-victory-item.ejs',
             {text: 'Victorias 3c3',value:
-            brawldata.usuarioBrawlInfo.user.triosVictories}) %>
+            brawldata.usuarioBrawlInfo.user.trioVictories}) %>
 
             <%- include('./brawl-victory-item.ejs',
             {text: 'Victorias Duo',value:

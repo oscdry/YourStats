@@ -284,7 +284,7 @@ a#logo-nav
     align-items: center;
     justify-content: center;
 
-    width: 33%;
+    width: 25%;
     gap: 1rem;
     padding: 1rem;
 
@@ -299,8 +299,8 @@ a#logo-nav
 
 i.server-status-icon
 {
-    height: 100px;
-    width: 100px;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
 }
 

@@ -5,13 +5,9 @@ import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
 import { LoginUser } from '../api/controllers/loginController.js';
 import { validateUserIdentifier } from '../api/middlewares/validateUserIdentifier.js';
-import { errorHandler } from '../api/middlewares/errorHandler.js';
-import { GetLolUserData } from '../api/services/lolServices.js';
-import { updateFirebaseUserById, updateFirebaseUserName } from '../api/services/FirebaseServices.js';
 import { verifyTokenOptional } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
-import { RiotDataByName } from '../api/services/riotServices.js';
-import { riotUserExists, sendLolData } from '../api/controllers/lolController.js';
+import { RiotUserExists, SendLolData } from '../api/controllers/lolController.js';
 import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { JoiValidate } from '../api/middlewares/joiValidate.js';
 import { contactFormSchema } from '../api/middlewares/schemas.js';
@@ -21,8 +17,7 @@ import { BrawlUserExists, SendBrawlData } from '../api/controllers/brawlControll
 const apiRouter = Router();
 
 // Contact form
-apiRouter.post('/contact-form',
-	JoiValidate(contactFormSchema), HandleContactForm);
+apiRouter.post('/contact-form', JoiValidate(contactFormSchema), HandleContactForm);
 
 // Auth
 apiRouter.post('/login', LoginUser);
@@ -49,9 +44,9 @@ apiRouter.put('/update-user-username/:identifier', validateUserIdentifier, valid
 apiRouter.get('/get-all-users', getAllUsers);
 
 // League of Legends API
-apiRouter.post('/riot-user/', riotUserExists);
+apiRouter.post('/riot-user/', RiotUserExists);
 
-apiRouter.get('/lol-data/:username', sendLolData);
+apiRouter.get('/lol-data/:username', SendLolData);
 
 // Brawl Stars API
 apiRouter.post('/brawl-user/', BrawlUserExists);

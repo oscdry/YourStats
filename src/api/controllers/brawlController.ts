@@ -6,7 +6,6 @@ export const BrawlUserExists = async (req: Request, res: Response, next: NextFun
 
 	try {
 		const user = await brawlInfo(userTag);
-
 		if (!user)
 			throw new Error('User not found');
 
@@ -26,8 +25,13 @@ export const SendBrawlData = async (req: Request, res: Response, next: NextFunct
 };
 
 export const RenderBrawlStats = async (req: Request, res: Response, next: NextFunction) => {
-	const userTag = req.params.tag;
-	const brawlData = await GetBrawlData(userTag);
+	try {
+		const userTag = req.params.tag;
+		const brawlData = await GetBrawlData(userTag);
 
-	return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawlData });
+		return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlData });
+	} catch (error) {
+		next(error);
+	}
+
 };

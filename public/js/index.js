@@ -180,22 +180,57 @@ logoutButton?.addEventListener('click', async (e) => {
 const gameUsernameForm = document.getElementById('game-username-form');
 const gameUsernameInput = document.getElementById('game-username-input');
 
+const dataMode = gameUsernameInput.getAttribute('data-mode');
+
+switch (dataMode) {
+	case 'lol':
+		gameUsernameInput.placeholder = 'Enter your League of Legends username';
+		break;
+
+	case 'brawl':
+		gameUsernameInput.placeholder = 'Enter your Brawl Stars tag';
+		break;
+}
+
+
 // On submit of the game username form
+// Universal for all games, the mode is set in the data-mode attribute of the input
 gameUsernameForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const errorText = e.target.querySelector('.error-text');
-
 	const usernameVal = gameUsernameInput.value.trim();
-	if (usernameVal) {
 
-		// This response either returns 400 or redirects to the stats page
-		const response = await fetch('/api/riot-user/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ username: usernameVal })
-		});
+	if (usernameVal) {
+		let response;
+		let targetUrl = '';
+
+		switch (dataMode) {
+			case 'lol':
+
+				// This response either returns 400 or redirects to the stats page
+				response = await fetch('/api/riot-user/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ username: usernameVal })
+				});
+				targetUrl = '/lol/stats/' + usernameVal;
+				break;
+
+			case 'brawl':
+
+				// This response either returns 400 or redirects to the stats page
+				response = await fetch('/api/brawl-user/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ tag: usernameVal })
+				});
+				targetUrl = '/brawl/stats/' + usernameVal;
+				break;
+		}
 
 		if (!response.ok) {
 			const json = await response.json();
@@ -203,8 +238,7 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 			return;
 		}
 
-		// Redirect to the stats page
-		window.location.href = '/lol/stats/' + usernameVal;
+		window.location = targetUrl;
 	}
 });
 
