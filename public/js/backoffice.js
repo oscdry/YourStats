@@ -1,3 +1,67 @@
+//user list with pagination
+
+document.addEventListener('DOMContentLoaded', () => {
+	let before = document.getElementById('previous-currentPage');
+	let current = document.getElementById('currentPage');
+	let after = document.getElementById('after-currentPage');
+	let prevButton = document.getElementById('prevPage');
+	let nextButton = document.getElementById('nextPage');
+	let count = document.getElementById('countUsers').textContent; // Obtener el count de usuarios desde el backend
+	let usersPerPage = 10; // Número de usuarios por página
+	let totalPages = Math.ceil(count / usersPerPage); // Calcular el número total de páginas
+	let currentPage = getPageNumberFromUrl(); // Obtener el número de página de la URL
+
+	updatePageNumbers();
+
+	document.getElementById('nextPage').addEventListener('click', () => {
+		currentPage++;
+		window.location.href = `/admin?page=${currentPage}`;
+
+		// Llamamos a updatePageNumbers después de cambiar la página
+		updatePageNumbers();
+	});
+
+	document.getElementById('prevPage').addEventListener('click', () => {
+		currentPage = Math.max(1, currentPage - 1);
+		window.location.href = `/admin?page=${currentPage}`;
+
+		// Llamamos a updatePageNumbers después de cambiar la página
+		updatePageNumbers();
+	});
+
+	function getPageNumberFromUrl() {
+		const urlParams = new URLSearchParams(window.location.search);
+		const page = parseInt(urlParams.get('page'));
+		return isNaN(page) ? 1 : page; // Si no se encuentra 'page' en la URL, devuelve 1
+	}
+
+	function updatePageNumbers() {
+		current.textContent = currentPage;
+
+		// Establecer el texto de 'before' como el número de página actual menos 1
+		before.textContent = Math.max(1, currentPage - 1);
+
+		if (currentPage <= 1) {
+			prevButton.disabled = true;
+			before.style.display = 'none'; // Ocultar el botón 'before'
+		} else {
+			prevButton.disabled = false;
+			before.style.display = 'inline'; // Mostrar el botón 'before'
+		}
+
+		// Si currentPage es igual al número total de páginas, deshabilitar el botón "next" y ocultar el botón "after"
+		if (currentPage >= totalPages) {
+			nextButton.disabled = true;
+			after.style.display = 'none'; // Ocultar el botón 'after'
+		} else {
+			nextButton.disabled = false;
+			after.style.display = 'inline'; // Mostrar el botón 'after'
+		}
+
+		after.textContent = currentPage + 1;
+	}
+});
+
 // backoffice update
 
 const backUpdateSubmit = document.getElementById('back-update-button-submit');
@@ -151,48 +215,68 @@ backUpdateSubmit?.addEventListener('click', async (e) => {
 	}
 });
 
-// backoffice search user by username
+// backoffice search user by mail
 
 const searchBtn = document.getElementById('back-search-button');
 const searchInput = document.getElementById('back-search-mail-input');
 const errorSearch = document.getElementById('error-search-back');
+const tbody = document.querySelector('tbody');
 
-searchBtn?.addEventListener('click', (event) => {
-	event.preventDefault(); // Prevenir el envío del formulario para realizar la búsqueda con JavaScript
-	const userEmail = searchInput.value.trim(); // Obtener el valor del input y eliminar espacios en blanco al principio y al final
-	const userRows = document.querySelectorAll('.user-row'); // Seleccionar todas las filas de usuarios
+searchBtn.addEventListener('click', async (e) => {
+	e.preventDefault();
 
-	// Verificar si el input está en blanco
-	if (userEmail === '') {
+	const email = searchInput.value.trim(); // Obtener el valor del input y eliminar espacios en blanco al inicio y al final
 
-		// Mostrar todas las filas y no mostrar mensaje de error
-		userRows.forEach(row => {
-			row.style.display = '';
-		});
-		errorSearch.textContent = ''; // Asegurarse de que no se muestre el mensaje de error
-		return; // Salir de la función para no ejecutar el código de búsqueda
+	// Validar que el campo de correo electrónico no esté vacío
+	if (!email) {
+		errorSearch.textContent = 'El campo de correo electrónico es obligatorio';
+		return;
 	}
 
-	let found = false; // Indicador si se encontró el usuario
+	// Limpiar mensajes de error
+	errorSearch.textContent = '';
 
-	userRows.forEach(row => {
-		const mailCell = row.cells[2].textContent; // Asumiendo que el correo está en la tercera celda
-		if (mailCell === userEmail) {
+	try {
+		const response = await fetch('/search-by-email', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ email }) // Enviar el correo electrónico al servidor en formato JSON
+		});
 
-			// Si el correo coincide, mostrar solo esa fila y marcar que se encontró el usuario
-			row.style.display = '';
-			found = true;
-		} else {
-
-			// Si no coincide, ocultar la fila
-			row.style.display = 'none';
+		if (!response.ok) {
+			throw new Error('Error al buscar usuarios por correo electrónico');
 		}
-	});
 
-	// Si después de la búsqueda no se encontró ningún usuario, mostrar mensaje de error
-	if (!found) {
-		errorSearch.textContent = 'No user found with that email';
-	} else {
-		errorSearch.textContent = ''; // Limpiar el mensaje de error si se encontró al usuario
+		const users = await response.json();
+
+		// Limpiar la tabla antes de agregar los nuevos resultados
+		tbody.innerHTML = '';
+
+		// Agregar las filas de usuarios encontrados a la tabla
+		users.forEach(user => {
+			const tr = document.createElement('tr');
+			tr.classList.add('user-row');
+			tr.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.username}</td>
+                <td>${user.mail}</td>
+                <td>${user.role}</td>
+                <td><a data-bs-toggle="modal" data-bs-target="#modal-back-update"
+                    data-id="${user.id}"
+                    data-username="${user.username}"
+                    data-mail="${user.mail}"
+                    data-role="${user.role}"
+                    class="edit-btn">Edit</a></td>
+                <td><a href="/admin/users/delete/${user.id}">Delete</a></td>
+            `;
+			tbody.appendChild(tr);
+		});
+
+	} catch (error) {
+		console.error('Error al buscar usuarios por correo electrónico:', error);
+		errorSearch.textContent = 'Error interno del servidor';
 	}
 });
+
