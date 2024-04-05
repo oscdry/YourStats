@@ -8,7 +8,7 @@ interface Skin {
 	imageUrl: string;
 }
 
-const baseURL = 'https://rankedkings.com/lol-champion-skins';
+const baseURL = 'https://rankedkings.com/';
 
 
 export async function getSkinsChamp(nombreCampeon: string): Promise<Skin[]> {
@@ -115,4 +115,4 @@ async function getNewSkins(): Promise<Skin[]> {
 
 
 const nombreCampeon = 'gragas';
-console.log(await getNewSkins());
+console.log(await getAllSkins(baseURL));
