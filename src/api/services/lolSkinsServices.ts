@@ -85,8 +85,6 @@ function getChampId(idSkin: number): number {
 }
 
 
-
-
 async function getNewSkins(): Promise<Skin[]> {
 	try {
 		const response = await axios.get(baseURL);
@@ -115,4 +113,5 @@ async function getNewSkins(): Promise<Skin[]> {
 
 
 const nombreCampeon = 'gragas';
-console.log(await getAllSkins(baseURL));
+
+// console.log(await getAllSkins(baseURL));

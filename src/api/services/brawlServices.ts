@@ -3,10 +3,9 @@ const playerTagEX = 'YCQLVQV';
 const playerTagEX2 = 'LR2PV2J2';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
-import { UserNotFoundError } from '../errors/errors.js';
+import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
 
 config();
-
 
 export const brawlRecentBattle = async (battletag: string): Promise<{
 	resumeMatch: any[];
@@ -19,10 +18,16 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 			'Content-Type': 'application/json'
 		}
 	});
+
 	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog');
 
-	if (result.status !== 200) {
+	// Else, user not found
+	if (result.status === 404) {
 		throw new UserNotFoundError();
+	} else if (result.status === 403) {
+		Pino.trace(result);
+		throw new ExternalServiceError();
+
 	}
 
 	const json = await result.json();
@@ -136,9 +141,6 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 };
 
 
-
-
-
 export const brawlInfo = async (battletag: string): Promise<{
 	user: object;
 	imgID: string;
@@ -152,7 +154,13 @@ export const brawlInfo = async (battletag: string): Promise<{
 		}
 	});
 
-	if (result.status !== 200) {
+	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag);
+
+	// If 403, some key might be invalid
+	if (result.status === 403) {
+		Pino.trace('result:' + JSON.stringify(result));
+		throw new ExternalServiceError();
+	} else if (result.status !== 200) {
 		Pino.error(result.status);
 		return null;
 	}
@@ -165,7 +173,9 @@ export const brawlInfo = async (battletag: string): Promise<{
 		name: userData.name,
 		trophies: userData.trophies,
 		highestTrophies: userData.highestTrophies,
-		triosVictories: userData.triosVictories,
+
+		// Increíble que traiga la variable con numeros 🤮
+		trioVictories: userData['3vs3Victories'],
 		soloVictories: userData.soloVictories,
 		duoVictories: userData.duoVictories
 	};
@@ -217,7 +227,7 @@ interface BrawlData {
 			name: string;
 			trophies: number;
 			highestTrophies: number;
-			triosVictories: number;
+			trioVictories: number;
 			soloVictories: number;
 			duoVictories: number;
 		};
@@ -256,6 +266,6 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData> => {
 		}
 	};
 };
-console.log(JSON.stringify(await GetBrawlData(playerTagEX)));
 
+// console.log(JSON.stringify(await GetBrawlData(playerTagEX)));
 //console.log(await brawlInfo(playerTagEX));

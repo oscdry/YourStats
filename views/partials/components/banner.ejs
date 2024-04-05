@@ -1,3 +1,5 @@
+<%# This component takes a (mode) optional parameter to determine the game mode and display the corresponding banner and a (hide) optional parameter to hide the content %>
+
 <%
 const bannerslol = [
 "/img/banners/lol-a.jpg",
@@ -12,18 +14,25 @@ const bannersbrawl = [
 ]
 
 const bannerMode = typeof mode !== "undefined" ? mode : ""
+const hideContent = typeof hide !== "undefined" ? hide : false
+const text = bannerMode === "" ? "Tus estadísticas, al instante." : bannerMode === "lol" ? "League of Legends" : "Brawl Stars"
+
+console.log(bannerMode)
+console.log(hideContent)
 %>
 
 <div class="banner">
+
+    <% if (!hideContent) { %>
     <h3>
-        Tus estadísticas, al instante
+        <%= text %>
     </h3>
 
     <a href class="divisor"></a>
 
-    <p>
+    <p></p>
+    <% } %>
 
-    </p>
     <% if (bannerMode === "lol") { %>
     <img src="<%= bannerslol[Math.floor(Math.random() * bannerslol.length)] %>"
         alt="Banner League of Legends">

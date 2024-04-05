@@ -4,19 +4,28 @@ const RIOT_API_ENDPOINT = 'https://europe.api.riotgames.com';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { RiotDataByName } from './riotServices.js';
+import { ExternalServiceError } from '../errors/errors.js';
 
 config();
 
 
 // Status de la plataforma del League of Legends
-export const RiotStatusServer = async () => {
+export const RiotStatusServer = async (): Promise<{
+	id: string,
+	name: string,
+	locales: string[],
+	maintenances: any[],
+	incidents: any[],
+}> => {
 	const result = await fetch(LOL_API_ENDPOINT + 'status/v4/platform-data', {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
 	});
-	if (result.status != 200) { console.log('Error'); }
 
+	if (result.status === 403) { throw new ExternalServiceError(); }
+
+	if (result.status != 200) { Pino.error('Error'); }
 	const json = await result.json();
-	console.log(json);
+	return json;
 };
 
 // Mostrar el Ranking de los mejores jugadores (los pasa todos)
@@ -594,14 +603,10 @@ interface LoLUserData {
 }
 
 export const GetLolHomeData = async (): Promise<LolHomeData> => {
-	const ranking = await LolRankingDemo();
-	const list = getLastChamps();
-	const skins = getPopularSkins();
-
 	const LolHomeData: LolHomeData = {
-		summonerDetails: ranking,
-		champList: list,
-		popularSkins: skins
+		summonerDetails: await LolRankingDemo(),
+		champList: getLastChamps(),
+		popularSkins: getPopularSkins()
 
 	};
 
@@ -638,4 +643,5 @@ interface LolHomeData {
 }
 
 console.log(await GetLolHomeData());
+
 //console.log(JSON.stringify(await GetLolUserData(Gamename)));

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { RiotDataByName } from '../services/riotServices.js';
-import { GetLolUserData } from '../services/lolServices.js';
+import { GetLolHomeData, GetLolUserData, RiotStatusServer } from '../services/lolServices.js';
 import Pino from '../../logger.js';
 import { UserNotFoundError } from '../errors/errors.js';
 
@@ -10,7 +10,7 @@ import { UserNotFoundError } from '../errors/errors.js';
  * @param res
  * @param next Devuelve el error a errorHandler
  */
-export const riotUserExists = async (req: Request, res: Response, next: NextFunction) => {
+export const RiotUserExists = async (req: Request, res: Response, next: NextFunction) => {
 	const userName = req.body.username;
 
 	try {
@@ -29,10 +29,26 @@ export const riotUserExists = async (req: Request, res: Response, next: NextFunc
  * @param res
  * @param next
  */
-export const sendLolData = async (req: Request, res: Response, next: NextFunction) => {
+export const SendLolData = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const userName = req.params.username;
 		return res.json(await GetLolUserData(userName));
+	} catch (error) {
+		next(error);
+	}
+};
+
+/**
+ * Renderiza el home de League of Legends.
+ * @param _req
+ * @param res
+ * @param next
+ */
+export const RenderLolIndex = async (_req: Request, res: Response, next: NextFunction) => {
+	try {
+		const server = await RiotStatusServer();
+		const data = await GetLolHomeData();
+		res.render('./lol/index.ejs', { title: 'LoL', server, homedata: data });
 	} catch (error) {
 		next(error);
 	}
