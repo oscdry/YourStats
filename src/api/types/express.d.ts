@@ -1,7 +1,7 @@
 declare global {
-    namespace Express {
-        interface Locals {
-            token: TokenPayload;
-        }
-    }
+	namespace Express {
+		interface Locals {
+			token: TokenPayload;
+		}
+	}
 }

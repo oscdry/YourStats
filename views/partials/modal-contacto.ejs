@@ -17,13 +17,34 @@
                 {id:"contact-mail-input"}) %>
 
                 <%- include('./components/input-generic.ejs',
-                {label:"text", labelText:"Asunto", id:"contact-subject-input"})
+                {label:"text", labelText:"Asunto", id:"contact-content-input"})
                 %>
             </div>
-            <p class="error-text"></p>
+            <p class="error-text" id="contact-error-text"></p>
             <div class="modal-footer">
                 <button type="button" class="primary"
                     id="contact-submit">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%# Modal cuando se envía el formulario correctamente %>
+<div id="modal-contacto-success" class="modal fade" tabindex="-1"
+    aria-labelledby="modal-contact-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modal-contact-success-label">Enviado Correctamente</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Gracias por contactar con nosotros. Te responderemos lo antes posible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="primary"
+                    id="contact-success-submit">Gracias!</button>
             </div>
         </div>
     </div>
