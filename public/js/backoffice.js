@@ -94,14 +94,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			backUpdateRoleInput.value = role;
 			currentUserId = userId;
 
-
-			// Agrega aquí un campo oculto o una variable para almacenar el userId si planeas usarlo
-			// Por ejemplo, podrías tener un input oculto en tu formulario para el userId
-			// document.getElementById('back-update-user-id').value = userId;
+			// Limpiar los mensajes de error
+			const errorText = this.closest('.modal-content').querySelector('.error-text');
+			errorText.textContent = ''; // Limpiar los mensajes de error al abrir el modal
 		});
 	});
 });
-
 backUpdateSubmit?.addEventListener('click', async (e) => {
 	e.preventDefault();
 
@@ -217,66 +215,104 @@ backUpdateSubmit?.addEventListener('click', async (e) => {
 
 // backoffice search user by mail
 
-const searchBtn = document.getElementById('back-search-button');
-const searchInput = document.getElementById('back-search-mail-input');
-const errorSearch = document.getElementById('error-search-back');
-const tbody = document.querySelector('tbody');
+document.addEventListener('DOMContentLoaded', async () => {
 
-searchBtn.addEventListener('click', async (e) => {
-	e.preventDefault();
+	const searchBtn = document.getElementById('back-search-button');
+	const searchInput = document.getElementById('back-search-mail-input');
+	const errorSearch = document.getElementById('error-search-back');
+	const tbody = document.querySelector('tbody');
+	const beforeBtn = document.getElementById('prevPage');
+	const afterBtn = document.getElementById('nextPage');
+	const numBeforePage = document.getElementById('previous-currentPage');
+	const numCurrentPage = document.getElementById('currentPage');
+	const numAfterPage = document.getElementById('after-currentPage');
 
-	const email = searchInput.value.trim(); // Obtener el valor del input y eliminar espacios en blanco al inicio y al final
+	searchBtn.addEventListener('click', async (e) => {
+		e.preventDefault();
 
-	// Validar que el campo de correo electrónico no esté vacío
-	if (!email) {
-		errorSearch.textContent = 'El campo de correo electrónico es obligatorio';
-		return;
-	}
+		const email = searchInput.value.trim();
 
-	// Limpiar mensajes de error
-	errorSearch.textContent = '';
+		if (!email) {
+			errorSearch.textContent = 'El campo de correo electrónico es obligatorio';
 
-	try {
-		const response = await fetch('/search-by-email', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ email }) // Enviar el correo electrónico al servidor en formato JSON
-		});
-
-		if (!response.ok) {
-			throw new Error('Error al buscar usuarios por correo electrónico');
+			// Recargar la página /admin
+			window.location.href = '/admin';
+			return;
 		}
 
-		const users = await response.json();
+		errorSearch.textContent = '';
 
-		// Limpiar la tabla antes de agregar los nuevos resultados
-		tbody.innerHTML = '';
+		try {
+			const response = await fetch('/api/search-by-email', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ email })
+			});
 
-		// Agregar las filas de usuarios encontrados a la tabla
-		users.forEach(user => {
-			const tr = document.createElement('tr');
-			tr.classList.add('user-row');
-			tr.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.mail}</td>
-                <td>${user.role}</td>
-                <td><a data-bs-toggle="modal" data-bs-target="#modal-back-update"
-                    data-id="${user.id}"
-                    data-username="${user.username}"
-                    data-mail="${user.mail}"
-                    data-role="${user.role}"
-                    class="edit-btn">Edit</a></td>
-                <td><a href="/admin/users/delete/${user.id}">Delete</a></td>
-            `;
-			tbody.appendChild(tr);
-		});
+			if (!response.ok) {
+				throw new Error('Error al buscar usuarios por correo electrónico');
+			}
 
-	} catch (error) {
-		console.error('Error al buscar usuarios por correo electrónico:', error);
-		errorSearch.textContent = 'Error interno del servidor';
-	}
+			const users = await response.json();
+
+			const existingRows = document.querySelectorAll('.user-row');
+			existingRows.forEach(row => {
+				if (!users.find(user => user.id === parseInt(row.children[0].textContent))) {
+					row.remove();
+				}
+			});
+
+			users.forEach(user => {
+				if (!document.querySelector(`.user-row[data-id="${user.id}"]`)) {
+					const tr = document.createElement('tr');
+					tr.classList.add('user-row');
+					tr.dataset.id = user.id;
+					tr.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.mail}</td>
+                        <td>${user.role}</td>
+                        <td><a data-bs-toggle="modal" data-bs-target="#modal-back-update"
+                            data-id="${user.id}"
+                            data-username="${user.username}"
+                            data-mail="${user.mail}"
+                            data-role="${user.role}"
+                            class="edit-btn">Edit</a></td>
+                        <td><a href="/admin/users/delete/${user.id}">Delete</a></td>
+                    `;
+					tbody.appendChild(tr);
+
+					const editButton = tr.querySelector('.edit-btn');
+					editButton.addEventListener('click', function () {
+						const username = this.getAttribute('data-username');
+						const mail = this.getAttribute('data-mail');
+						const role = this.getAttribute('data-role');
+						const userId = this.getAttribute('data-id');
+
+						backUpdateUsernameInput.value = username;
+						backUpdateMailInput.value = mail;
+						backUpdateRoleInput.value = role;
+						currentUserId = userId;
+
+						const errorText = this.closest('.modal-content').querySelector('.error-text');
+						errorText.textContent = '';
+					});
+				}
+			});
+
+			// Ocultar los botones de paginación
+			beforeBtn.style.display = 'none';
+			afterBtn.style.display = 'none';
+			numBeforePage.style.display = 'none';
+			numCurrentPage.style.display = 'none';
+			numAfterPage.style.display = 'none';
+
+		} catch (error) {
+			console.error('Error al buscar usuarios por correo electrónico:', error);
+			errorSearch.textContent = 'Error interno del servidor';
+		}
+	});
 });
 
