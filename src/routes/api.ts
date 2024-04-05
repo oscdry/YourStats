@@ -15,6 +15,7 @@ import { riotUserExists, sendLolData } from '../api/controllers/lolController.js
 import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { JoiValidate } from '../api/middlewares/joiValidate.js';
 import { contactFormSchema } from '../api/middlewares/schemas.js';
+import { BrawlUserExists, SendBrawlData } from '../api/controllers/brawlController.js';
 
 
 const apiRouter = Router();
@@ -51,6 +52,11 @@ apiRouter.get('/get-all-users', getAllUsers);
 apiRouter.post('/riot-user/', riotUserExists);
 
 apiRouter.get('/lol-data/:username', sendLolData);
+
+// Brawl Stars API
+apiRouter.post('/brawl-user/', BrawlUserExists);
+
+apiRouter.get('/brawl-data/:tag', SendBrawlData);
 
 
 export default apiRouter;

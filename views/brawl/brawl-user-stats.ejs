@@ -1,0 +1,55 @@
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" type="module"></script>
+    <link rel="stylesheet" href="/css/brawl.css">
+</head>
+
+<%- include('../partials/components/banner.ejs', {mode: "brawl"}) %>
+
+<main>
+    <%- include('../partials/components/game-stats-header.ejs', {name:
+    'Brawl Stars', href: '/brawl', username:
+    brawldata.usuarioBrawlInfo.user.name}) %>
+
+    <div class="brawl-container">
+        <div class="brawl-user">
+            <img src="<%= brawldata.usuarioBrawlInfo.imgID %>"
+                alt="Imagen de perfil del usuario">
+            <div class="brawl-user-info">
+                <h2><%= brawldata.usuarioBrawlInfo.user.name %></h2>
+                <div class="brawl-user-trophies">
+                    <i class="trophy-icon"></i>
+                    <p>
+                        <%= brawldata.usuarioBrawlInfo.user.trophies %>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="brawl-victory-stats">
+            <%- include('./brawl-victory-item.ejs',
+            {text: 'Victorias 3c3',value:
+            brawldata.usuarioBrawlInfo.user.triosVictories}) %>
+
+            <%- include('./brawl-victory-item.ejs',
+            {text: 'Victorias Duo',value:
+            brawldata.usuarioBrawlInfo.user.duoVictories}) %>
+
+            <%- include('./brawl-victory-item.ejs',
+            {text: 'Victorias Solo',value:
+            brawldata.usuarioBrawlInfo.user.soloVictories}) %>
+
+        </div>
+    </div>
+
+    <div class="header my-5">
+
+        <div class="lol-rank">
+            <img
+                src="/img/lol/ranks/<%=// brawldata.tier.toLowerCase() + ".png"%>">
+            <p>
+                <%= brawldata.usuarioBrawlInfo.user.trophies %> <%=
+                brawldata.usuarioBrawlInfo.user.highestTrophies %>
+            </p>
+        </div>
+    </div>
+</main>

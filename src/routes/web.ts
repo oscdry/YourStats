@@ -8,9 +8,11 @@ import { errorHandler } from '../api/middlewares/errorHandler.js';
 import { UserNotFoundError } from '../api/errors/errors.js';
 import { verifyTokenOptional } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
-import { lolTestData } from '../api/services/lolTestData.js';
+import { lolTestData } from '../api/types/lolTestData.js';
 import { type } from 'os';
 import { renderLolStatsForPlayer } from '../api/controllers/lolController.js';
+import { GetBrawlData } from "../api/services/brawlServices.js";
+import { brawlTestData } from "../api/types/brawlTestData.js";
 
 const webRouter = Router();
 
@@ -41,17 +43,22 @@ webRouter.get('/about', (_req: Request, res: Response) => {
 	res.render('./about.ejs', { title: 'Contacto' });
 });
 
-// Brawl Stars
+// Brawl Stars ---------------------------------------------------------
 webRouter.get('/brawl', (_req: Request, res: Response) => {
 	res.render('./brawl/index.ejs', { title: 'Brawl Stars' });
 });
 
-// League of Legends
+//! Testing routes Brawl Stars
+webRouter.get('/brawl/stats/asd', async (_req: Request, res: Response, next: NextFunction) => {
+	return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlTestData });
+}
+
+// League of Legends ---------------------------------------------------------
 webRouter.get('/lol', (_req: Request, res: Response) => {
 	res.render('./lol/index.ejs', { title: 'LoL' });
 });
 
-//! Testing routes
+//! Testing routes League of Legends
 webRouter.get('/lol/stats/asd', async (_req: Request, res: Response, next: NextFunction) => {
 
 	const lolPositionsChartData = {

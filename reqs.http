@@ -36,4 +36,23 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LT
 
 // LOL testing
 
-POST http://localhost:8080/api/lol-data/OSCDRY
+GET http://localhost:8080/api/lol-data/OSCDRY
+
+
+###
+
+POST http://localhost:8080/api/brawl-user
+Content-Type: application/json
+
+{
+    "tag": "YCQLVQV"
+}
+
+###
+
+GET https://api.brawlstars.com/v1/players/%23YCQLVQV
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjQ4NmM5MGIwLTdmMmEtNDBjYi05MmMwLTEzMDQ1MWFmYTFkNiIsImlhdCI6MTcxMjMwNDczNSwic3ViIjoiZGV2ZWxvcGVyL2FhZGU3NjBhLWM4OTgtZDc5OC0yZDU1LTg2NjlmN2Q3NjY2MyIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMi4xNTQuMjM2LjE1MCJdLCJ0eXBlIjoiY2xpZW50In1dfQ.d9CgskEBrC1M1wE4J1EkPQkKDQ07qrWEBV6PdWsWZarm5z6kMIp8tI55_OJOKyVdiyl1Jid5dRlTxDwy9MjJqQ
+
+###
+
+GET http://localhost:8080/api/brawl-data/YCQLVQV

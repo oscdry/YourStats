@@ -1,0 +1,103 @@
+:root{
+    --brawl-bg-color: #343c50;
+    --trophy-color: #ffbe20;
+}
+
+.brawl-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+
+    margin-top: 2rem;
+}
+
+.trophy-icon {
+    background-image: url('/img/brawl/trophy.webp');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 50px;
+}
+
+.brawl-user{
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1.5rem;
+
+    min-width: 450px;
+    max-height: 160px;
+    width: 50%;
+
+    color: var(--white);
+
+    border-radius: 10px;
+
+    background-color: var(--brawl-bg-color);
+}
+
+.brawl-user img{
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.brawl-user-info {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+
+    padding: 1rem 0rem;
+}
+
+.brawl-user-info h2 {
+    color: white;
+}
+
+.brawl-user-trophies {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+
+    color: var(--trophy-color);
+    font-size: 2.5rem;
+
+    gap: 1rem;
+}
+
+/* Victorias */
+
+.brawl-victory-stats {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
+
+    gap: 1rem;
+
+}
+
+.brawl-victory-item {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+
+    color: var(--white);
+
+    padding: 1rem;
+    min-width: 150px;
+
+    border-radius: 10px;
+
+    background-color: var(--brawl-bg-color);
+    gap: 1rem;
+}
+
+.brawl-victory-item >.value {
+    font-size: 2.5rem;
+    color: var(--trophy-color);
+}

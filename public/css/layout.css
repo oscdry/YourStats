@@ -146,7 +146,7 @@ div.banner
     gap: 1rem;
 
     position: absolute;
-    top: var(--nav-height);
+    top: calc(var(--nav-height) - 2px);
     min-width: 100%;
     width: 100%;
     min-height: 80vh;
@@ -370,6 +370,13 @@ i.server-status-icon
     object-fit: contain;
     border-radius: 5px;
 
+}
+
+.game-stats-header{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 3rem;
 }
 
 
@@ -830,15 +837,40 @@ a.icon
 {
     position: relative;
     display: block;
+
+    overflow: hidden;
 }
 
-i
+a.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 48px;
+    min-height: 48px;
+
+    padding: 5px;
+    padding-right: 7px;
+    border-radius: 10%;
+
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+a.back-button:hover
+{
+    background-color: var(--gray);
+}
+
+a i
 {
     position: relative;
     display: block;
 
-    width: 50px;
-    height: 50px;
+    min-width: 36px;
+    min-height: 36px;
+
+    width: 100%;
+    height: 100%;
 }
 
 .icon-glyph-left
@@ -847,8 +879,6 @@ i
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-
-
 }
 
 .win,
