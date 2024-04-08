@@ -3,6 +3,7 @@
 </head>
 
 <%- include('../partials/modal-back-update.ejs') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
 <main>
     <h1 class="title">Users</h1>
@@ -11,8 +12,12 @@
         <%- include('../partials/components/input-mail.ejs',
         {id:"back-search-mail-input"})%>
         <button id="back-search-button" type="submit" class="primary">Search</button>
+        <button id="clear-search-button" style="display: none;">Clear</button>
         <p id="error-search-back" class="error-text"></p>
     </form>
+    <div>
+        <p>Total users: <p id="countUsers"><%= count %></p></p>
+    </div>
     <table>
 
         <tbody>
@@ -42,4 +47,11 @@
             <% }); %>
         </tbody>
     </table>
+    <div>
+        <button id="prevPage" class="secondary"><i class="fas fa-arrow-left"></i></button>
+        <button class="secondary" id="previous-currentPage"></button>
+        <button class="primary" id="currentPage"></button>
+        <button class="secondary" id="after-currentPage"></button>
+        <button id="nextPage" class="secondary"><i class="fas fa-arrow-right"></i></button>
+    </div>
 </main>
