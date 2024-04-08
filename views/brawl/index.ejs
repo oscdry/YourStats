@@ -1,8 +1,8 @@
-<%- include('../partials/components/banner.ejs') %>
+<%- include('../partials/components/banner.ejs', {mode : "brawl"}) %>
 
-<main class="banner">
+<main class="banner-main">
     <h1 class="title">Brawl Stars</h1>
-    <%- include('../partials/components/game-input-username.ejs') %>
+    <%- include('../partials/components/game-input-username.ejs', {mode: "brawl"}) %>
 
     <% const server = {
     id: 'EUW1',

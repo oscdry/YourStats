@@ -11,6 +11,9 @@
     --shadow: 1px 2px 4px 1px rgba(0, 0, 0, 0.10);
 
     --input-outline: 1px solid var(--dark-gray);
+    --separator-border: 1px solid #e0e0e0;
+
+    --nav-height: 90px;
 }
 
 html
@@ -58,10 +61,9 @@ main
     box-shadow: var(--shadow);
 }
 
-main.banner
+main.banner-main
 {
-    top: -10vh;
-    margin-top: 0;
+    margin-top: 30vh;
 }
 
 section
@@ -122,11 +124,75 @@ a.divisor
     display: block;
     width: 65%;
     height: 1px;
-    background-color: var(--black);
+    background-color: var(--white);
     margin: 1rem 0;
 
     pointer-events: none;
     cursor: none;
+
+    z-index: 1;
+}
+
+
+/* Banner */
+div.banner
+{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 7.5rem 5rem;
+    gap: 1rem;
+
+    position: absolute;
+    top: calc(var(--nav-height) - 2px);
+    min-width: 100%;
+    width: 100%;
+    min-height: 80vh;
+
+    overflow: hidden;
+
+    background-color: var(--dark);
+}
+
+.banner>h3
+{
+    margin-left: auto;
+    text-align: end;
+    margin-right: 0;
+
+    font-size: 3rem;
+
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: var(--white);
+    z-index: 5;
+}
+
+.banner>a
+{
+    margin-left: auto;
+}
+
+.banner>img {
+    position: absolute;
+    width: 100%;
+    object-fit: cover;
+    top: 0;
+
+    min-height: 100%;
+}
+
+.banner::after {
+    content: "";
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0), var(--gray));
 }
 
 /* Navbar */
@@ -145,8 +211,8 @@ nav
 
     width: 100%;
     min-width: 100%;
-    min-height: 90px;
-    max-height: 90px;
+    min-height: var(--nav-height);
+    max-height: var(--nav-height);
 
     box-sizing: border-box;
     z-index: 10;
@@ -206,6 +272,11 @@ a#logo-nav
     background-position: center;
 }
 
+.error-text {
+    color: red;
+    font-size: 18px;
+}
+
 .server-status-card
 {
     display: flex;
@@ -213,7 +284,7 @@ a#logo-nav
     align-items: center;
     justify-content: center;
 
-    width: 33%;
+    width: 25%;
     gap: 1rem;
     padding: 1rem;
 
@@ -228,8 +299,8 @@ a#logo-nav
 
 i.server-status-icon
 {
-    height: 100px;
-    width: 100px;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
 }
 
@@ -301,35 +372,13 @@ i.server-status-icon
 
 }
 
-/* Banner */
-div.banner
-{
+.game-stats-header{
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     align-items: center;
-    justify-content: center;
-
-    padding: 2rem;
-
-    position: relative;
-    min-width: 100%;
-    width: 100%;
-    min-height: 350px;
-
-    background-color: var(--dark);
+    gap: 3rem;
 }
 
-.banner>h3
-{
-    margin-left: auto;
-    text-align: end;
-    margin-right: 0;
-}
-
-.banner>a
-{
-    margin-left: auto;
-}
 
 /* Tables */
 table
@@ -494,6 +543,40 @@ label
     z-index: 0;
 
     background-color: var(--gray);
+}
+
+
+
+#carouselBanner {
+    max-height: 650px;
+    overflow: hidden;
+}
+
+#carouselBanner .carousel-item {
+    position: relative;
+
+    z-index: 5;
+}
+
+#carouselBanner .carousel-item h1 {
+    position: absolute;
+    color: white;
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+#carouselBanner .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-control-next,
+.carousel-control-prev
+{
+    z-index: 100;
 }
 
 .input-row-labeled
@@ -754,15 +837,40 @@ a.icon
 {
     position: relative;
     display: block;
+
+    overflow: hidden;
 }
 
-i
+a.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 48px;
+    min-height: 48px;
+
+    padding: 5px;
+    padding-right: 7px;
+    border-radius: 10%;
+
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+a.back-button:hover
+{
+    background-color: var(--gray);
+}
+
+a i
 {
     position: relative;
     display: block;
 
-    width: 50px;
-    height: 50px;
+    min-width: 36px;
+    min-height: 36px;
+
+    width: 100%;
+    height: 100%;
 }
 
 .icon-glyph-left
@@ -771,8 +879,6 @@ i
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-
-
 }
 
 .win,

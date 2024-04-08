@@ -1,10 +1,13 @@
+<%# This component takes a (server) object parameter to display the server status %>
+
 <head>
     <link rel="stylesheet" href="/css/lol.css">
 </head>
 
 <div class="server-status-card">
     <p class="server-name">
-        <%= server.name %>
+        <%= server.id %>&nbsp;
+        (<%= server.name %>)
     </p>
 
     <p>Estado: </p>

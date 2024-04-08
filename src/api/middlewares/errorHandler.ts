@@ -31,6 +31,10 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
 			return res.status(500).json({ error: 'Error registering user' });
 		case 'UserNotFoundError':
 			return res.status(404).json({ error: 'User not found' });
+
+		// JOI validation error
+		case 'ValidationError':
+			return res.status(400).json({ error: err.message });
 		default:
 			break;
 	}
