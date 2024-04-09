@@ -24,6 +24,9 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
 			// If this is not done, an infinite loop will occur
 			res.clearCookie('token           m');
 			return res.redirect('/');
+		case 'TokenExpiredError':
+			res.clearCookie('token');
+			return res.redirect('/');
 
 		case 'LoginError':
 			return res.status(400).json({ error: 'Invalid username or password' });
