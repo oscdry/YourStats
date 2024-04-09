@@ -1,117 +1,104 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+import fs from 'fs';
 
-interface Skin {
-	uri: string;
-	name: string;
-	rp_price: number | null;
-	imageUrl: string;
+async function extractSkinInfoFromPage(pageNumber: number) {
+    try {
+        const url = `https://www.mobafire.com/league-of-legends/skins?page=${pageNumber}`;
+
+        const response = await axios.get(url);
+
+        const $ = cheerio.load(response.data);
+
+        const skinsInfo = [];
+
+        $('.champ-skins__item').each((index, element) => {
+            const skin = {};
+
+            const skinName = $(element).find('h3').text().trim();
+            const releaseDate = $(element).find('.date .localized-datetime').attr('title');
+            const wishlistStatus = $(element).find('.wishlist-btn').text().trim();
+            const popularity = $(element).find('.heart__val').text().trim();
+            const cost = $(element).find('.champ-skins__item__cost').text().trim();
+            const imageURL = 'https://www.mobafire.com' + $(element).find('img').eq(0).attr('data-original');
+            
+
+            skin['name'] = skinName;
+            skin['releaseDate'] = releaseDate;
+            skin['wishlistStatus'] = wishlistStatus;
+            skin['popularity'] = popularity;
+            skin['cost'] = cost;
+            skin['imageURL'] = imageURL;
+            const landscapeURL = imageURL.replace('/portrait/', '/landscape/');
+            const chromaURL = imageURL.replace('/portrait/', '/chromas/');
+            skin['landscapeURL'] = landscapeURL;
+            skin['chromaURL'] = chromaURL;
+
+            skinsInfo.push(skin);
+        });
+
+        return skinsInfo;
+
+    } catch (error) {
+        console.error('Error:', error);
+        return []; // Retorna un array vacío en caso de error
+    }
 }
 
-const baseURL = 'https://rankedkings.com/';
+async function extractSkinInfoFromAllPages(totalPages: number) {
+    const allSkinsInfo = [];
 
+    for (let page = 1; page <= totalPages; page++) {
+        const skinsInfoFromPage = await extractSkinInfoFromPage(page);
+        
+        allSkinsInfo.push(...skinsInfoFromPage);
+    }
 
-export async function getSkinsChamp(nombreCampeon: string): Promise<Skin[]> {
-	try {
-		const urlCampeon = `${baseURL}/${nombreCampeon}`;
-		const response = await axios.get(urlCampeon);
-		const scriptDataRegex = /<script id="vike_pageContext" type="application\/json">([^]+?)<\/script>/;
-		const scriptDataMatch = response.data.match(scriptDataRegex);
-
-		const skins: Skin[] = [];
-
-		const $ = cheerio.load(response.data);
-		const skinContainers = $('div.hover\\:cursor-pointer');
-
-		skinContainers.each((index, element) => {
-			const scriptData = JSON.parse(scriptDataMatch[1]);
-			const skinsData = scriptData.pageProps.data.skins;
-			const uri = $(element).find('a').attr('href') || '';
-			const name = $(element).find('p.text-xs').text().trim();
-			const rpPrice = parseInt(($(element).find('div.absolute').text().trim().split(' ')[0] || ''), 10) || null;
-			const imageUrl = $(element).find('img').attr('src') || '';
-
-			skins.push({ uri, name, rp_price: rpPrice, imageUrl });
-		});
-		console.log(skins);
-		return skins;
-	} catch (error) {
-		console.error('Error obtainig champ info:', error);
-		return [];
-	}
-}
-
-export async function getAllSkins(url: string): Promise<Skin[]> {
-	try {
-		const response = await axios.get(url);
-		const jsonData = getJSON(response.data);
-
-		if (!jsonData) {
-			throw new Error('Cannot find  JSON ');
-		}
-
-		const skinsData = jsonData.pageProps.data.skins;
-
-		const skins: Skin[] = skinsData.map((skinData: any) => ({
-			uri: skinData.uri,
-			name: skinData.name,
-			rp_price: skinData.rp_price,
-			id: skinData.id,
-			image_URL: `https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/${getChampId(skinData.id)}/${skinData.id}.jpg`
-		}));
-
-		return skins;
-	} catch (error) {
-		console.error('Error with skin INFO', error);
-		return [];
-	}
-}
-
-function getJSON(html: string): any {
-	const inicio = html.indexOf('{"pageProps":{"data":{"skins":[');
-	const fin = html.indexOf('</script>', inicio);
-
-	if (inicio !== -1 && fin !== -1) {
-		const jsonString = html.slice(inicio, fin);
-		return JSON.parse(jsonString);
-	}
-
-	return null;
-}
-
-function getChampId(idSkin: number): number {
-	const idCampeon = Math.floor(idSkin / 1000);
-	return idCampeon;
+    fs.writeFileSync('all_skins_info.json', JSON.stringify(allSkinsInfo, null, 2));
+    
+    console.log('Información de todas las skins extraída y guardada correctamente.');
 }
 
 
-async function getNewSkins(): Promise<Skin[]> {
-	try {
-		const response = await axios.get(baseURL);
-		const jsonData = getJSON(response.data);
 
-		if (!jsonData) {
-			throw new Error('Cannot find  JSON Cannot find  JSON ');
-		}
 
-		const skinsData = jsonData.pageProps.data.skins.slice(0, 12);
+export function searchSkinByName(skinName: string) {
+    try {
+        const jsonData = fs.readFileSync('all_skins_info.json', 'utf8');
+        const skinsInfo = JSON.parse(jsonData);
 
-		const skins: Skin[] = skinsData.map((skinData: any) => ({
-			uri: skinData.uri,
-			name: skinData.name,
-			rp_price: skinData.rp_price,
-			id: skinData.id,
-			image_URL: `https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-tiles/${getChampId(skinData.id)}/${skinData.id}.jpg`
-		}));
+        const foundSkins = skinsInfo.filter((skin) =>
+            skin.name.toLowerCase().includes(skinName.toLowerCase())
+        );
 
-		return skins;
-	} catch (error) {
-		console.error('Error with skin INFO', error);
-		return [];
-	}
+        if (foundSkins.length > 0) {
+            return foundSkins; 
+        } else {
+            return ""; 
+        }
+    } catch (error) {
+        console.error('Error al buscar las skins:', error);
+        return "";
+    }
 }
 
+export function getNewSkins() {
+    try {
+        const jsonData = fs.readFileSync('all_skins_info.json', 'utf8');
+        const skinsInfo = JSON.parse(jsonData);
+        const firstFiveSkins = skinsInfo.slice(0, 5);
 
-const nombreCampeon = 'gragas';
+        return firstFiveSkins; 
+    } catch (error) {
+        console.error('Error al obtener las skins:', error);
+        return "";
+    }
+}
 
-// console.log(await getAllSkins(baseURL));
+//function getSkins
+
+const totalPages = 42;
+
+//extractSkinInfoFromAllPages(totalPages);
+console.log(getNewSkins());
+//console.log(searchSkinByName("Akali"));

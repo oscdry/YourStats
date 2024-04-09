@@ -110,6 +110,14 @@ export const getAllFirebaseUsers = async (): Promise<FirebaseUser[]> => {
 	return usersRef.docs.map(buildFirebaseUser);
 };
 
+// metodo para obtener usuarios de firebase de 10 en 10
+export const getFirebaseUsersByPage = async (page: number): Promise<{ users: FirebaseUser[], count: number }> => {
+	const usersRef = await firestore.collection('users').orderBy('username').limit(10).offset((page - 1) * 10).get();
+	const count = await firestore.collection('users').count().get();
+	const users = usersRef.docs.map(buildFirebaseUser);
+	return { users, count: count.data().count};
+};
+
 export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number; bio?: string; }): Promise<void> => {
 	if (!id) {
 		throw new UserNotFoundError();
@@ -152,4 +160,12 @@ export const updateFirebaseUserBio = async (id: string, updates: { bio?: string;
 		});
 	}
 	await firestore.collection('users').doc(id).update(updates);
+};
+export const searchByEmailBackoffice = async (mail: string): Promise<FirebaseUser[]> => {
+	const usersRef = await firestore
+		.collection('users')
+		.where('mail', '>=', mail)
+		.where('mail', '<=', mail + '\uf8ff')
+		.get();
+	return usersRef.docs.map(buildFirebaseUser);
 };

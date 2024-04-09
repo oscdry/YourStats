@@ -4,6 +4,7 @@ const RIOT_API_ENDPOINT = 'https://europe.api.riotgames.com';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { RiotDataByName } from './riotServices.js';
+import { getNewSkins } from './lolSkinsServices.js';
 import { ExternalServiceError } from '../errors/errors.js';
 
 config();
@@ -603,10 +604,16 @@ interface LoLUserData {
 }
 
 export const GetLolHomeData = async (): Promise<LolHomeData> => {
+	const ranking = await LolRankingDemo();
+	const list = getLastChamps();
+	const skins = getPopularSkins();
+	const newSkins = getNewSkins();
+
 	const LolHomeData: LolHomeData = {
-		summonerDetails: await LolRankingDemo(),
-		champList: getLastChamps(),
-		popularSkins: getPopularSkins()
+		summonerDetails: ranking,
+		champList: list,
+		popularSkins: skins,
+		newSkins : newSkins,
 
 	};
 
@@ -638,6 +645,19 @@ interface LolHomeData {
 			skinNombre: string,
 			price: number,
 		}
+	];
+	newSkins : [
+		skins: {
+			name: string,
+			releaseDate: string,
+			wishlistStatus:string,
+			popularity: string,
+			cost: number,
+			imageURL: string,
+			landscapeURL: string,
+			chromaURL: string,
+		}
+	
 	];
 
 }

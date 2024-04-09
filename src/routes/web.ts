@@ -2,7 +2,7 @@ import { Router, type Response, type Request, NextFunction } from 'express';
 import { getFirebaseUserById } from '../api/services/FirebaseServices.js';
 import { GetLolUserData } from '../api/services/lolServices.js';
 
-import { getAllFirebaseUsers } from '../api/services/FirebaseServices.js';
+import { getAllFirebaseUsers, getFirebaseUsersByPage } from '../api/services/FirebaseServices.js';
 
 import { errorHandler } from '../api/middlewares/errorHandler.js';
 import { UserNotFoundError } from '../api/errors/errors.js';
@@ -35,9 +35,12 @@ webRouter.get('/user/:id', async (_req: Request, res: Response) => {
 	res.render('./user.ejs', { title: 'User', userView: user });
 });
 
-webRouter.get('/admin', async (_req: Request, res: Response) => {
-	const users = await getAllFirebaseUsers();
-	res.render('./backoffice/dashboard.ejs', { title: 'Admin Panel', users });
+webRouter.get('/admin', async (req: Request, res: Response) => {
+
+	// Obtener el número de página de los parámetros de consulta, por defecto es 1
+	const page = parseInt(req.query.page as string) || 1;
+	const { users, count } = await getFirebaseUsersByPage(page); // Desestructura el resultado para obtener el conteo de usuarios
+	res.render('./backoffice/dashboard.ejs', { title: 'Admin Panel', users, page, count }); // Incluye el conteo en los datos renderizados
 });
 
 webRouter.get('/about', (_req: Request, res: Response) => {
