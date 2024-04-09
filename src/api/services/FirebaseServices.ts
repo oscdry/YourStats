@@ -2,6 +2,7 @@ import firestore from '../db/firebaseConnections.js';
 import { hash } from 'bcrypt';
 import { UserNotFoundError } from '../errors/errors.js';
 import Pino from '../../logger.js';
+import { FirebaseUser } from '../types/FirebaseUser.js';
 
 export const getFirebaseUserById = async (id: string): Promise<FirebaseUser | null> => {
 	if (!id) {
@@ -75,7 +76,7 @@ export const deleteFirebaseUserByMail = async (mail: string): Promise<boolean> =
 	return true;
 };
 
-export const createFirebaseUser = async (username: string, mail: string, password: string, bio: string, role: number): Promise<FirebaseUser | null> => {
+export const createFirebaseUser = async (username: string, mail: string, password: string, bio: string, role: number, google: boolean = false): Promise<FirebaseUser | null> => {
 	if (!mail) {
 		console.error('No mail provided creating user');
 		return null;
@@ -86,8 +87,8 @@ export const createFirebaseUser = async (username: string, mail: string, passwor
 		mail,
 		hash: await hash(password, 10),
 		bio,
-		role
-
+		role,
+		google: google ? 1 : 0
 	});
 	return buildFirebaseUser(await userRef.get());
 };

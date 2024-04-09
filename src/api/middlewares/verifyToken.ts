@@ -22,23 +22,23 @@ export const verifyTokenOptional = (req: Request, res: Response, next: NextFunct
 		const cookieToken = req.cookies.token || null;
 
 		if (!cookieToken) {
-			console.log('No optional token provided');
+			Pino.trace('No optional token provided in web');
 			return next();
 		}
 
 		res.locals.user = verifyToken(cookieToken) as TokenPayload;
 
 		if (!res.locals.user) {
-			console.log('No optional token provided');
+			Pino.trace('No optional token provided in web');
 			return next();
 		}
 
-		console.log('Token verified for user:', JSON.stringify(res.locals.user));
+		Pino.trace('Valid Token verified for user:' + JSON.stringify(res.locals.user));
 		next();
 
 	} catch (error) {
 		Pino.debug('Error verifying optional token:', error);
-		next();
+		next(error);
 	}
 };
 
@@ -54,7 +54,7 @@ export const verifyTokenRequired = (req: Request, res: Response, next: NextFunct
 		const cookieToken = req.cookies.token || null;
 
 		if (!cookieToken) {
-			console.log('No required token provided');
+			Pino.warn('No required token provided');
 			throw new InvalidTokenError();
 		}
 
