@@ -20,7 +20,8 @@ async function extractSkinInfoFromPage(pageNumber: number) {
             const wishlistStatus = $(element).find('.wishlist-btn').text().trim();
             const popularity = $(element).find('.heart__val').text().trim();
             const cost = $(element).find('.champ-skins__item__cost').text().trim();
-            const imageURL = $(element).find('img').eq(0).attr('data-original'); // Obtener la URL de la imagen
+            const imageURL = 'https://www.mobafire.com' + $(element).find('img').eq(0).attr('data-original');
+            
 
             skin['name'] = skinName;
             skin['releaseDate'] = releaseDate;
@@ -28,6 +29,10 @@ async function extractSkinInfoFromPage(pageNumber: number) {
             skin['popularity'] = popularity;
             skin['cost'] = cost;
             skin['imageURL'] = imageURL;
+            const landscapeURL = imageURL.replace('/portrait/', '/landscape/');
+            const chromaURL = imageURL.replace('/portrait/', '/chroma/');
+            skin['landscapeURL'] = landscapeURL;
+            skin['chromaURL'] = chromaURL;
 
             skinsInfo.push(skin);
         });
