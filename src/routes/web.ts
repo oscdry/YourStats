@@ -52,12 +52,13 @@ webRouter.get('/brawl', (_req: Request, res: Response) => {
 	res.render('./brawl/index.ejs', { title: 'Brawl Stars' });
 });
 
-webRouter.get('/brawl/stats/:tag', RenderBrawlStats);
-
 //! Testing routes Brawl Stars
 webRouter.get('/brawl/stats/asd', async (_req: Request, res: Response, next: NextFunction) => {
 	return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlTestData });
 });
+
+webRouter.get('/brawl/stats/:tag', RenderBrawlStats);
+
 
 // League of Legends ---------------------------------------------------------
 webRouter.get('/lol', RenderLolIndex);

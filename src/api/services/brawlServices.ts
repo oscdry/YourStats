@@ -195,7 +195,7 @@ export const brawlInfo = async (battletag: string): Promise<{
 	}));
 
 	const iconId = userData.icon.id;
-	const imgID = 'https://media.brawltime.ninja/avatars/' + iconId + '.webp?size=200';
+	const imgID = 'https://media.brawltime.ninja/avatars/' + iconId + '.webp';
 
 	return { user, imgID, brawlers };
 };
