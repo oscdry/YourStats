@@ -22,6 +22,11 @@
                         <%= brawldata.usuarioBrawlInfo.user.trophies %>
                     </p>
                 </div>
+                <div class="braw-user-trophies max-trophies">
+                    <p>
+                        Máximo de trofeos: <%= brawldata.usuarioBrawlInfo.user.highestTrophies %>
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -41,15 +46,12 @@
         </div>
     </div>
 
-    <div class="header my-5">
-
-        <div class="lol-rank">
-            <img
-                src="/img/lol/ranks/<%=// brawldata.tier.toLowerCase() + ".png"%>">
-            <p>
-                <%= brawldata.usuarioBrawlInfo.user.trophies %> <%=
-                brawldata.usuarioBrawlInfo.user.highestTrophies %>
-            </p>
-        </div>
+    <p>
+        Últimas <%= brawldata.resumenPartidas.length %> partidas:
+    </p>
+    <div class="brawl-games-container">
+        <% brawldata.resumenPartidas.forEach((game) => { %>
+        <%- include('./brawl-game-card.ejs', {game}) %>
+        <% }) %>
     </div>
 </main>

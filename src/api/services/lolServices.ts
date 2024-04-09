@@ -475,7 +475,7 @@ export function getPopularSkins() {
 		},
 		{
 			champName: 'Soul Reaver Draven',
-			skinURL: 'Uhttps://www.mobafire.com/images/champion/skins/portrait/draven-soul-reaver.jpg',
+			skinURL: 'https://www.mobafire.com/images/champion/skins/portrait/draven-soul-reaver.jpg',
 			skinName: 'Soul Reaver Draven',
 			skinNombre: 'Draven Segador de Almas',
 			price: 1350

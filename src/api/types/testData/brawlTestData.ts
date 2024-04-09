@@ -108,17 +108,17 @@ export const brawlTestData = {
 					}
 				]
 			],
-			'datosPartida': {
-				'idBrawlerPasadoPorTag': null,
-				'nombreBrawlerPasadoPorTag': null,
-				'modo': 'heist',
-				'mapa': 'Pit Stop',
-				'tipo': 'soloRanked',
-				'duracion': 51
+			datosPartida: {
+				idBrawlerPasadoPorTag: null,
+				nombreBrawlerPasadoPorTag: null,
+				modo: 'heist',
+				mapa: 'Pit Stop',
+				tipo: 'soloRanked',
+				duracion: 51
 			}
 		},
 		{
-			'equipos': [
+			equipos: [
 				[
 					{
 						'Nombrejugador': 'Supersan_jlv',
@@ -216,11 +216,11 @@ export const brawlTestData = {
 						'isStarPlayer': false
 					},
 					{
-						'Nombrejugador': '♎женя♎',
-						'tag': '#GQC9QV90V',
-						'nombreBrawler': 'SPIKE',
-						'idBrawler': 16000005,
-						'isStarPlayer': false
+						Nombrejugador: '♎женя♎',
+						tag: '#GQC9QV90V',
+						nombreBrawler: 'SPIKE',
+						idBrawler: 16000005,
+						isStarPlayer: false
 					}
 				]
 			],
@@ -330,11 +330,11 @@ export const brawlTestData = {
 			name: 'Supersan_jlv',
 			trophies: 32437,
 			highestTrophies: 32437,
-			triosVictories: 2064,
+			trioVictories: 2064,
 			soloVictories: 1378,
 			duoVictories: 623
 		},
-		imgID: 'https://media.brawltime.ninja/avatars/28000159.webp?size=200',
+		imgID: 'https://media.brawltime.ninja/avatars/28000159.webp',
 		brawlers: [
 			{
 				id: 16000012,

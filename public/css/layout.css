@@ -853,12 +853,18 @@ a.back-button {
     padding-right: 7px;
     border-radius: 10%;
 
-    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out transform 0.10s ease-in-out;
 }
 
 a.back-button:hover
 {
     background-color: var(--gray);
+}
+
+a.back-button:active
+{
+    background-color: var(--dark);
+    transform: scale(0.95);
 }
 
 a i

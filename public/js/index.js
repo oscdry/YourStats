@@ -180,7 +180,7 @@ logoutButton?.addEventListener('click', async (e) => {
 const gameUsernameForm = document.getElementById('game-username-form');
 const gameUsernameInput = document.getElementById('game-username-input');
 
-const dataMode = gameUsernameInput.getAttribute('data-mode');
+const dataMode = gameUsernameInput?.getAttribute('data-mode');
 
 switch (dataMode) {
 	case 'lol':
