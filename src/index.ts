@@ -71,7 +71,7 @@ app.use('/admin', adminRouter);
 
 app.use(errorHandler);
 
-const port = 8080;
+const port = 80;
 app.listen(port, () => Pino.info(`Server listening on port ${port}`));
 
 export default app;
