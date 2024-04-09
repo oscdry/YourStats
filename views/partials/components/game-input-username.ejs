@@ -1,3 +1,8 @@
+<% const gameMode = typeof mode !== "undefined" ? mode : ""
+const placeholder = gameMode === "lol" ? "Introduce tu nombre de invocador" : "Introduce tu tag de jugador"
+%>
+
+
 <div class="w-100 p-5 input-row">
 
     <% // Username input form %>
@@ -5,7 +10,7 @@
         <form id="game-username-form">
 
             <input type="text" name="username" id="game-username-input" required
-                placeholder="Introduce tu nombre de jugador">
+                placeholder="<%= placeholder %>" data-mode="<%= mode %>">
 
             <button class="primary" type="submit">
                 Buscar

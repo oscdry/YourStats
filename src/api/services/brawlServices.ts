@@ -4,9 +4,39 @@ const playerTagEX2 = 'LR2PV2J2';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
+const BRAWL_API_ENDPOINT = 'https://api.brawlstars.com/v1/';
+const playerTagEX = 'YCQLVQV';
+const playerTagEX2 = 'LR2PV2J2';
+import { config } from 'dotenv';
+import Pino from '../../logger.js';
+import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
 
 config();
 
+export const brawlRecentBattle = async (battletag: string): Promise<{
+	resumeMatch: any[];
+	mostPlayedmode: [string, number][];
+	gameNamesrepeated: [string, number][];
+} | null> => {
+	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog', {
+		headers: {
+			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Content-Type': 'application/json'
+		}
+	});
+
+	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog');
+
+	// Else, user not found
+	if (result.status === 404) {
+		throw new UserNotFoundError();
+	} else if (result.status === 403) {
+		Pino.trace(result);
+		throw new ExternalServiceError();
+
+	}
+
+	const json = await result.json();
 export const brawlRecentBattle = async (battletag: string): Promise<{
 	resumeMatch: any[];
 	mostPlayedmode: [string, number][];
@@ -35,7 +65,14 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 	const resumeMatch: any[] = [];
 	const modosJuego: { [key: string]: number; } = {};
 	const nombresJugadores: string[] = [];
+	const resumeMatch: any[] = [];
+	const modosJuego: { [key: string]: number; } = {};
+	const nombresJugadores: string[] = [];
 
+	if (Array.isArray(json.items)) {
+		json.items.slice(0, 10).forEach((item: any) => {
+			const event = item.event;
+			const battle = item.battle;
 	if (Array.isArray(json.items)) {
 		json.items.slice(0, 10).forEach((item: any) => {
 			const event = item.event;
@@ -46,9 +83,36 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 			} else {
 				modosJuego[event.mode] = 1;
 			}
+			if (modosJuego[event.mode]) {
+				modosJuego[event.mode]++;
+			} else {
+				modosJuego[event.mode] = 1;
+			}
 
 			let teams: any[] = [];
+			let teams: any[] = [];
 
+			if (event.mode === 'soloShowdown') {
+				const jugadoresSoloShowdown: any[] = item.battle.players;
+				jugadoresSoloShowdown.forEach((jugador: any) => {
+					const isTagMatch = jugador.tag === battletag;
+					teams.push([
+						{
+							Nombrejugador: jugador.name,
+							tag: jugador.tag,
+							nombreBrawler: jugador.brawler ? jugador.brawler.name : null,
+							idBrawler: jugador.brawler ? jugador.brawler.id : null,
+							isStarPlayer: isTagMatch && item.battle.starPlayer && jugador.tag === item.battle.starPlayer.tag
+						}
+					]);
+					if (!isTagMatch) {
+						nombresJugadores.push(jugador.name);
+					}
+				});
+			} else {
+				if (Array.isArray(item.battle.teams)) {
+					item.battle.teams.forEach((team: any) => {
+						const jugadores: any[] = [];
 			if (event.mode === 'soloShowdown') {
 				const jugadoresSoloShowdown: any[] = item.battle.players;
 				jugadoresSoloShowdown.forEach((jugador: any) => {
@@ -80,7 +144,20 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 								idBrawler: player.brawler ? player.brawler.id : null,
 								isStarPlayer: isStarPlayer
 							});
+						team.forEach((player: any) => {
+							const isStarPlayer = item.battle.starPlayer && player.tag === item.battle.starPlayer.tag;
+							jugadores.push({
+								Nombrejugador: player.name,
+								tag: player.tag,
+								nombreBrawler: player.brawler ? player.brawler.name : null,
+								idBrawler: player.brawler ? player.brawler.id : null,
+								isStarPlayer: isStarPlayer
+							});
 
+							if (player.tag !== battletag) {
+								nombresJugadores.push(player.name);
+							}
+						});
 							if (player.tag !== battletag) {
 								nombresJugadores.push(player.name);
 							}
@@ -90,7 +167,19 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 					});
 				}
 			}
+						teams.push(jugadores);
+					});
+				}
+			}
 
+			const matchData = {
+				idBrawlerPasadoPorTag: null,
+				nombreBrawlerPasadoPorTag: null,
+				modo: event.mode,
+				mapa: event.map,
+				tipo: battle.type,
+				duracion: battle.duration
+			};
 			const matchData = {
 				idBrawlerPasadoPorTag: null,
 				nombreBrawlerPasadoPorTag: null,
@@ -108,12 +197,29 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 					}
 				});
 			});
+			teams.forEach((equipo: any[]) => {
+				equipo.forEach((jugador: any) => {
+					if (jugador.tag === battletag && jugador.idBrawler) {
+						matchData.idBrawlerPasadoPorTag = jugador.idBrawler;
+						matchData.nombreBrawlerPasadoPorTag = jugador.nombreBrawler;
+					}
+				});
+			});
 
 			const partida = {
 				teams: teams,
 				matchData: matchData
 			};
+			const partida = {
+				teams: teams,
+				matchData: matchData
+			};
 
+			resumeMatch.push(partida);
+		});
+	} else {
+		Pino.error('La propiedad \'items\' no es un array en el objeto JSON.');
+	}
 			resumeMatch.push(partida);
 		});
 	} else {
@@ -128,11 +234,26 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 			contadorNombresJugadores[nombre] = 1;
 		}
 	});
+	const contadorNombresJugadores: { [key: string]: number; } = {};
+	nombresJugadores.forEach((nombre: string) => {
+		if (contadorNombresJugadores[nombre]) {
+			contadorNombresJugadores[nombre]++;
+		} else {
+			contadorNombresJugadores[nombre] = 1;
+		}
+	});
 
+	const modosJuegoOrdenados = Object.entries(modosJuego).sort((a, b) => b[1] - a[1]);
 	const modosJuegoOrdenados = Object.entries(modosJuego).sort((a, b) => b[1] - a[1]);
 
 	const nombresJugadoresOrdenados = Object.entries(contadorNombresJugadores).sort((a, b) => b[1] - a[1]);
+	const nombresJugadoresOrdenados = Object.entries(contadorNombresJugadores).sort((a, b) => b[1] - a[1]);
 
+	return {
+		resumeMatch: resumeMatch,
+		mostPlayedmode: modosJuegoOrdenados,
+		gameNamesrepeated: nombresJugadoresOrdenados.slice(0, 3)
+	};
 	return {
 		resumeMatch: resumeMatch,
 		mostPlayedmode: modosJuegoOrdenados,
@@ -243,9 +364,55 @@ interface BrawlData {
 			gadgets: string[];
 		}[];
 	};
+	resumenPartidas: {
+		equipos: {
+			Nombrejugador: string;
+			tag: string;
+			nombreBrawler: string | null;
+			idBrawler: number | null;
+			isStarPlayer: boolean;
+		}[][];
+		datosPartida: {
+			idBrawlerPasadoPorTag: number | null;
+			nombreBrawlerPasadoPorTag: string | null;
+			modo: string;
+			mapa: string;
+			tipo: string;
+			duracion: number;
+		};
+	}[];
+	modosJuegoMasJugados: [string, number][];
+	nombresJugadoresMasRepetidos: [string, number][];
+	usuarioBrawlInfo: {
+		user: {
+			tag: string;
+			name: string;
+			trophies: number;
+			highestTrophies: number;
+			trioVictories: number;
+			soloVictories: number;
+			duoVictories: number;
+		};
+		imgID: string;
+		brawlers: {
+			id: number;
+			name: string;
+			power: number;
+			gears: number;
+			trophies: number;
+			highestTrophies: number;
+			starPowers: string[];
+			gadgets: string[];
+		}[];
+	};
 }
 
 export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData> => {
+	const partidas = await brawlRecentBattle(playerTagEX);
+	const infoJugador = await brawlInfo(playerTagEX);
+
+	Pino.trace(JSON.stringify(partidas));
+	Pino.trace(JSON.stringify(infoJugador));
 	const partidas = await brawlRecentBattle(playerTagEX);
 	const infoJugador = await brawlInfo(playerTagEX);
 
@@ -265,7 +432,22 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData> => {
 			brawlers: infoJugador.brawlers
 		}
 	};
+	return {
+		resumenPartidas: partidas.resumeMatch.map((partida: any) => ({
+			equipos: partida.teams,
+			datosPartida: partida.matchData
+		})),
+		modosJuegoMasJugados: partidas.mostPlayedmode,
+		nombresJugadoresMasRepetidos: partidas.gameNamesrepeated,
+		usuarioBrawlInfo: {
+			user: infoJugador.user,
+			imgID: infoJugador.imgID,
+			brawlers: infoJugador.brawlers
+		}
+	};
 };
+
+// console.log(JSON.stringify(await GetBrawlData(playerTagEX)));
 
 // console.log(JSON.stringify(await GetBrawlData(playerTagEX)));
 //console.log(await brawlInfo(playerTagEX));

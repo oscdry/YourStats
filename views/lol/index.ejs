@@ -1,18 +1,21 @@
-<%- include('../partials/components/banner.ejs') %>
+<%# This view takes a (server) object parameter to display the server status and a
+(homedata) object parameter to display the home data %>
+
+<%- include('../partials/components/banner.ejs', {mode: "lol"}) %>
 
 <main class="banner-main">
     <h1 class="title">League of Legends</h1>
-    <%- include('../partials/components/game-input-username.ejs') %>
+    <%- include('../partials/components/game-input-username.ejs', {mode : "lol"}) %>
 
-    <% const server = {
-    id: 'EUW1',
-    name: 'EU West',
-    maintenances: [],
-    incidents: []
-    } %>
-
-    <div class="d-flex ">
+    <div class="d-flex flex-column gap-3">
+        <h3>Estado de los servidores</h3>
         <%- include('../partials/server-status-card.ejs', {server}) %>
     </div>
+
+<% console.log(homedata) %>
+
+<%- include('./lol-skins-showcase.ejs', {popularSkins: homedata.popularSkins}) %>
+
+<%- include('./lol-global-ranking.ejs', {summonerDetails: homedata.summonerDetails}) %>
 
 </main>

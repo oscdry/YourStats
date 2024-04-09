@@ -5,18 +5,28 @@ import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { RiotDataByName } from './riotServices.js';
 import { getNewSkins } from './lolSkinsServices.js';
+import { ExternalServiceError } from '../errors/errors.js';
+
 config();
 
 
 // Status de la plataforma del League of Legends
-export const RiotStatusServer = async () => {
+export const RiotStatusServer = async (): Promise<{
+	id: string,
+	name: string,
+	locales: string[],
+	maintenances: any[],
+	incidents: any[],
+}> => {
 	const result = await fetch(LOL_API_ENDPOINT + 'status/v4/platform-data', {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
 	});
-	if (result.status != 200) { console.log('Error'); }
 
+	if (result.status === 403) { throw new ExternalServiceError(); }
+
+	if (result.status != 200) { Pino.error('Error'); }
 	const json = await result.json();
-	console.log(json);
+	return json;
 };
 
 // Mostrar el Ranking de los mejores jugadores (los pasa todos)
@@ -653,4 +663,5 @@ interface LolHomeData {
 }
 
 console.log(await GetLolHomeData());
+
 //console.log(JSON.stringify(await GetLolUserData(Gamename)));

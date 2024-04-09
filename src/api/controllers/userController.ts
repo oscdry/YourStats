@@ -3,7 +3,7 @@ import firestore from '../db/firebaseConnections.js';
 import { generateTokenForUserId } from './tokenController.js';
 
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio } from '../services/FirebaseServices.js';
-import { EmailUsedError, RegisterError, UsernameUsedError, updateUserBioError, updateUsernameError } from '../errors/errors.js';
+import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUserBioError, UpdateUsernameError } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
 import Pino from '../../logger.js';
 
@@ -105,7 +105,7 @@ export async function updateUser(req: Request, res: Response, next: NextFunction
 		await updateFirebaseUserById(identifier, updates);
 		res.json({ message: 'User updated successfully' });
 	} catch (error) {
-		error = new updateUsernameError();
+		error = new UpdateUsernameError();
 		next(error);
 	}
 }
@@ -143,7 +143,7 @@ export async function updateUserName(req: Request, res: Response, next: NextFunc
 		return res.json({ token });
 
 	} catch (error) {
-		error = new updateUsernameError();
+		error = new UpdateUsernameError();
 		next(error);
 	}
 }

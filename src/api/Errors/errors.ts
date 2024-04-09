@@ -19,6 +19,13 @@ export class UserNotFoundError extends Error {
 	}
 }
 
+export class ExternalServiceError extends Error {
+	constructor() {
+		super('Error with external service. Check that any keys are valid.');
+		this.name = 'ExternalServiceError';
+	}
+}
+
 export class InvalidTokenError extends Error {
 	constructor() {
 		super('Invalid Token');
@@ -40,14 +47,14 @@ export class UsernameUsedError extends Error {
 	}
 }
 
-export class updateUsernameError extends Error {
+export class UpdateUsernameError extends Error {
 	constructor() {
 		super('Error updating username');
 		this.name = 'Update username';
 	}
 }
 
-export class updateUserBioError extends Error {
+export class UpdateUserBioError extends Error {
 	constructor() {
 		super('Error updating Bio for user');
 		this.name = 'Update Bio';

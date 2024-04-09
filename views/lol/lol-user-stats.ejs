@@ -5,16 +5,14 @@
     <link rel="stylesheet" href="/css/lol.css">
 </head>
 
+<%- include('../partials/components/banner.ejs', {mode: "lol", hide : true}) %>
+
+
 <main>
-    <div class="d-flex flex-row justify-center gap-3">
-        <%- include('../partials/components/back-button.ejs', {href : '/lol'});
-        %>
-        <h2>League of Legends</h2>
-    </div>
+    <%- include('../partials/components/game-stats-header.ejs', {name: 'League of Legends', href: '/lol', username: loldata.gameName}) %>
 
     <div class="header my-5">
         <div class="d-flex flex-column flex-wrap">
-            <h2>Estadísticas de <%= loldata.gameName %></h2>
             <img src="<%= loldata.iconID %>">
 
             <div class="lol-general-stats">
