@@ -4,7 +4,7 @@ const RIOT_API_ENDPOINT = 'https://europe.api.riotgames.com';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { RiotDataByName } from './riotServices.js';
-
+import { getNewSkins } from './lolSkinsServices.js';
 config();
 
 
@@ -466,7 +466,7 @@ export function getPopularSkins() {
 		},
 		{
 			champName: 'Soul Reaver Draven',
-			skinURL: 'Uhttps://www.mobafire.com/images/champion/skins/portrait/draven-soul-reaver.jpg',
+			skinURL: 'https://www.mobafire.com/images/champion/skins/portrait/draven-soul-reaver.jpg',
 			skinName: 'Soul Reaver Draven',
 			skinNombre: 'Draven Segador de Almas',
 			price: 1350
@@ -597,11 +597,13 @@ export const GetLolHomeData = async (): Promise<LolHomeData> => {
 	const ranking = await LolRankingDemo();
 	const list = getLastChamps();
 	const skins = getPopularSkins();
+	const newSkins = getNewSkins();
 
 	const LolHomeData: LolHomeData = {
 		summonerDetails: ranking,
 		champList: list,
-		popularSkins: skins
+		popularSkins: skins,
+		newSkins : newSkins,
 
 	};
 
@@ -633,6 +635,19 @@ interface LolHomeData {
 			skinNombre: string,
 			price: number,
 		}
+	];
+	newSkins : [
+		skins: {
+			name: string,
+			releaseDate: string,
+			wishlistStatus:string,
+			popularity: string,
+			cost: number,
+			imageURL: string,
+			landscapeURL: string,
+			chromaURL: string,
+		}
+	
 	];
 
 }

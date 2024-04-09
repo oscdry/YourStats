@@ -62,25 +62,36 @@ async function extractSkinInfoFromAllPages(totalPages: number) {
 
 
 
-function searchSkinByName(skinName: string) {
+export function searchSkinByName(skinName: string) {
     try {
         const jsonData = fs.readFileSync('all_skins_info.json', 'utf8');
         const skinsInfo = JSON.parse(jsonData);
 
-        const foundSkins = skinsInfo.filter((skin: { name: string }) =>
+        const foundSkins = skinsInfo.filter((skin) =>
             skin.name.toLowerCase().includes(skinName.toLowerCase())
         );
 
         if (foundSkins.length > 0) {
-            console.log(`Skins con "${skinName}":`);
-            foundSkins.forEach((foundSkin: any) => {
-                console.log(foundSkin);
-            });
+            return foundSkins; 
         } else {
-            console.log(`No se encontraron skins que contengan "${skinName}".`);
+            return ""; 
         }
     } catch (error) {
         console.error('Error al buscar las skins:', error);
+        return "";
+    }
+}
+
+export function getNewSkins() {
+    try {
+        const jsonData = fs.readFileSync('all_skins_info.json', 'utf8');
+        const skinsInfo = JSON.parse(jsonData);
+        const firstFiveSkins = skinsInfo.slice(0, 5);
+
+        return firstFiveSkins; 
+    } catch (error) {
+        console.error('Error al obtener las skins:', error);
+        return "";
     }
 }
 
@@ -89,5 +100,5 @@ function searchSkinByName(skinName: string) {
 const totalPages = 42;
 
 //extractSkinInfoFromAllPages(totalPages);
-
-console.log(searchSkinByName("Akali"));
+//console.log(getNewSkins());
+//console.log(searchSkinByName("Akali"));

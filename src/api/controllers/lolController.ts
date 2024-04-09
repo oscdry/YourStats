@@ -3,6 +3,7 @@ import { RiotDataByName } from '../services/riotServices.js';
 import { GetLolUserData } from '../services/lolServices.js';
 import Pino from '../../logger.js';
 import { UserNotFoundError } from '../errors/errors.js';
+import { searchSkinByName } from '../services/lolSkinsServices.js';
 
 /**
  * Comprueba si un usuario de Riot existe para un nombre de usuario dado.
@@ -33,6 +34,15 @@ export const sendLolData = async (req: Request, res: Response, next: NextFunctio
 	try {
 		const userName = req.params.username;
 		return res.json(await GetLolUserData(userName));
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const sendLolSkin = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const skinName = req.params.skinName;
+		return res.json(await searchSkinByName(skinName));
 	} catch (error) {
 		next(error);
 	}

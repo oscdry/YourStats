@@ -11,11 +11,11 @@ import { updateFirebaseUserById, updateFirebaseUserName } from '../api/services/
 import { verifyTokenOptional } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
 import { RiotDataByName } from '../api/services/riotServices.js';
-import { riotUserExists, sendLolData } from '../api/controllers/lolController.js';
+import { riotUserExists, sendLolData, sendLolSkin } from '../api/controllers/lolController.js';
 import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { JoiValidate } from '../api/middlewares/joiValidate.js';
 import { contactFormSchema } from '../api/middlewares/schemas.js';
-
+import { searchSkinByName } from '../api/services/lolSkinsServices.js';
 
 const apiRouter = Router();
 
@@ -49,7 +49,7 @@ apiRouter.get('/get-all-users', getAllUsers);
 
 // League of Legends API
 apiRouter.post('/riot-user/', riotUserExists);
-
+apiRouter.get('/lol/skins/:skinName', sendLolSkin);
 apiRouter.get('/lol-data/:username', sendLolData);
 
 
