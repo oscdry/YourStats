@@ -19,13 +19,16 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link
-            href="https://fonts.googleapis.com/css2?family=Sen:wght@400..800&display=swap"
-            rel="stylesheet">
+            href="https://fonts.googleapis.com/css2?family=Sen:wght@400..800&display=swap"    rel="stylesheet">
 
         <title><%= title %> - YourStats</title>
         <link rel="stylesheet" href="/css/reset.css">
         <link rel="stylesheet" href="/css/layout.css">
-        <script src="/js/index.js" defer></script>
+        <script src="/js/index.js" defer type="module"></script>
+        <%# THIS IS FOR GOOGLE OAUTH, moving this to the individual button
+        causes an error %>
+        <script defer src="https://accounts.google.com/gsi/client"></script>
+        <script defer src="/js/oauth.js" type="module"></script>
     </head>
     <body>
         <%- include('./partials/navbar.ejs') %>

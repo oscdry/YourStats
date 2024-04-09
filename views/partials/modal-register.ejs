@@ -17,10 +17,14 @@
                 {id:"register-password-input"}) %>
                 <%- include('./components/input-password-confirmation.ejs',
                 {id:"register-password-confirmation-input"}) %>
+
+                <%- include('./components/oauth-button.ejs', {mode: "register"}) %>
+
             </div>
             <p class="error-text"></p>
             <div class="modal-footer">
-                <button type="button" class="primary" id="register-button-submit">Registrarse</button>
+                <button type="button" class="primary"
+                    id="register-button-submit">Registrarse</button>
             </div>
         </div>
     </div>

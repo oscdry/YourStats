@@ -1,13 +1,14 @@
 import { config } from 'dotenv';
+import initFirebase from './api/firebase/firebaseApp.js';
+initFirebase();
 config();
-
-import adminRouter from './routes/adminRouter.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express, { NextFunction, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import expressLayouts from 'express-ejs-layouts';
+import Pino from './logger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -15,9 +16,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Client for the current API (API v2)
 // const client = new Client('eUPnOYKsnu4dBD6BJzjtsrtFpf91r7LFK7MTkbAa');
 
+import adminRouter from './routes/adminRouter.js';
 import apiRouter from './routes/api.js';
 import webRouter from './routes/web.js';
-import Pino from './logger.js';
 import { errorHandler } from './api/middlewares/errorHandler.js';
 
 const app = express();

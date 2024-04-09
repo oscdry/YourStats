@@ -52,7 +52,9 @@ main
 
     margin: 0 auto;
     padding: 2rem 4rem;
+
     margin-top: 15vh;
+    margin-bottom: 3rem;
 
     background-color: var(--white);
 
@@ -226,6 +228,15 @@ nav a
     font-weight: 700;
 }
 
+nav ul {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+
+}
+
 nav>.navbar-list
 {
     display: flex;
@@ -321,7 +332,7 @@ i.server-status-icon
     flex-flow: row wrap;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 3rem;
     margin: 2rem 0;
 }
 
@@ -334,12 +345,15 @@ i.server-status-icon
 {
     display: flex;
     flex-flow: column nowrap;
+    justify-content: space-around;
     align-items: center;
-    justify-content: center;
 
     gap: 0.25rem;
     padding: 0.75rem;
     border-radius: 5px;
+
+    min-height: 250px;
+    min-width: 200px;
 
     box-shadow: var(--shadow);
     cursor: pointer;
@@ -352,7 +366,6 @@ i.server-status-icon
 .game-selector-item:hover
 {
     background-color: var(--accent-color);
-
     transform: scale(1.05);
 }
 
@@ -370,6 +383,10 @@ i.server-status-icon
     object-fit: contain;
     border-radius: 5px;
 
+}
+
+.game-selector-item p {
+    font-size: 1.1rem;
 }
 
 .game-stats-header{
