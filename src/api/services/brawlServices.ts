@@ -4,12 +4,6 @@ const playerTagEX2 = 'LR2PV2J2';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
-const BRAWL_API_ENDPOINT = 'https://api.brawlstars.com/v1/';
-const playerTagEX = 'YCQLVQV';
-const playerTagEX2 = 'LR2PV2J2';
-import { config } from 'dotenv';
-import Pino from '../../logger.js';
-import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
 
 config();
 
