@@ -30,7 +30,7 @@ async function extractSkinInfoFromPage(pageNumber: number) {
             skin['cost'] = cost;
             skin['imageURL'] = imageURL;
             const landscapeURL = imageURL.replace('/portrait/', '/landscape/');
-            const chromaURL = imageURL.replace('/portrait/', '/chroma/');
+            const chromaURL = imageURL.replace('/portrait/', '/chromas/');
             skin['landscapeURL'] = landscapeURL;
             skin['chromaURL'] = chromaURL;
 
