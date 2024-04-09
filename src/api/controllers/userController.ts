@@ -5,7 +5,6 @@ import { generateTokenForUserId } from './tokenController.js';
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio } from '../services/FirebaseServices.js';
 import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUserBioError, UpdateUsernameError } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
-import Pino from '../../logger.js';
 import { FirebaseUser } from '../types/FirebaseUser.js';
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {

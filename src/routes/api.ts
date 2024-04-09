@@ -12,10 +12,11 @@ import { updateFirebaseUserById, updateFirebaseUserName, searchByEmailBackoffice
 
 import { verifyTokenOptional } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
-import { RiotUserExists, SendLolData } from '../api/controllers/lolController.js';
+import { RiotUserExists, SendLolData, sendLolSkin } from '../api/controllers/lolController.js';
 import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { JoiValidate } from '../api/middlewares/joiValidate.js';
 import { contactFormSchema } from '../api/middlewares/schemas.js';
+import { searchSkinByName } from '../api/services/lolSkinsServices.js';
 import { BrawlUserExists, SendBrawlData } from '../api/controllers/brawlController.js';
 
 
@@ -51,7 +52,7 @@ apiRouter.get('/get-all-users', getAllUsers);
 
 // League of Legends API
 apiRouter.post('/riot-user/', RiotUserExists);
-
+apiRouter.get('/lol/skins/:skinName', sendLolSkin);
 apiRouter.get('/lol-data/:username', SendLolData);
 
 // Brawl Stars API
