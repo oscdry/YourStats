@@ -1,9 +1,9 @@
 // Auth
-const SaveToken = (token) => document.cookie = `token=${token};`;
-const ClearToken = () => document.cookie = '';
+export const SaveToken = (token) => document.cookie = `token=${token};`;
+export const ClearToken = () => document.cookie = '';
 
-const RedirectToHome = () => window.location.href = '/';
-const ReloadPage = () => window.location.reload();
+export const RedirectToHome = () => window.location.href = '/';
+export const ReloadPage = () => window.location.reload();
 
 // Regex
 const validateUsername = (username) => /^[a-zA-Z0-9_]{3,16}$/.test(username);
@@ -28,7 +28,6 @@ loginSubmit?.addEventListener('click', async (e) => {
 		//TODO: Check regex
 
 		try {
-			console.log('Sending request to server');
 
 			// Send request to server
 			const response = await fetch('/api/login', {

@@ -1,0 +1,5 @@
+<%# This component takes a (mode) that can be "login" "register" %>
+
+<% const authMode = mode === "login" ? "login-google" : "register-google" %>
+
+<div id="<%= authMode %>"></div>

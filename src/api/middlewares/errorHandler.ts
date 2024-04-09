@@ -35,6 +35,8 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
 		// JOI validation error
 		case 'ValidationError':
 			return res.status(400).json({ error: err.message });
+		case 'FirebaseError':
+			return res.status(500).json({ error: 'Internal Server Error.' });
 		default:
 			break;
 	}

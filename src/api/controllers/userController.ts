@@ -5,32 +5,45 @@ import { generateTokenForUserId } from './tokenController.js';
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio } from '../services/FirebaseServices.js';
 import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUserBioError, UpdateUsernameError } from '../errors/errors.js';
 import { UserNotFoundError } from '../errors/errors.js';
-import Pino from '../../logger.js';     
+import { FirebaseUser } from '../types/FirebaseUser.js';
 
-export async function createUser(req: Request, res: Response, next: NextFunction) {
+export const createUser = async (req: Request, res: Response, next: NextFunction) => {
 	const { username, mail, password } = req.body;
 
 	Pino.info('UserController Creating User', { username, mail, password });
 
 	try {
-		const user = await getUserByIdentifier(username, 'username');
+
+		// Check if the user already exists
+		const [user, userMail] = await userExists(username, mail);
 		if (user)
 			throw new UsernameUsedError();
-
-		const userMail = await getUserByIdentifier(mail, 'email');
 		if (userMail)
 			throw new EmailUsedError();
 
 		const createUser = await createFirebaseUser(username, mail, password, '', 0);
 		if (!createUser)
-			throw new UserNotFoundError();
+			throw new RegisterError();
 
 		const token = generateTokenForUserId({ id: createUser.id, username: createUser.username, role: createUser.role });
 		return res.json({ token });
 	} catch (error) {
-		next(new RegisterError());
+		next(error);
 	}
-}
+};
+
+export const userExists = async (username: string | null, mail: string | null) => {
+
+	const [user, userMail] = await Promise.all(
+		[username ? getUserByIdentifier(username, 'username') : null,
+			mail ? getUserByIdentifier(mail, 'email') : null]);
+
+	return [user, userMail];
+};
+
+export const userExistsByMail = async (mail: string) => {
+	return await getUserByIdentifier(mail, 'email');
+};
 
 // Main function to get user by identifier from Firebase Services
 export async function getUserByIdentifier(identifier: string,

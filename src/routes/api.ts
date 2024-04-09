@@ -3,7 +3,7 @@ import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, ge
 import { validateCreateUser } from '../api/middlewares/validateCreateUsers.js';
 import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
-import { LoginUser } from '../api/controllers/loginController.js';
+import { LoginGoogleUser, LoginUser } from '../api/controllers/loginController.js';
 import { validateUserIdentifier } from '../api/middlewares/validateUserIdentifier.js';
 
 import { errorHandler } from '../api/middlewares/errorHandler.js';
@@ -27,6 +27,7 @@ apiRouter.post('/contact-form', JoiValidate(contactFormSchema), HandleContactFor
 
 // Auth
 apiRouter.post('/login', LoginUser);
+apiRouter.post('/login-google', LoginGoogleUser);
 apiRouter.post('/logout', LogoutUser);
 apiRouter.post('/register', validateCreateUser, createUser);
 
