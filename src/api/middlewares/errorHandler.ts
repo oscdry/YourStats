@@ -22,7 +22,7 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
 
 			// If invalid token error, clear the token cookie and redirect to home
 			// If this is not done, an infinite loop will occur
-			res.clearCookie('token           m');
+			res.clearCookie('token');
 			return res.redirect('/');
 		case 'TokenExpiredError':
 			res.clearCookie('token');
