@@ -15,32 +15,8 @@ config();
 
 export const brawlRecentBattle = async (battletag: string): Promise<{
 	resumeMatch: any[];
-	mostPlayedmode: [string, number][];
-	gameNamesrepeated: [string, number][];
-} | null> => {
-	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog', {
-		headers: {
-			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
-			'Content-Type': 'application/json'
-		}
-	});
-
-	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog');
-
-	// Else, user not found
-	if (result.status === 404) {
-		throw new UserNotFoundError();
-	} else if (result.status === 403) {
-		Pino.trace(result);
-		throw new ExternalServiceError();
-
-	}
-
-	const json = await result.json();
-export const brawlRecentBattle = async (battletag: string): Promise<{
-	resumeMatch: any[];
-	mostPlayedmode: [string, number][];
-	gameNamesrepeated: [string, number][];
+	mostPlayedmode: [string, number];
+	gameNamesrepeated: [string, number];
 } | null> => {
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog', {
 		headers: {
@@ -73,153 +49,153 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 		json.items.slice(0, 10).forEach((item: any) => {
 			const event = item.event;
 			const battle = item.battle;
-	if (Array.isArray(json.items)) {
-		json.items.slice(0, 10).forEach((item: any) => {
-			const event = item.event;
-			const battle = item.battle;
+			if (Array.isArray(json.items)) {
+				json.items.slice(0, 10).forEach((item: any) => {
+					const event = item.event;
+					const battle = item.battle;
 
-			if (modosJuego[event.mode]) {
-				modosJuego[event.mode]++;
-			} else {
-				modosJuego[event.mode] = 1;
-			}
-			if (modosJuego[event.mode]) {
-				modosJuego[event.mode]++;
-			} else {
-				modosJuego[event.mode] = 1;
-			}
-
-			let teams: any[] = [];
-			let teams: any[] = [];
-
-			if (event.mode === 'soloShowdown') {
-				const jugadoresSoloShowdown: any[] = item.battle.players;
-				jugadoresSoloShowdown.forEach((jugador: any) => {
-					const isTagMatch = jugador.tag === battletag;
-					teams.push([
-						{
-							Nombrejugador: jugador.name,
-							tag: jugador.tag,
-							nombreBrawler: jugador.brawler ? jugador.brawler.name : null,
-							idBrawler: jugador.brawler ? jugador.brawler.id : null,
-							isStarPlayer: isTagMatch && item.battle.starPlayer && jugador.tag === item.battle.starPlayer.tag
-						}
-					]);
-					if (!isTagMatch) {
-						nombresJugadores.push(jugador.name);
+					if (modosJuego[event.mode]) {
+						modosJuego[event.mode]++;
+					} else {
+						modosJuego[event.mode] = 1;
 					}
-				});
-			} else {
-				if (Array.isArray(item.battle.teams)) {
-					item.battle.teams.forEach((team: any) => {
-						const jugadores: any[] = [];
-			if (event.mode === 'soloShowdown') {
-				const jugadoresSoloShowdown: any[] = item.battle.players;
-				jugadoresSoloShowdown.forEach((jugador: any) => {
-					const isTagMatch = jugador.tag === battletag;
-					teams.push([
-						{
-							Nombrejugador: jugador.name,
-							tag: jugador.tag,
-							nombreBrawler: jugador.brawler ? jugador.brawler.name : null,
-							idBrawler: jugador.brawler ? jugador.brawler.id : null,
-							isStarPlayer: isTagMatch && item.battle.starPlayer && jugador.tag === item.battle.starPlayer.tag
-						}
-					]);
-					if (!isTagMatch) {
-						nombresJugadores.push(jugador.name);
+					if (modosJuego[event.mode]) {
+						modosJuego[event.mode]++;
+					} else {
+						modosJuego[event.mode] = 1;
 					}
-				});
-			} else {
-				if (Array.isArray(item.battle.teams)) {
-					item.battle.teams.forEach((team: any) => {
-						const jugadores: any[] = [];
 
-						team.forEach((player: any) => {
-							const isStarPlayer = item.battle.starPlayer && player.tag === item.battle.starPlayer.tag;
-							jugadores.push({
-								Nombrejugador: player.name,
-								tag: player.tag,
-								nombreBrawler: player.brawler ? player.brawler.name : null,
-								idBrawler: player.brawler ? player.brawler.id : null,
-								isStarPlayer: isStarPlayer
-							});
-						team.forEach((player: any) => {
-							const isStarPlayer = item.battle.starPlayer && player.tag === item.battle.starPlayer.tag;
-							jugadores.push({
-								Nombrejugador: player.name,
-								tag: player.tag,
-								nombreBrawler: player.brawler ? player.brawler.name : null,
-								idBrawler: player.brawler ? player.brawler.id : null,
-								isStarPlayer: isStarPlayer
-							});
+					let teams: any[] = [];
+					let teams: any[] = [];
 
-							if (player.tag !== battletag) {
-								nombresJugadores.push(player.name);
+					if (event.mode === 'soloShowdown') {
+						const jugadoresSoloShowdown: any[] = item.battle.players;
+						jugadoresSoloShowdown.forEach((jugador: any) => {
+							const isTagMatch = jugador.tag === battletag;
+							teams.push([
+								{
+									Nombrejugador: jugador.name,
+									tag: jugador.tag,
+									nombreBrawler: jugador.brawler ? jugador.brawler.name : null,
+									idBrawler: jugador.brawler ? jugador.brawler.id : null,
+									isStarPlayer: isTagMatch && item.battle.starPlayer && jugador.tag === item.battle.starPlayer.tag
+								}
+							]);
+							if (!isTagMatch) {
+								nombresJugadores.push(jugador.name);
 							}
 						});
-							if (player.tag !== battletag) {
-								nombresJugadores.push(player.name);
+					} else {
+						if (Array.isArray(item.battle.teams)) {
+							item.battle.teams.forEach((team: any) => {
+								const jugadores: any[] = [];
+								if (event.mode === 'soloShowdown') {
+									const jugadoresSoloShowdown: any[] = item.battle.players;
+									jugadoresSoloShowdown.forEach((jugador: any) => {
+										const isTagMatch = jugador.tag === battletag;
+										teams.push([
+											{
+												Nombrejugador: jugador.name,
+												tag: jugador.tag,
+												nombreBrawler: jugador.brawler ? jugador.brawler.name : null,
+												idBrawler: jugador.brawler ? jugador.brawler.id : null,
+												isStarPlayer: isTagMatch && item.battle.starPlayer && jugador.tag === item.battle.starPlayer.tag
+											}
+										]);
+										if (!isTagMatch) {
+											nombresJugadores.push(jugador.name);
+										}
+									});
+								} else {
+									if (Array.isArray(item.battle.teams)) {
+										item.battle.teams.forEach((team: any) => {
+											const jugadores: any[] = [];
+
+											team.forEach((player: any) => {
+												const isStarPlayer = item.battle.starPlayer && player.tag === item.battle.starPlayer.tag;
+												jugadores.push({
+													Nombrejugador: player.name,
+													tag: player.tag,
+													nombreBrawler: player.brawler ? player.brawler.name : null,
+													idBrawler: player.brawler ? player.brawler.id : null,
+													isStarPlayer: isStarPlayer
+												});
+												team.forEach((player: any) => {
+													const isStarPlayer = item.battle.starPlayer && player.tag === item.battle.starPlayer.tag;
+													jugadores.push({
+														Nombrejugador: player.name,
+														tag: player.tag,
+														nombreBrawler: player.brawler ? player.brawler.name : null,
+														idBrawler: player.brawler ? player.brawler.id : null,
+														isStarPlayer: isStarPlayer
+													});
+
+													if (player.tag !== battletag) {
+														nombresJugadores.push(player.name);
+													}
+												});
+												if (player.tag !== battletag) {
+													nombresJugadores.push(player.name);
+												}
+											});
+
+											teams.push(jugadores);
+										});
+									}
+								}
+								teams.push(jugadores);
+							});
+						}
+					}
+
+					const matchData = {
+						idBrawlerPasadoPorTag: null,
+						nombreBrawlerPasadoPorTag: null,
+						modo: event.mode,
+						mapa: event.map,
+						tipo: battle.type,
+						duracion: battle.duration
+					};
+					const matchData = {
+						idBrawlerPasadoPorTag: null,
+						nombreBrawlerPasadoPorTag: null,
+						modo: event.mode,
+						mapa: event.map,
+						tipo: battle.type,
+						duracion: battle.duration
+					};
+
+					teams.forEach((equipo: any[]) => {
+						equipo.forEach((jugador: any) => {
+							if (jugador.tag === battletag && jugador.idBrawler) {
+								matchData.idBrawlerPasadoPorTag = jugador.idBrawler;
+								matchData.nombreBrawlerPasadoPorTag = jugador.nombreBrawler;
 							}
 						});
-
-						teams.push(jugadores);
 					});
-				}
-			}
-						teams.push(jugadores);
+					teams.forEach((equipo: any[]) => {
+						equipo.forEach((jugador: any) => {
+							if (jugador.tag === battletag && jugador.idBrawler) {
+								matchData.idBrawlerPasadoPorTag = jugador.idBrawler;
+								matchData.nombreBrawlerPasadoPorTag = jugador.nombreBrawler;
+							}
+						});
 					});
-				}
+
+					const partida = {
+						teams: teams,
+						matchData: matchData
+					};
+					const partida = {
+						teams: teams,
+						matchData: matchData
+					};
+
+					resumeMatch.push(partida);
+				});
+			} else {
+				Pino.error('La propiedad \'items\' no es un array en el objeto JSON.');
 			}
-
-			const matchData = {
-				idBrawlerPasadoPorTag: null,
-				nombreBrawlerPasadoPorTag: null,
-				modo: event.mode,
-				mapa: event.map,
-				tipo: battle.type,
-				duracion: battle.duration
-			};
-			const matchData = {
-				idBrawlerPasadoPorTag: null,
-				nombreBrawlerPasadoPorTag: null,
-				modo: event.mode,
-				mapa: event.map,
-				tipo: battle.type,
-				duracion: battle.duration
-			};
-
-			teams.forEach((equipo: any[]) => {
-				equipo.forEach((jugador: any) => {
-					if (jugador.tag === battletag && jugador.idBrawler) {
-						matchData.idBrawlerPasadoPorTag = jugador.idBrawler;
-						matchData.nombreBrawlerPasadoPorTag = jugador.nombreBrawler;
-					}
-				});
-			});
-			teams.forEach((equipo: any[]) => {
-				equipo.forEach((jugador: any) => {
-					if (jugador.tag === battletag && jugador.idBrawler) {
-						matchData.idBrawlerPasadoPorTag = jugador.idBrawler;
-						matchData.nombreBrawlerPasadoPorTag = jugador.nombreBrawler;
-					}
-				});
-			});
-
-			const partida = {
-				teams: teams,
-				matchData: matchData
-			};
-			const partida = {
-				teams: teams,
-				matchData: matchData
-			};
-
-			resumeMatch.push(partida);
-		});
-	} else {
-		Pino.error('La propiedad \'items\' no es un array en el objeto JSON.');
-	}
 			resumeMatch.push(partida);
 		});
 	} else {
