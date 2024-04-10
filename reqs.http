@@ -26,3 +26,38 @@ Content-Type: application/json
     "mail": "a@mail.com",
     "password": "Abc.1234"
 }
+
+###
+
+https://api.brawlstars.com/v1/players/%23YCQLVQV
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImE3OGZhZmI5LTQ3N2QtNGQ0MC05OTdkLTFlMjcxMmI0ZjIxMyIsImlhdCI6MTcxMjA2NjA5OSwic3ViIjoiZGV2ZWxvcGVyL2FhZGU3NjBhLWM4OTgtZDc5OC0yZDU1LTg2NjlmN2Q3NjY2MyIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiODAuMjguMTIxLjk3Il0sInR5cGUiOiJjbGllbnQifV19.A1PNSUgAaaQ2_9CWWjIErmXJv_uBjICk-EUVxUjq6k1laGXXJLV8dHM2L0ZTacr4j32A05dP1bXefc39PLYQ3A
+
+###
+
+// LOL testing
+
+GET http://localhost:8080/api/lol-data/OSCDRY
+
+
+###
+
+POST http://localhost:8080/api/brawl-user
+Content-Type: application/json
+
+{
+    "tag": "YCQLVQV"
+}
+
+###
+
+GET https://api.brawlstars.com/v1/players/%23LR2PV2J2
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjgyYzlhMGU4LWY0NzctNDFkYi1iM2M4LTZlZjJlMTQ1ZjIyZiIsImlhdCI6MTcxMjMzMjA3MSwic3ViIjoiZGV2ZWxvcGVyL2FhZGU3NjBhLWM4OTgtZDc5OC0yZDU1LTg2NjlmN2Q3NjY2MyIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiNzkuMTUzLjcuNjMiLCI4MC4yOC4xMjEuOTciXSwidHlwZSI6ImNsaWVudCJ9XX0.h3m2BWEKwD-p8sgJjurVQYROW5oDmLW1Ts0nCk77y4afO2sWNmuaPv-yMr6pzALKY69hWqL8bVCT_HdMq1G3oQ
+
+###
+
+GET http://localhost:8080/api/brawl-data/YCQLVQV
+
+###
+
+GET https://api.brawlstars.com/v1/players/%23YCQLVQV
+Authorization

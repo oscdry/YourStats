@@ -1,6 +1,79 @@
-<main>
+<head>
+    <link rel="stylesheet" href="/css/contact.css">
+    <script src="/js/contact.js" type="module" defer></script>
+</head>
+
+<%- include('./partials/modal-contacto.ejs') %>
+
+<main class="d-flex flex-column">
     <h1 class="title">Contacto</h1>
+    <section class>
+        <h2>¿Quiénes somos?</h2>
+        <p>
+            Somos un grupo de estudiantes de ciclo superior de Desarrollo de
+            Aplicaciones Web en La Salle Gracia.
+        </p>
+
+        <div class="contact-user-div">
+
+            <div class="contact-user">
+                <img src="/img/default.jpg" alt>
+                <h4>Pol Condal</h4>
+            </div>
+
+            <div class="contact-user">
+                <img src="/img/default.jpg" alt>
+                <h4>Oscar Sanz</h4>
+            </div>
+
+            <div class="contact-user">
+                <img src="/img/default.jpg" alt>
+                <h4>Joan Linares</h4>
+            </div>
+
+            <div class="contact-user">
+                <img src="/img/default.jpg" alt>
+                <h4>Pol Ballarín</h4>
+            </div>
+        </div>
+
+    </section>
+
     <section>
+        <h2>
+            Nuestra misión
+        </h2>
+
+        <p>
+            Nuestra misión es ayudarte a encontrar la información que necesitas
+            para mejorar en tus juegos favoritos.
+        </p>
+
+        <p>
+            Diferenciándonos de otras webs, nosotros te ofrecemos información de
+            tus juegos favoritos de manera cómoda y sin distracciones.
+        </p>
+
+    </section>
+
+    <section>
+        <h2>
+            ¿Cómo contactar con nosotros?
+        </h2>
+
+        <p>
+            Puedes contactar con nosotros a través de nuestro correo
+            electrónico:
+            <a
+                href="mailto:stevewozniakyourstats@gmail.com">stevewozniakyourstats@gmail.com</a>
+
+            o a través de este formulario:
+        </p>
+
+        <button type="button" class="primary" data-bs-toggle="modal"
+            data-bs-target="#modal-contacto">
+            Contactar
+        </button>
 
     </section>
 

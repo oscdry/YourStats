@@ -1,14 +1,16 @@
-import { config } from "dotenv";
+import { config } from 'dotenv';
 config();
 
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+import Pino from '../../logger.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-    throw new Error("Error, No JWT_SECRET set");
+	throw new Error('Error, No JWT_SECRET set');
 }
 
 export const generateTokenForUserId = (payload: TokenPayload): string => {
-    return jwt.sign(payload, JWT_SECRET!, { expiresIn: "1d" });
+	Pino.debug('Generating token for user id: ' + payload.id);
+	return jwt.sign(payload, JWT_SECRET!, { expiresIn: '1d' });
 };

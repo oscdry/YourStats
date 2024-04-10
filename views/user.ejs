@@ -1,12 +1,20 @@
-<link rel="stylesheet" href="/css/user.css">
 
-<%- include('./partials/components/banner.ejs') %>
+<head>
+    <link rel="stylesheet" href="/css/user.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="/js/user.js" type="module"></script>
+</head>
 
-<main class="banner">
+<%- include('./partials/components/banner.ejs', {hide:true}) %>
+
+<main class="banner-main">
     <div class="profile">
         <img src="/img/default.jpg" alt="Foto de perfil">
-        <div class="user-title">
-            <h1 class="title"><%= userView.username%></h1>
+        <div class="user-title" data-user-id=<%= userView.id%>>
+            <h1 id="currentUserName" class="title"><%= userView.username%></h1>
+            <button id="changeUserNameBtn" class="primary"><i
+                    class="fa-solid fa-pencil"></i></button>
             <div class="points-div">
                 <p class="points">
                     50125
@@ -15,7 +23,11 @@
             </div>
         </div>
     </div>
-    <p class="bio">
-        <%= userView.bio %>
-    </p>
+    <div class="bio-info">
+        <p id="currentUserBio" class="bio">
+            <%= userView.bio %>
+        </p>
+        <button id="changeUserBioBtn" class="primary"><i
+                class="fa-solid fa-pencil"></i></button>
+    </div>
 </main>
