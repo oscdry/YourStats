@@ -144,7 +144,7 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 export const brawlInfo = async (battletag: string): Promise<{
 	user: object;
 	imgID: string;
-	brawlers: object[];
+	brawlers: any[];
 } | null> => {
 
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag, {
@@ -180,19 +180,25 @@ export const brawlInfo = async (battletag: string): Promise<{
 		duoVictories: userData.duoVictories
 	};
 
-	const sortByTrophies = userData.brawlers.sort((a, b) => b.trophies - a.trophies);
+	const sortByTrophies = userData.brawlers.sort(
+		(a: { trophies: number; }, b: { trophies: number; }) => b.trophies - a.trophies);
 	const topBrawlersByTrophies = sortByTrophies.slice(0, 10);
 
-	const brawlers = topBrawlersByTrophies.sort((a, b) => b.highestTrophies - a.highestTrophies).slice(0, 3).map(brawler => ({
-		id: brawler.id,
-		name: brawler.name,
-		power: brawler.power,
-		gears: brawler.gears,
-		trophies: brawler.trophies,
-		highestTrophies: brawler.highestTrophies,
-		starPowers: brawler.starPowers,
-		gadgets: brawler.gadgets
-	}));
+	const brawlers = topBrawlersByTrophies.sort(
+		(a: { highestTrophies: number; }, b: { highestTrophies: number; }
+		) => b.highestTrophies - a.highestTrophies).slice(0, 3)
+		.map((brawler: { id: any; name: any; power: any; gears: any; trophies: any; highestTrophies: any; starPowers: any; gadgets: any; }) => (
+			{
+				id: brawler.id,
+				name: brawler.name,
+				power: brawler.power,
+				gears: brawler.gears,
+				trophies: brawler.trophies,
+				highestTrophies: brawler.highestTrophies,
+				starPowers: brawler.starPowers,
+				gadgets: brawler.gadgets
+			}
+		));
 
 	const iconId = userData.icon.id;
 	const imgID = 'https://media.brawltime.ninja/avatars/' + iconId + '.webp';
@@ -245,9 +251,20 @@ interface BrawlData {
 	};
 }
 
-export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData> => {
+export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | null> => {
 	const partidas = await brawlRecentBattle(playerTagEX);
 	const infoJugador = await brawlInfo(playerTagEX);
+
+	if(!partidas) {
+		Pino.warn('El usuario: ' + playerTagEX + ' no tiene partidas de brawl');
+		return null;
+	}
+
+	if (!infoJugador) {
+		Pino.error('No se ha encontrado datos de brawl para el jugador: ' + playerTagEX);
+		return null;
+	}
+
 
 	Pino.trace(JSON.stringify(partidas));
 	Pino.trace(JSON.stringify(infoJugador));

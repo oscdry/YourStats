@@ -45,7 +45,5 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
 	}
 
 	Pino.error('Unknown error: ' + (err instanceof Error ? err.message : err));
-
-	if (!err.name)
-		return res.status(500).json({ error: 'Internal Server Error' });
+	return res.status(500).json({ error: 'Internal Server Error' });
 };

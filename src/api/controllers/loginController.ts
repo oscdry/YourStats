@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { createUser, getUserByIdentifier, userExists, userExistsByMail } from './userController.js';
+import { getUserByIdentifier, userExists, userExistsByMail } from './userController.js';
 import { generateTokenForUserId as generateTokenForUser } from './tokenController.js';
 import { LoginError } from '../errors/errors.js';
 import Pino from '../../logger.js';
 import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { createFirebaseUser } from '../services/FirebaseServices.js';
-import { FirebaseUser } from '../types/FirebaseUser.js';
 
 export const LoginUser = async (req: Request, res: Response, next: NextFunction) => {
 	const { username, password } = req.body;
@@ -98,7 +97,7 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 		return res.json({ token });
 	} catch (error) {
 		if (error instanceof Error) {
-			Pino.error('Error in google login: ' + error.message);
+			Pino.error('Error in google login: ' + error.message + error.stack);
 			return next(error);
 		}
 
