@@ -83,6 +83,6 @@ app.use('/admin', adminRouter);
 
 app.use(errorHandler);
 
-app.listen(port, () => Pino.info(`Server listening on port ${port}`));
+server.listen(port, () => Pino.info(`Server listening on port ${port}`));
 
 export default app;
