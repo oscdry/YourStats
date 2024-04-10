@@ -40,7 +40,6 @@ body
     min-width: 100%;
 
     overflow-x: hidden;
-    box-sizing: border-box;
 }
 
 main
@@ -734,6 +733,11 @@ label
 }
 
 /* ------------------ Bootstrap Overrides -------------------- */
+body.modal-open { /* Prevents modals from causing layout shift */
+    overflow: visible !important;
+    padding-right: 0 !important;
+}
+
 .modal
 {
     z-index: 2000 !important;

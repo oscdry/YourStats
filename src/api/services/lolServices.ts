@@ -48,11 +48,15 @@ export const LolRankingDemo = async () => {
 	if (result.status !== 200) { console.log('Error'); }
 
 	const json = await result.json();
-	const sortedData = json.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
+	const sortedData = json.entries.sort(
+		(a: { leaguePoints: number; },
+			b: { leaguePoints: number; }) => b.leaguePoints - a.leaguePoints);
 
 	const topUsers = sortedData.slice(0, 5);
 
-	const summonerDetails = topUsers.map(({ summonerName, leaguePoints }) => ({ summonerName, leaguePoints }));
+	const summonerDetails = topUsers.map(
+		({ summonerName, leaguePoints }:
+		{ summonerName: string, leaguePoints: number }) => ({ summonerName, leaguePoints }));
 
 	return summonerDetails;
 };
@@ -74,7 +78,7 @@ export const LoLMostPlayed = async (puuid: string): Promise<{ championID: number
 };
 
 // Muestra datos de Usuario como: Partidas gnadas,perdidas, totales,puntos de liga , rango y tier
-export const LoLRankById = async (Id: string): Promise<object | null> => {
+export const LoLRankById = async (Id: string): Promise<LoLUserData | null> => {
 	if (!Id) {
 		return null;
 	}
@@ -83,9 +87,6 @@ export const LoLRankById = async (Id: string): Promise<object | null> => {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
 	});
 	if (result.status != 200) { console.log('Error'); }
-
-	console.log(JSON.stringify(result));
-
 
 	const json = await result.json();
 	const entry = Array.isArray(json) ? json[0] : json;
@@ -233,7 +234,7 @@ export const LoLChampsLast10Games = async (Puiid: string): Promise<string> => {
 
 // Detalle ultimas 10 partidas con estadísticas incluidas, los items, si ganó,etc
 export const LoLGameChampWin = async (GameID: string, puuid: string):
-	Promise<{ championName: string, isWinner: boolean; } | null> => {
+Promise<LoLGameChampWinResponse | null> => {
 
 	const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/' + GameID, {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
@@ -277,7 +278,7 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
 		json.info.participants.forEach((p: any) => {
 			if (p.teamId === teamID) {
 				arrayTeammates
-				[p.summonerName] = p.championId;
+					[p.summonerName] = p.championId;
 			}
 		});
 		json.info.participants.forEach((p: any) => {
@@ -290,23 +291,23 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
 			if (p.teamId === teamID) {
 				if (p.teamPosition === 'TOP') {
 					arrayTeammates
-					[p.summonerName] = p.championId;
+						[p.summonerName] = p.championId;
 				} else if (p.teamPosition === 'JUNGLE') {
 
 					arrayTeammates
-					[p.summonerName] = p.championId;
+						[p.summonerName] = p.championId;
 				} else if (p.teamPosition === 'MIDDLE') {
 
 					arrayTeammates
-					[p.summonerName] = p.championId;
+						[p.summonerName] = p.championId;
 				} else if (p.teamPosition === 'BOTTOM') {
 
 					arrayTeammates
-					[p.summonerName] = p.championId;
+						[p.summonerName] = p.championId;
 				} else if (p.teamPosition === 'UTILITY') {
 
 					arrayTeammates
-					[p.summonerName] = p.championId;
+						[p.summonerName] = p.championId;
 				}
 			}
 		});
@@ -342,8 +343,9 @@ export const LoLGameChampWin = async (GameID: string, puuid: string):
 	}
 
 	return {
-		championIdentifier, isWinner, arrayItems, stats, kda, gameMode, teamID, teamPosition, arrayTeammates
-		, arrayBlue, arrayRed
+		championIdentifier, isWinner, arrayItems, stats,
+		kda, gameMode, teamID, teamPosition, arrayTeammates,
+		arrayBlue, arrayRed
 	};
 };
 
@@ -501,8 +503,15 @@ interface LoLGameChampWinResponse {
 	isWinner: boolean;
 	arrayItems: number[];
 	stats: ChampionStats;
-	kda: number;
+	kda: string;
 	gameMode: string;
+
+	teamID: string;
+
+	teamPosition: string;
+	arrayTeammates: { [nombre: string]: string; }
+	arrayBlue: { [nombre: string]: string; }
+	arrayRed: { [nombre: string]: string; };
 }
 
 //
@@ -528,7 +537,7 @@ const puuid = 'g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0P
  * @param gameName
  * @returns Un objeto con todos los datos del usuario
  */
-export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
+export const GetLolUserData = async (gameName: string): Promise<LoLUserData | null> => {
 	const data = await RiotDataByName(gameName);
 	const urlImage = 'https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/';
 	const preIcon = data?.profileIconId;
@@ -613,7 +622,7 @@ export const GetLolHomeData = async (): Promise<LolHomeData> => {
 		summonerDetails: ranking,
 		champList: list,
 		popularSkins: skins,
-		newSkins : newSkins,
+		newSkins : newSkins
 
 	};
 
@@ -646,22 +655,17 @@ interface LolHomeData {
 			price: number,
 		}
 	];
-	newSkins : [
+
+	newSkins: [
 		skins: {
 			name: string,
 			releaseDate: string,
-			wishlistStatus:string,
+			wishlistStatus: string,
 			popularity: string,
 			cost: number,
 			imageURL: string,
 			landscapeURL: string,
 			chromaURL: string,
 		}
-	
 	];
-
 }
-
-console.log(await GetLolHomeData());
-
-//console.log(JSON.stringify(await GetLolUserData(Gamename)));
