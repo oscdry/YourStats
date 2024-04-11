@@ -67,6 +67,7 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 
 		// Create the user
 		if (!existingUser) {
+			Pino.trace('User ' + result.user.displayName + ' not found for login, creating user');
 			const user = await createFirebaseUser(
 				result.user.displayName ? result.user.displayName : 'Unnamed User',
 				result.user.email ? result.user.email : '',
@@ -90,7 +91,7 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 		const payload: TokenPayload = {
 			id: userId ? userId : existingUser!.id,
 			username: result.user.displayName ? result.user.displayName : 'Unnamed User',
-			role: 0
+			role: existingUser ? existingUser.role : 0
 		};
 
 		const token = generateTokenForUser(payload);
