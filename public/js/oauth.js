@@ -2,6 +2,23 @@ import { RedirectToHome, SaveToken } from './index.js';
 
 // Callback api call for Google Oauth login/register
 const handleCredentialResponse = async (response) =>{
+
+	// Disable login and register buttons
+	const loginBtn = document.querySelector('[data-bs-toggle="modal"][data-bs-target="#modal-login"]');
+	const registerBtn = document.querySelector('[data-bs-toggle="modal"][data-bs-target="#modal-register"]');
+
+	if (loginBtn)
+		loginBtn.disabled = true;
+	if (registerBtn)
+		registerBtn.disabled = true;
+
+	// Darken the page
+	const body = document.body;
+	body.style.pointerEvents = 'none';
+	body.style.transition = 'opacity 0.5s';
+	body.style.opacity = '0.65';
+
+	// Send the credential to the server
 	const apiResponse = await fetch('/api/login-google', {
 		method: 'POST',
 		headers: {
