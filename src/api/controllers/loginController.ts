@@ -63,7 +63,7 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 		const existingUser = await userExistsByMail(
 			result.user.email ? result.user.email : '');
 
-		let userId: string| undefined = undefined;
+		let userId: string | undefined = undefined;
 
 		// Create the user
 		if (!existingUser) {

@@ -26,6 +26,8 @@ import { errorHandler } from './api/middlewares/errorHandler.js';
 
 const app = express();
 
+app.disable('x-powered-by');
+
 // Logging of requests
 app.use((req, _res, next) => {
 	Pino.debug(req.method + ' ' + req.url);

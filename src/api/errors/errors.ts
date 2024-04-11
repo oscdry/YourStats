@@ -33,30 +33,37 @@ export class InvalidTokenError extends Error {
 	}
 }
 
+export class MissingPrivilegesError extends Error {
+	constructor() {
+		super('Missing Privileges');
+		this.name = 'MissingPrivilegesError';
+	}
+}
+
 export class EmailUsedError extends Error {
 	constructor() {
 		super('This email is already provided');
-		this.name = 'Email used';
+		this.name = 'EmailUsedError';
 	}
 }
 
 export class UsernameUsedError extends Error {
 	constructor() {
-		super('This username is already provided');
-		this.name = 'Username used';
+		super('Username already in use');
+		this.name = 'UsernameUsedError';
 	}
 }
 
 export class UpdateUsernameError extends Error {
 	constructor() {
 		super('Error updating username');
-		this.name = 'Update username';
+		this.name = 'UpdateUsernameError';
 	}
 }
 
 export class UpdateUserBioError extends Error {
 	constructor() {
 		super('Error updating Bio for user');
-		this.name = 'Update Bio';
+		this.name = 'UpdateBioError';
 	}
 }
