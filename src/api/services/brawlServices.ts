@@ -7,6 +7,11 @@ import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
 
 config();
 
+const apiKey = process.env.BRAWL_API_KEY;
+if (!apiKey)
+	throw new Error('No Brawl API Key in env');
+
+
 export const brawlRecentBattle = async (battletag: string): Promise<{
 	resumeMatch: any[];
 	mostPlayedmode: [string, number][];
@@ -14,7 +19,7 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 } | null> => {
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog', {
 		headers: {
-			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Authorization': 'Bearer ' + apiKey,
 			'Content-Type': 'application/json'
 		}
 	});
@@ -149,7 +154,7 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag, {
 		headers: {
-			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Authorization': 'Bearer ' + apiKey,
 			'Content-Type': 'application/json'
 		}
 	});
@@ -158,16 +163,15 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 	// If 403, some key might be invalid
 	if (result.status === 403) {
-		Pino.trace('result:' + JSON.stringify(result));
+		const json = await result.json();
+		Pino.trace('Brawl info result: ' + json.reason + ' | ' + result.status + ' | ' + result.statusText + ' | ' + json.message);
 		throw new ExternalServiceError();
 	} else if (result.status !== 200) {
-		Pino.error(result.status);
-		return null;
+		Pino.error('Error fetching to Brawl API: ' + result.status + ' | ' + result.statusText);
+		throw new UserNotFoundError();
 	}
 
 	const userData = await result.json();
-	if (!userData) { return null; }
-
 	const user = {
 		tag: userData.tag,
 		name: userData.name,
@@ -255,7 +259,7 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | nul
 	const partidas = await brawlRecentBattle(playerTagEX);
 	const infoJugador = await brawlInfo(playerTagEX);
 
-	if(!partidas) {
+	if (!partidas) {
 		Pino.warn('El usuario: ' + playerTagEX + ' no tiene partidas de brawl');
 		return null;
 	}
