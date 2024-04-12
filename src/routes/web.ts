@@ -11,8 +11,12 @@ import { verifyAdminUser } from '../api/middlewares/verifyAdminUser.js';
 const webRouter = Router();
 
 // Not found page
-const NotFoundPage = (_req: Request, res: Response) => {
+export const NotFoundPage = (_req: Request, res: Response) => {
 	res.status(404).render('404.ejs', { title: 'Page not found' });
+};
+
+export const RenderErrorPage = (res: Response) => {
+	res.status(500).render('500.ejs', { title: 'Error' });
 };
 
 // Páginas publicas

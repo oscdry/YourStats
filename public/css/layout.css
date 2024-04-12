@@ -106,12 +106,12 @@ h1
 
 h2
 {
-    font-size: 48px;
+    font-size: clamp(2.2rem, 4vw, 48px);
 }
 
 h3
 {
-    font-size: 36px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
 h4
@@ -175,7 +175,8 @@ div.banner
     margin-left: auto;
 }
 
-.banner>img {
+.banner>img
+{
     position: absolute;
     width: 100%;
     object-fit: cover;
@@ -184,7 +185,8 @@ div.banner
     min-height: 100%;
 }
 
-.banner::after {
+.banner::after
+{
     content: "";
     display: flex;
     position: absolute;
@@ -227,7 +229,8 @@ nav a
     font-weight: 700;
 }
 
-nav ul {
+nav ul
+{
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -282,7 +285,8 @@ a#logo-nav
     background-position: center;
 }
 
-.error-text {
+.error-text
+{
     color: red;
     font-size: 18px;
 }
@@ -384,17 +388,25 @@ i.server-status-icon
 
 }
 
-.game-selector-item p {
+.game-selector-item p
+{
     font-size: 1.1rem;
 }
 
-.game-stats-header{
+.game-stats-header
+{
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
     gap: 3rem;
 }
 
+
+.chart {
+    max-width: 250px;
+    width: 100%;
+    max-height: 200px;
+}
 
 /* Tables */
 table
@@ -563,18 +575,21 @@ label
 
 
 
-#carouselBanner {
+#carouselBanner
+{
     max-height: 650px;
     overflow: hidden;
 }
 
-#carouselBanner .carousel-item {
+#carouselBanner .carousel-item
+{
     position: relative;
 
     z-index: 5;
 }
 
-#carouselBanner .carousel-item h1 {
+#carouselBanner .carousel-item h1
+{
     position: absolute;
     color: white;
     font-size: 3rem;
@@ -583,7 +598,8 @@ label
     z-index: 10;
 }
 
-#carouselBanner .carousel-item img {
+#carouselBanner .carousel-item img
+{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -733,9 +749,16 @@ label
 }
 
 /* ------------------ Bootstrap Overrides -------------------- */
-body.modal-open { /* Prevents modals from causing layout shift */
+body.modal-open
+{
+    /* Prevents modals from causing layout shift */
     overflow: visible !important;
     padding-right: 0 !important;
+}
+
+div.container {
+    max-width: 100%;
+    gap: 1rem;
 }
 
 .modal
@@ -846,14 +869,6 @@ button::focus
     box-shadow: none;
 }
 
-@media screen and (max-width: 768px)
-{
-    main
-    {
-        width: 100%;
-    }
-}
-
 a.icon
 {
     position: relative;
@@ -862,7 +877,8 @@ a.icon
     overflow: hidden;
 }
 
-a.back-button {
+a.back-button
+{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -918,4 +934,38 @@ div.lol-game-card.win
 div.lol-game-card.loss
 {
     background-color: rgb(255, 178, 178);
+}
+
+/* Responsive */
+
+@media screen and (max-width: 1024px)
+{
+    main {
+        width: 97.5%;
+        padding: 1rem 1.5rem;
+
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+    }
+
+    div.container { /* Center all items */
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 768px)
+{
+    main
+    {
+        width: 100%;
+        padding: 1rem 1rem;
+    }
+
+    h3
+    {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+
 }

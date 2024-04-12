@@ -36,7 +36,6 @@
     min-height: 100px;
     max-height: 150px;
 
-    background-color: var(--gray);
     box-shadow: var(--shadow);
 
     border-radius: 10px;
@@ -80,15 +79,26 @@
     align-items: center;
     justify-content: space-between;
 
-    width: 30%;
+    width: 25%;
     height: 100%;
 
-    background-color: var(--gray);
     box-shadow: var(--shadow);
 
     border-radius: 10px;
     overflow: hidden;
 
+}
+
+.lol-champion-card-info {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+
+    width: 75%;
+    height: 100%;
+
+    gap: 1rem;
 }
 
 .lol-champion-card img
@@ -119,7 +129,7 @@
     height: 100px;
 }
 
-.lol-games-div
+.lol-games-container
 {
     display: flex;
     flex-flow: row wrap;
@@ -129,6 +139,28 @@
     box-sizing: border-box;
 
     gap: 1rem;
+}
+
+.lol-user {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 40%;
+    height: 100%;
+
+    gap: 1rem;
+
+    padding: 1rem;
+    box-shadow: var(--shadow);
+    border-radius: 10px;
+}
+
+.lol-user img
+{
+    object-fit: contain;
+    height: 100%;
 }
 
 .lol-rank
@@ -147,8 +179,7 @@
     padding: 0;
 
     box-sizing: border-box;
-    border-radius: 5%;
-    background-color: var(--gray);
+    border-radius: 10px;
 
     box-shadow: var(--shadow);
 
@@ -230,8 +261,6 @@ div.lol-game-info-modal>.modal-dialog>.modal-content>.modal-body
 
     padding: 2.5rem;
     border-radius: 10px;
-
-    background-color: var(--gray);
 }
 
 div.lol-game-info-modal-team
@@ -342,7 +371,6 @@ div.lol-item-icon-empty
 
     padding: 1rem;
 
-    background-color: var(--gray);
     box-shadow: var(--shadow);
 
     border-radius: 10px;
