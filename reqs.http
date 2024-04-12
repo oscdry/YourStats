@@ -70,3 +70,7 @@ GET http://localhost:80/api/brawl-data/YCQLVQV
 
 GET https://api.brawlstars.com/v1/players/%23YCQLVQV
 Authorization
+
+
+###
+POST http://localhost:8080/api/upload

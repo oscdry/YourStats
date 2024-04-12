@@ -67,6 +67,9 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 		case 'ValidationError':
 			return res.status(400).json({ error: err.message });
 
+		case 'ImageFormatError':
+			return res.status(400).json({ error: 'Invalid image format.' });
+      
 		// External service errors
 		case 'ExternalServiceError':
 			return res.status(500).json({ error: 'There was an error connecting with external services, this should be fixed soon, apologies!' });

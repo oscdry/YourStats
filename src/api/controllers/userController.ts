@@ -178,4 +178,3 @@ export async function updateUserBio(req: Request, res: Response, next: NextFunct
 		next(error);
 	}
 }
-

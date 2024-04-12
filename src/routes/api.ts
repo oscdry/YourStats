@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName } from '../api/controllers/userController.js';
+import { Request, Response, Router } from 'express';
+import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, updateUserBio } from '../api/controllers/userController.js';
+import { validateCreateUser } from '../api/middlewares/validateCreateUsers.js';
 import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
 import { LoginGoogleUser, LoginUser } from '../api/controllers/loginController.js';
-
 
 import { verifyTokenOptional, verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
@@ -12,6 +12,7 @@ import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { joiValidate } from '../api/middlewares/joiValidate.js';
 import { contactFormSchema, createUserSchema, getUserSchema } from '../api/middlewares/schemas.js';
 import { BrawlUserExists, SendBrawlData } from '../api/controllers/brawlController.js';
+import { upload } from '../api/middlewares/multer.js';
 import { searchByEmailBackoffice } from '../api/services/FirebaseServices.js';
 
 
@@ -25,9 +26,26 @@ apiRouter.post('/contact-form', joiValidate(contactFormSchema), HandleContactFor
 
 // Auth
 apiRouter.post('/login', LoginUser);
+
+// Users
+apiRouter.delete('/delete-user/:identifier', validateUserIdentifier, deleteUser);
+apiRouter.put('/update-user/:identifier', validateUserIdentifier, validateUpdateUser, updateUser);
+apiRouter.get('/get-user/:identifier', validateUserIdentifier, async (req, res, next) => {
+	const user = await getUserByIdentifier(req.params.identifier, 'username');
+	Pino.trace(JSON.stringify(user));
+	return res.json(user);
+});
+
+apiRouter.put('/update-user-bio/:identifier', updateUserBio);
+
+apiRouter.get('/users/search/:identifier', validateUserIdentifier, (req) => {
+	const user = getUserByIdentifier(req.params.identifier, 'email');
+	return user;
+});
+
+apiRouter.use(verifyTokenOptional);
 apiRouter.post('/login-google', LoginGoogleUser);
 apiRouter.post('/register', joiValidate(createUserSchema), createUser);
-
 
 // League of Legends API
 apiRouter.post('/riot-user/', RiotUserExists);
@@ -72,6 +90,17 @@ apiRouter.post('/search-by-email', async (req, res) => {
 	} catch (error) {
 		console.error('Error al buscar usuarios por correo electrónico:', error);
 		return res.status(500).json({ error: 'Error interno del servidor' });
+	}
+});
+
+// ruta update image
+apiRouter.post('/upload/:userId', upload.single('image'), (req: Request, res: Response) => {
+	Pino.trace('hola');
+	if (req.file) {
+		Pino.debug('File uploaded:' + req.file);
+		res.sendStatus(200);
+	} else {
+		res.status(400).json({ message: 'Error uploading image' });
 	}
 });
 
