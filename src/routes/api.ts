@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName } from '../api/controllers/userController.js';
+import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, upload } from '../api/controllers/userController.js';
 import { validateCreateUser } from '../api/middlewares/validateCreateUsers.js';
 import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
@@ -71,6 +71,17 @@ apiRouter.post('/search-by-email', async (req, res) => {
 	} catch (error) {
 		console.error('Error al buscar usuarios por correo electrónico:', error);
 		return res.status(500).json({ error: 'Error interno del servidor' });
+	}
+});
+
+// ruta update image
+apiRouter.post('/upload', upload.single('image'), (req: Request, res: Response) => {
+	console.log('hola');
+	if (req.file) {
+		res.json({ message: 'Image uploaded successfully', filePath: req.file.path });
+		console.log(req.file);
+	} else {
+		res.status(400).json({ message: 'Error uploading image' });
 	}
 });
 

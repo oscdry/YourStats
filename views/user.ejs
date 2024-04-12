@@ -4,13 +4,43 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <script src="/js/user.js" type="module"></script>
+
+    <style>
+        .profile-pic-container {
+        position: relative;
+        width: fit-content;
+        }
+
+        .profile-pic {
+            display: block;
+            width: 100%; /* o el tamaño que prefieras */
+        }
+
+        .upload-pic-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Asegúrate de que esté oculto inicialmente */
+            z-index: 10; /* Asegura que el botón se muestre por encima de la imagen */
+            background-color: white; /* Fondo para que el texto sea legible */
+            color: black; /* Color del texto */
+            border: 1px solid black; /* Hace que el botón sea más visible */
+            padding: 5px 10px; /* Espaciado interno */
+            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+        }
+    </style>
 </head>
 
 <%- include('./partials/components/banner.ejs', {hide:true}) %>
 
 <main class="banner-main">
     <div class="profile">
-        <img src="/img/default.jpg" alt="Foto de perfil">
+        <div class="profile-pic-container">
+            <img src="/img/storage/users/default.jpg" alt="Foto de perfil" class="profile-pic">
+            <button id="uploadPicBtn" class="upload-pic-btn" style="display:none;">Cambiar imagen</button>
+            <input type="file" id="fileInput" style="display: none;" accept="image/*">
+        </div>
         <div class="user-title" data-user-id=<%= userView.id%>>
             <h1 id="currentUserName" class="title"><%= userView.username%></h1>
             <button id="changeUserNameBtn" class="primary"><i

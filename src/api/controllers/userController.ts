@@ -167,3 +167,42 @@ export async function updateUserBio(req: Request, res: Response, next: NextFunct
 	}
 }
 
+
+// user Image controller
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+// Configura multer para almacenar archivos en el directorio deseado
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		const dir = '/img/storage/users';
+
+		// Crea el directorio si no existe
+		if (!fs.existsSync(dir)) {
+			fs.mkdirSync(dir, { recursive: true });
+		}
+		cb(null, dir);
+	},
+	filename: function (req, file, cb) {
+
+		// Obtiene el userId desde el cuerpo de la petición o cualquier otra lógica que utilices
+		const userId = req.body.userId;
+
+		// Construye el nombre del archivo con el userId y la extensión original
+		const fileName = userId + path.extname(file.originalname);
+		cb(null, fileName);
+	}
+});
+
+// Filtra los archivos para asegurar que solo se suban imágenes
+const fileFilter = (req: Request, file: any, cb: any) => {
+	if (file.mimetype.startsWith('image/')) {
+		cb(null, true);
+	} else {
+		cb(new Error('Not an image! Please upload only images.'), false);
+	}
+};
+export const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+

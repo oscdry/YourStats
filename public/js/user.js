@@ -154,3 +154,61 @@ changeUserBioBtn?.addEventListener('click', () => {
 		}
 	});
 });
+
+// user change image
+document.addEventListener('DOMContentLoaded', () => {
+	const uploadPicBtn = document.getElementById('uploadPicBtn');
+	const fileInput = document.getElementById('fileInput');
+	const profilePicContainer = document.querySelector('.profile-pic-container');
+	const profilePic = document.querySelector('.profile-pic');
+	const userId = document.querySelector('.user-title').dataset.userId;
+
+	// Mostrar el botón de subir imagen al pasar el mouse sobre la imagen de perfil
+	profilePicContainer.addEventListener('mouseover', () => {
+		uploadPicBtn.style.display = 'block';
+	});
+
+	// Ocultar el botón de subir imagen cuando el mouse sale del contenedor
+	profilePicContainer.addEventListener('mouseout', () => {
+		uploadPicBtn.style.display = 'none';
+	});
+
+	// Abrir el selector de archivos al hacer clic en el botón
+	uploadPicBtn.addEventListener('click', () => {
+		fileInput.click();
+	});
+
+	// Manejar la selección de archivo y enviar la imagen al servidor
+	fileInput.addEventListener('change', function () {
+		const file = this.files[0];
+		if (file) {
+			const formData = new FormData();
+			formData.append('image', file);
+			formData.append('userId', userId);
+
+			// Realizar la petición fetch para subir la imagen
+			fetch('/api/upload', {
+				method: 'POST',
+				body: formData
+			})
+				.then(response => response.json())
+				.then(data => {
+					console.log([...formData]);
+					
+					// Actualizar la imagen de perfil con la nueva imagen subida
+					// Asegúrate de que el servidor responda con la ruta o nombre de la imagen
+					// Aquí asumimos que el servidor responde con la ruta de la imagen actualizada
+					if (data.filePath) {
+						profilePic.src = '/' + data.filePath;
+					} else {
+
+						// Manejar errores o respuesta inesperada
+						console.error('Error al subir la imagen:', data);
+					}
+				})
+				.catch(error => {
+					console.error('Error en la petición fetch:', error);
+				});
+		}
+	});
+});
