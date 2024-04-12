@@ -99,6 +99,6 @@ export function getNewSkins() {
 
 const totalPages = 42;
 
-//extractSkinInfoFromAllPages(totalPages);
-console.log(getNewSkins());
+extractSkinInfoFromAllPages(totalPages);
+//console.log(getNewSkins());
 //console.log(searchSkinByName("Akali"));
