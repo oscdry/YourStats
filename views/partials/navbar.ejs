@@ -6,7 +6,6 @@
 <nav>
     <a href="/" id="logo-nav"></a>
     <ul class="navbar-list">
-        <li><a href="/games">Juegos</a></li>
         <li><a href="/about">Sobre Nosotros</a></li>
     </ul>
 
@@ -23,9 +22,8 @@
                 data-bs-target="#modal-register">Regístrate</button>
         </li>
     </ul>
-
     <% } else { %>
-    <ul id="nav-controls">
+    <ul>
         <li>
             <a href="/user/<%= user.id %>">
                 <%= user.username %>

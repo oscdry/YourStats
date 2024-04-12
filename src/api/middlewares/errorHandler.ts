@@ -1,34 +1,65 @@
 import { NextFunction, Request, Response } from 'express';
 import Pino from '../../logger.js';
+import { RenderErrorPage } from '../../routes/web.js';
+
+const isApiRequest = (req: Request) => req.originalUrl.includes('/api');
+
+/**
+ * Redirects the user if it is not an API request, otherwise
+ * sends an error code.
+ * @param req
+ * @param res
+ */
+const handleApiError = (req: Request, res: Response, errorString: string, code: number) => {
+	isApiRequest(req) ? res.status(code).json({ error: errorString }) : res.redirect('/');
+};
 
 /**
  * Handles errors that are encountered in the application in order
  * to send them to the client in an expected format.
  * @param err
- * @param _req
+ * @param req
  * @param res
  * @param _next
  * @author @polcondal
  */
-export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+export const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction) => {
 	if (!err)
 		Pino.fatal('Caught Error is null or undefined');
 
 
-	Pino.warn('Caught Error of type: ' + err.name + ' | ' + (err instanceof Error ? err.message : err));
+	Pino.error('Caught Error of type: ' + err.name + ' | ' + (err instanceof Error ? err.message : err));
 
 	switch (err.name) {
+
+		// Token Errrors ---
+		// If invalid token error, clear the token cookie and redirect to home
+		// If this is not done, an infinite loop will occur
 		case 'InvalidTokenError':
+			res.clearCookie('token');
+			return handleApiError(req, res, 'Not Authorized', 401);
 
-			// If invalid token error, clear the token cookie and redirect to home
-			// If this is not done, an infinite loop will occur
-			res.clearCookie('token           m');
-			return res.redirect('/');
+		// If token required error, redirect to home
+		case 'TokenRequiredError':
+			res.clearCookie('token');
+			return handleApiError(req, res, 'Not Authorized', 401);
 
+		// If token expired, clear the token cookie and redirect to home
+		case 'TokenExpiredError':
+			res.clearCookie('token');
+			return handleApiError(req, res, 'Not Authorized', 401);
+		case 'MissingPrivilegesError':
+			return handleApiError(req, res, 'Not Authorized', 403);
+
+		// Auth/User Errors
 		case 'LoginError':
 			return res.status(400).json({ error: 'Invalid username or password' });
 		case 'RegisterError':
 			return res.status(500).json({ error: 'Error registering user' });
+		case 'EmailUsedError':
+			return res.status(400).json({ error: 'Email already in use' });
+		case 'UsernameUsedError':
+			return res.status(400).json({ error: 'Username already in use' });
 		case 'UserNotFoundError':
 			return res.status(404).json({ error: 'User not found' });
 
@@ -38,12 +69,22 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
 
 		case 'ImageFormatError':
 			return res.status(400).json({ error: 'Invalid image format.' });
+      
+		// External service errors
+		case 'ExternalServiceError':
+			return res.status(500).json({ error: 'There was an error connecting with external services, this should be fixed soon, apologies!' });
+
+		// Internal errors
+		case 'FirebaseError':
+			return res.status(500).json({ error: 'Internal Server Error.' });
+		case 'SyntaxError':
+			return RenderErrorPage(res);
+		case 'TypeError':
+			return RenderErrorPage(res);
 		default:
 			break;
 	}
 
 	Pino.error('Unknown error: ' + (err instanceof Error ? err.message : err));
-
-	if (!err.name)
-		return res.status(500).json({ error: 'Internal Server Error' });
+	return res.status(500).json({ error: 'Internal Server Error' });
 };

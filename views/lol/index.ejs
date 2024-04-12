@@ -12,8 +12,6 @@
         <%- include('../partials/server-status-card.ejs', {server}) %>
     </div>
 
-<% console.log(homedata) %>
-
 <%- include('./lol-skins-showcase.ejs', {popularSkins: homedata.popularSkins}) %>
 
 <%- include('./lol-global-ranking.ejs', {summonerDetails: homedata.summonerDetails}) %>
