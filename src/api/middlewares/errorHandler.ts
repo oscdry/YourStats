@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Pino from '../../logger.js';
+import { RenderErrorPage } from '../../routes/web.js';
 
 const isApiRequest = (req: Request) => req.originalUrl.includes('/api');
 
@@ -9,8 +10,8 @@ const isApiRequest = (req: Request) => req.originalUrl.includes('/api');
  * @param req
  * @param res
  */
-const handleApiError = (req: Request, res: Response, code: number) => {
-	isApiRequest(req) ? res.status(code).json({ error: 'Not Authorized' }) : res.redirect('/');
+const handleApiError = (req: Request, res: Response, errorString: string, code: number) => {
+	isApiRequest(req) ? res.status(code).json({ error: errorString }) : res.redirect('/');
 };
 
 /**
@@ -36,17 +37,19 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 		// If this is not done, an infinite loop will occur
 		case 'InvalidTokenError':
 			res.clearCookie('token');
-			return handleApiError(req, res, 401);
+			return handleApiError(req, res, 'Not Authorized', 401);
 
 		// If token required error, redirect to home
 		case 'TokenRequiredError':
 			res.clearCookie('token');
-			return handleApiError(req, res, 401);
+			return handleApiError(req, res, 'Not Authorized', 401);
 
 		// If token expired, clear the token cookie and redirect to home
 		case 'TokenExpiredError':
 			res.clearCookie('token');
-			return handleApiError(req, res, 401);
+			return handleApiError(req, res, 'Not Authorized', 401);
+		case 'MissingPrivilegesError':
+			return handleApiError(req, res, 'Not Authorized', 403);
 
 		// Auth/User Errors
 		case 'LoginError':
@@ -60,9 +63,6 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 		case 'UserNotFoundError':
 			return res.status(404).json({ error: 'User not found' });
 
-		case 'MissingPrivilegesError':
-			return handleApiError(req, res, 403);
-
 		// JOI validation error
 		case 'ValidationError':
 			return res.status(400).json({ error: err.message });
@@ -74,6 +74,10 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 		// Internal errors
 		case 'FirebaseError':
 			return res.status(500).json({ error: 'Internal Server Error.' });
+		case 'SyntaxError':
+			return RenderErrorPage(res);
+		case 'TypeError':
+			return RenderErrorPage(res);
 		default:
 			break;
 	}
