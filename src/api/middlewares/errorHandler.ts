@@ -35,6 +35,9 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
 		// JOI validation error
 		case 'ValidationError':
 			return res.status(400).json({ error: err.message });
+
+		case 'ImageFormatError':
+			return res.status(400).json({ error: 'Invalid image format.' });
 		default:
 			break;
 	}

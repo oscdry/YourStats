@@ -60,3 +60,10 @@ export class UpdateUserBioError extends Error {
 		this.name = 'Update Bio';
 	}
 }
+
+export class ImageFormatError extends Error {
+	constructor() {
+		super('Wrong image format');
+		this.name = 'ImageFormatError';
+	}
+}

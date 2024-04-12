@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, upload } from '../api/controllers/userController.js';
+import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, updateUserBio } from '../api/controllers/userController.js';
 import { validateCreateUser } from '../api/middlewares/validateCreateUsers.js';
 import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
@@ -17,6 +17,7 @@ import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { JoiValidate } from '../api/middlewares/joiValidate.js';
 import { contactFormSchema } from '../api/middlewares/schemas.js';
 import { BrawlUserExists, SendBrawlData } from '../api/controllers/brawlController.js';
+import { upload } from '../api/middlewares/multer.js';
 
 
 const apiRouter = Router();
@@ -37,6 +38,8 @@ apiRouter.get('/get-user/:identifier', validateUserIdentifier, async (req, res, 
 	Pino.trace(JSON.stringify(user));
 	return res.json(user);
 });
+
+apiRouter.put('/update-user-bio/:identifier', updateUserBio);
 
 apiRouter.get('/users/search/:identifier', validateUserIdentifier, (req) => {
 	const user = getUserByIdentifier(req.params.identifier, 'email');
@@ -75,11 +78,11 @@ apiRouter.post('/search-by-email', async (req, res) => {
 });
 
 // ruta update image
-apiRouter.post('/upload', upload.single('image'), (req: Request, res: Response) => {
-	console.log('hola');
+apiRouter.post('/upload/:userId', upload.single('image'), (req: Request, res: Response) => {
+	Pino.trace('hola');
 	if (req.file) {
-		res.json({ message: 'Image uploaded successfully', filePath: req.file.path });
-		console.log(req.file);
+		Pino.debug('File uploaded:' + req.file);
+		res.sendStatus(200);
 	} else {
 		res.status(400).json({ message: 'Error uploading image' });
 	}
