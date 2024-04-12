@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express';
 import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, updateUserBio } from '../api/controllers/userController.js';
-import { validateCreateUser } from '../api/middlewares/validateCreateUsers.js';
 import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
 import { LoginGoogleUser, LoginUser } from '../api/controllers/loginController.js';
@@ -26,24 +25,6 @@ apiRouter.post('/contact-form', joiValidate(contactFormSchema), HandleContactFor
 
 // Auth
 apiRouter.post('/login', LoginUser);
-
-// Users
-apiRouter.delete('/delete-user/:identifier', validateUserIdentifier, deleteUser);
-apiRouter.put('/update-user/:identifier', validateUserIdentifier, validateUpdateUser, updateUser);
-apiRouter.get('/get-user/:identifier', validateUserIdentifier, async (req, res, next) => {
-	const user = await getUserByIdentifier(req.params.identifier, 'username');
-	Pino.trace(JSON.stringify(user));
-	return res.json(user);
-});
-
-apiRouter.put('/update-user-bio/:identifier', updateUserBio);
-
-apiRouter.get('/users/search/:identifier', validateUserIdentifier, (req) => {
-	const user = getUserByIdentifier(req.params.identifier, 'email');
-	return user;
-});
-
-apiRouter.use(verifyTokenOptional);
 apiRouter.post('/login-google', LoginGoogleUser);
 apiRouter.post('/register', joiValidate(createUserSchema), createUser);
 
@@ -70,6 +51,7 @@ apiRouter.get('/users/search/:identifier', joiValidate(getUserSchema), (req) => 
 apiRouter.get('/get-all-users', getAllUsers);
 apiRouter.delete('/delete-user/:identifier', joiValidate(getUserSchema), deleteUser);
 apiRouter.put('/update-user/:identifier', joiValidate(getUserSchema), validateUpdateUser, updateUser);
+apiRouter.put('/update-user-bio/:identifier', updateUserBio);
 
 apiRouter.get('/get-user/:identifier', joiValidate(getUserSchema), async (req, res, next) => {
 	const user = await getUserByIdentifier(req.params.identifier, 'username');
