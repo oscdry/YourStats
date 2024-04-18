@@ -11,12 +11,16 @@
 <main class="banner-main">
     <div class="profile">
         <div class="profile-pic-container">
-            <img src="/img/storage/users/<%= userView.id %>.jpg" alt="Foto de perfil" class="profile-pic" onerror="this.onerror=null; this.src='/img/storage/users/default.jpg'">
-            <button id="uploadPicBtn" class="upload-pic-btn" style="display:none;">Cambiar imagen
+            <img src="/img/storage/users/<%= userView.id %>.jpg"
+                alt="Foto de perfil" class="profile-pic"
+                onerror="this.onerror=null; this.src='/img/storage/users/default.jpg'">
+            <button id="uploadPicBtn" class="upload-pic-btn"
+                style="display:none;">Cambiar imagen
                 <br>
                 (.jpg)
             </button>
-            <input type="file" id="fileInput" style="display: none;" accept="image/*">
+            <input type="file" id="fileInput" style="display: none;"
+                accept="image/*">
             <p class="error-text">
             </p>
         </div>

@@ -2,16 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import Pino from '../../logger.js';
 import { RenderErrorPage } from '../../routes/web.js';
 
-const isApiRequest = (req: Request) => req.originalUrl.includes('/api');
-
 /**
- * Redirects the user if it is not an API request, otherwise
- * sends an error code.
  * @param req
  * @param res
  */
-const handleApiError = (req: Request, res: Response, errorString: string, code: number) => {
-	isApiRequest(req) ? res.status(code).json({ error: errorString }) : res.redirect('/');
+const handleApiError = (req: Request, res: Response, errorString: string, code: number): void => {
+	res.status(code).json({ error: errorString });
 };
 
 /**
@@ -69,7 +65,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 
 		case 'ImageFormatError':
 			return res.status(400).json({ error: 'Invalid image format.' });
-      
+
 		// External service errors
 		case 'ExternalServiceError':
 			return res.status(500).json({ error: 'There was an error connecting with external services, this should be fixed soon, apologies!' });

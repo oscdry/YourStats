@@ -29,10 +29,15 @@
         causes an error %>
         <script defer src="https://accounts.google.com/gsi/client"></script>
         <script defer src="/js/oauth.js" type="module"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8" />
+        <meta name="description" content="Tus estadísticas, al instante.">
     </head>
     <body>
         <%- include('./partials/navbar.ejs') %>
         <%- body %>
+        <%- include('./partials/components/popup-cookies.ejs') %>
     </body>
     <footer>
         <ul>

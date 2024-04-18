@@ -1,7 +1,7 @@
 <div id="modal-register" class="modal fade" tabindex="-1"
     aria-labelledby="modal-register-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <form class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="modal-register-label">¿Nuevo
                     por aquí?</h1>
@@ -18,14 +18,41 @@
                 <%- include('./components/input-password-confirmation.ejs',
                 {id:"register-password-confirmation-input"}) %>
 
-                <%- include('./components/oauth-button.ejs', {mode: "register"}) %>
+                <%- include('./components/oauth-button.ejs', {mode: "register"})
+                %>
+                <div class="input-row-validation">
+                    <div class="checkbox-item">
+                        <label for="username-valid">Usuario</label>
+                        <input type="checkbox" name="username-valid"
+                            id="username-valid" disabled>
+                        <p class="error-text"></p>
+                    </div>
 
+                    <div class="checkbox-item">
+                        <label for="mail-valid">Correo electrónico</label>
+                        <input type="checkbox" id="mail-valid" disabled>
+                        <p class="error-text"></p>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <label for="password-valid">Contraseña</label>
+                        <input type="checkbox" id="password-valid" disabled>
+                        <p class="error-text"></p>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <label for="password-confirmation-valid">Confirmar
+                            contraseña</label>
+                        <input type="checkbox" id="password-confirmation-valid"
+                            disabled>
+                    </div>
+                </div>
             </div>
-            <p class="error-text"></p>
+            <p class="error-text" id="register-error-text"></p>
             <div class="modal-footer">
-                <button type="button" class="primary"
+                <button type="submit" class="primary"
                     id="register-button-submit">Registrarse</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
