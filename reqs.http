@@ -74,3 +74,6 @@ Authorization
 
 ###
 POST http://localhost:8080/api/upload/asdasdasd
+
+###
+GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV

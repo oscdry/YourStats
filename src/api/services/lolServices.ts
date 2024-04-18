@@ -547,10 +547,12 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData | nu
 	}
 
 	const summonerId = data.id;
-	const numGames = await LoLGamesLast7days(puuid);
-	const LoLWinrateChamp = await LoLWinrateChamps(puuid, gameName);
-	const userData = await LoLRankById(summonerId);
-	const userPlayed = await LoLMostPlayed(puuid);
+	const [numGames, LoLWinrateChamp, userData, userPlayed] = await Promise.all([
+		LoLGamesLast7days(puuid),
+		LoLWinrateChamps(puuid, gameName),
+		LoLRankById(summonerId),
+		LoLMostPlayed(puuid)
+	]);
 
 	const lolData: LoLUserData = {
 		iconID: iconID,

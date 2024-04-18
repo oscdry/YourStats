@@ -39,7 +39,14 @@ export const verifyTokenOptional = (req: Request, res: Response, next: NextFunct
 		Pino.trace('Valid Token verified for user:' + JSON.stringify(res.locals.user));
 		next();
 	} catch (error) {
-		Pino.debug('Error verifying optional token:', error);
+		if (error instanceof Error && error.name === 'TokenExpiredError') {
+			Pino.warn('Optional token expired, clearing it...');
+			res.clearCookie('token');
+			next();
+			return;
+		}
+
+		Pino.error('Error verifying Optional token:' + error);
 		next(error);
 	}
 };

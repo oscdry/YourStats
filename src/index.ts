@@ -67,8 +67,7 @@ try {
 	server = https.createServer(
 		{
 			key: key,
-			cert: cert,
-			passphrase: process.env.HTTPS_PASSPHRASE
+			cert: cert
 		},
 		app);
 
