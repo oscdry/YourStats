@@ -74,4 +74,4 @@ const outputPath = 'public/img/fortnite/skins/';
 
 //downloadImagesFromJSON(jsonFilePath, outputPath);
 
-fetchFortniteShopData();
+//fetchFortniteShopData();
