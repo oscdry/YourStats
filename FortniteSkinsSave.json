@@ -1,0 +1,440 @@
+[
+  {
+    "name": "Zuko Pack",
+    "image": "https://fortnite.gg/img/items/11968/shop.jpg?11",
+    "price": 2000,
+    "filePath": "public/img/fortnite/skins/11968.jpg"
+  },
+  {
+    "name": "Toph Beifong Pack",
+    "image": "https://fortnite.gg/img/items/11969/shop.jpg?11",
+    "price": 2000,
+    "filePath": "public/img/fortnite/skins/11969.jpg"
+  },
+  {
+    "name": "Zuko & Katara Bundle",
+    "image": "https://fortnite.gg/img/items/11970/shop.jpg?11",
+    "price": 3200,
+    "filePath": "public/img/fortnite/skins/11970.jpg"
+  },
+  {
+    "name": "Air Flurry",
+    "image": "https://fortnite.gg/img/items/11920/shop.jpg?12",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/11920.jpg"
+  },
+  {
+    "name": "Katara Pack",
+    "image": "https://fortnite.gg/img/items/11971/shop.jpg?11",
+    "price": 2000,
+    "filePath": "public/img/fortnite/skins/11971.jpg"
+  },
+  {
+    "name": "Horizon",
+    "image": "https://fortnite.gg/img/items/11995/shop.jpg?8",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/11995.jpg"
+  },
+  {
+    "name": "Coachella Interstellar Bundle",
+    "image": "https://fortnite.gg/img/items/12003/shop.jpg?8",
+    "price": 3000,
+    "filePath": "public/img/fortnite/skins/12003.jpg"
+  },
+  {
+    "name": "Cosma",
+    "image": "https://fortnite.gg/img/items/11996/shop.jpg?8",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/11996.jpg"
+  },
+  {
+    "name": "Coachella Pulse",
+    "image": "https://fortnite.gg/img/items/12000/shop.jpg?8",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/12000.jpg"
+  },
+  {
+    "name": "Interstellar Butterfly",
+    "image": "https://fortnite.gg/img/items/11994/shop.jpg?8",
+    "price": 400,
+    "filePath": "public/img/fortnite/skins/11994.jpg"
+  },
+  {
+    "name": "Rebellious",
+    "image": "https://fortnite.gg/img/items/11997/shop.jpg?8",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/11997.jpg"
+  },
+  {
+    "name": "Sonic Surfer",
+    "image": "https://fortnite.gg/img/items/11998/shop.jpg?8",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/11998.jpg"
+  },
+  {
+    "name": "Soft Synth",
+    "image": "https://fortnite.gg/img/items/11999/shop.jpg?8",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/11999.jpg"
+  },
+  {
+    "name": "Beef Boss",
+    "image": "https://fortnite.gg/img/items/743/shop.jpg?150",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/743.jpg"
+  },
+  {
+    "name": "I Can't Hear You",
+    "image": "https://fortnite.gg/img/items/11486/shop.jpg?4",
+    "price": 200,
+    "filePath": "public/img/fortnite/skins/11486.jpg"
+  },
+  {
+    "name": "Satoru Gojo",
+    "image": "https://fortnite.gg/img/items/10010/shop.jpg?83",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/10010.jpg"
+  },
+  {
+    "name": "Megumi Fushiguro",
+    "image": "https://fortnite.gg/img/items/10014/shop.jpg?83",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/10014.jpg"
+  },
+  {
+    "name": "Megumi's Sword",
+    "image": "https://fortnite.gg/img/items/10040/shop.jpg?83",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/10040.jpg"
+  },
+  {
+    "name": "Megumi Fushiguro Bundle",
+    "image": "https://fortnite.gg/img/items/10048/shop.jpg?83",
+    "price": 1900,
+    "filePath": "public/img/fortnite/skins/10048.jpg"
+  },
+  {
+    "name": "Shadow Play: Max Elephant",
+    "image": "https://fortnite.gg/img/items/10020/shop.jpg?83",
+    "price": 200,
+    "filePath": "public/img/fortnite/skins/10020.jpg"
+  },
+  {
+    "name": "Nobara Kugisaki Bundle",
+    "image": "https://fortnite.gg/img/items/10049/shop.jpg?83",
+    "price": 1800,
+    "filePath": "public/img/fortnite/skins/10049.jpg"
+  },
+  {
+    "name": "Nobara Kugisaki",
+    "image": "https://fortnite.gg/img/items/10013/shop.jpg?83",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/10013.jpg"
+  },
+  {
+    "name": "Kugisaki's Hammer",
+    "image": "https://fortnite.gg/img/items/10039/shop.jpg?83",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/10039.jpg"
+  },
+  {
+    "name": "Loeya's Locker Bundle",
+    "image": "https://fortnite.gg/img/items/7564/shop.jpg?5",
+    "price": 2200,
+    "filePath": "public/img/fortnite/skins/7564.jpg"
+  },
+  {
+    "name": "Stoneheart",
+    "image": "https://fortnite.gg/img/items/422/shop.jpg?32",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/422.jpg"
+  },
+  {
+    "name": "Nite Owl",
+    "image": "https://fortnite.gg/img/items/2492/shop.jpg?152",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/2492.jpg"
+  },
+  {
+    "name": "Disco Fever",
+    "image": "https://fortnite.gg/img/items/3751/shop.jpg?172",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/3751.jpg"
+  },
+  {
+    "name": "Radiant Zero",
+    "image": "https://fortnite.gg/img/items/3158/shop.jpg?98",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/3158.jpg"
+  },
+  {
+    "name": "Bushranger",
+    "image": "https://fortnite.gg/img/items/338/shop.jpg?183",
+    "price": 1200,
+    "filePath": "public/img/fortnite/skins/338.jpg"
+  },
+  {
+    "name": "Vice",
+    "image": "https://fortnite.gg/img/items/394/shop.jpg?49",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/394.jpg"
+  },
+  {
+    "name": "Elmira",
+    "image": "https://fortnite.gg/img/items/659/shop.jpg?204",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/659.jpg"
+  },
+  {
+    "name": "Mogul Master",
+    "image": "https://fortnite.gg/img/items/866/shop.jpg?231",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/866.jpg"
+  },
+  {
+    "name": "Jailbird Bundle",
+    "image": "https://fortnite.gg/img/items/8460/shop.jpg?134",
+    "price": 2500,
+    "filePath": "public/img/fortnite/skins/8460.jpg"
+  },
+  {
+    "name": "Delirium",
+    "image": "https://fortnite.gg/img/items/360/shop.jpg?29",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/360.jpg"
+  },
+  {
+    "name": "Crystal",
+    "image": "https://fortnite.gg/img/items/451/shop.jpg?362",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/451.jpg"
+  },
+  {
+    "name": "Omen",
+    "image": "https://fortnite.gg/img/items/786/shop.jpg?93",
+    "price": 2000,
+    "filePath": "public/img/fortnite/skins/786.jpg"
+  },
+  {
+    "name": "Rapscallion",
+    "image": "https://fortnite.gg/img/items/792/shop.jpg?186",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/792.jpg"
+  },
+  {
+    "name": "Ski Boot",
+    "image": "https://fortnite.gg/img/items/2604/shop.jpg?197",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/2604.jpg"
+  },
+  {
+    "name": "Castor",
+    "image": "https://fortnite.gg/img/items/660/shop.jpg?208",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/660.jpg"
+  },
+  {
+    "name": "Scorpion",
+    "image": "https://fortnite.gg/img/items/726/shop.jpg?76",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/726.jpg"
+  },
+  {
+    "name": "Aerobic Assassin",
+    "image": "https://fortnite.gg/img/items/739/shop.jpg?28",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/739.jpg"
+  },
+  {
+    "name": "Scoundrel",
+    "image": "https://fortnite.gg/img/items/793/shop.jpg?147",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/793.jpg"
+  },
+  {
+    "name": "Recon Expert",
+    "image": "https://fortnite.gg/img/items/905/shop.jpg?172",
+    "price": 1200,
+    "filePath": "public/img/fortnite/skins/905.jpg"
+  },
+  {
+    "name": "Barracuda",
+    "image": "https://fortnite.gg/img/items/156/shop.jpg?22",
+    "price": 1200,
+    "filePath": "public/img/fortnite/skins/156.jpg"
+  },
+  {
+    "name": "Crimson Elite",
+    "image": "https://fortnite.gg/img/items/228/shop.jpg?167",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/228.jpg"
+  },
+  {
+    "name": "Whiteout",
+    "image": "https://fortnite.gg/img/items/740/shop.jpg?139",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/740.jpg"
+  },
+  {
+    "name": "Spellslinger",
+    "image": "https://fortnite.gg/img/items/2630/shop.jpg?123",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/2630.jpg"
+  },
+  {
+    "name": "Personal Pollinators",
+    "image": "https://fortnite.gg/img/items/4948/shop.jpg?157",
+    "price": 400,
+    "filePath": "public/img/fortnite/skins/4948.jpg"
+  },
+  {
+    "name": "Honey Hitters",
+    "image": "https://fortnite.gg/img/items/2423/shop.jpg?162",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/2423.jpg"
+  },
+  {
+    "name": "Nite Owl",
+    "image": "https://fortnite.gg/img/items/2492/shop.jpg?152",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/2492.jpg"
+  },
+  {
+    "name": "Oracle Axe",
+    "image": "https://fortnite.gg/img/items/2499/shop.jpg?77",
+    "price": 1200,
+    "filePath": "public/img/fortnite/skins/2499.jpg"
+  },
+  {
+    "name": "Witchia Axe",
+    "image": "https://fortnite.gg/img/items/2728/shop.jpg?72",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/2728.jpg"
+  },
+  {
+    "name": "Celeste",
+    "image": "https://fortnite.gg/img/items/4970/shop.jpg?94",
+    "price": 1200,
+    "filePath": "public/img/fortnite/skins/4970.jpg"
+  },
+  {
+    "name": "Starry Flight",
+    "image": "https://fortnite.gg/img/items/1470/shop.jpg?145",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/1470.jpg"
+  },
+  {
+    "name": "Spellbound Staff",
+    "image": "https://fortnite.gg/img/items/2629/shop.jpg?40",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/2629.jpg"
+  },
+  {
+    "name": "Dance Therapy",
+    "image": "https://fortnite.gg/img/items/3742/shop.jpg?71",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/3742.jpg"
+  },
+  {
+    "name": "Squat Kick",
+    "image": "https://fortnite.gg/img/items/4011/shop.jpg?87",
+    "price": 800,
+    "filePath": "public/img/fortnite/skins/4011.jpg"
+  },
+  {
+    "name": "Witchy",
+    "image": "https://fortnite.gg/img/items/3254/shop.jpg?72",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/3254.jpg"
+  },
+  {
+    "name": "Magic Wings",
+    "image": "https://fortnite.gg/img/items/1377/shop.jpg?109",
+    "price": 1200,
+    "filePath": "public/img/fortnite/skins/1377.jpg"
+  },
+  {
+    "name": "The Weeknd Bundle",
+    "image": "https://fortnite.gg/img/items/11075/shop.jpg?783",
+    "price": 3100,
+    "filePath": "public/img/fortnite/skins/11075.jpg"
+  },
+  {
+    "name": "The Weeknd Combat",
+    "image": "https://fortnite.gg/img/items/10967/shop.jpg?785",
+    "price": 1800,
+    "filePath": "public/img/fortnite/skins/10967.jpg"
+  },
+  {
+    "name": "Popular Vibe",
+    "image": "https://fortnite.gg/img/items/10968/shop.jpg?786",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/10968.jpg"
+  },
+  {
+    "name": "aXe-O",
+    "image": "https://fortnite.gg/img/items/10973/shop.jpg?786",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/10973.jpg"
+  },
+  {
+    "name": "Lady Gaga Bundle",
+    "image": "https://fortnite.gg/img/items/11475/shop.jpg?644",
+    "price": 2800,
+    "filePath": "public/img/fortnite/skins/11475.jpg"
+  },
+  {
+    "name": "Chromatica Armor Gaga",
+    "image": "https://fortnite.gg/img/items/11444/shop.jpg?650",
+    "price": 1500,
+    "filePath": "public/img/fortnite/skins/11444.jpg"
+  },
+  {
+    "name": "Rain Check",
+    "image": "https://fortnite.gg/img/items/11453/shop.jpg?649",
+    "price": 500,
+    "filePath": "public/img/fortnite/skins/11453.jpg"
+  },
+  {
+    "name": "SHRIEKING STAR QUEST PACK",
+    "image": "https://fortnite.gg/img/items/12011/bg.jpg?1",
+    "price": 899,
+    "filePath": "public/img/fortnite/skins/12011.jpg"
+  },
+  {
+    "name": "Fuse Starter Quest Pack",
+    "image": "https://fortnite.gg/img/items/11992/bg.jpg?1",
+    "price": 999,
+    "filePath": "public/img/fortnite/skins/11992.jpg"
+  },
+  {
+    "name": "Guardians of the Galaxy Pack",
+    "image": "https://fortnite.gg/img/items/11889/bg.jpg?1",
+    "price": 2899,
+    "filePath": "public/img/fortnite/skins/11889.jpg"
+  },
+  {
+    "name": "Operation Brite Starter Pack",
+    "image": "https://fortnite.gg/img/items/11780/bg.jpg?1",
+    "price": 375,
+    "filePath": "public/img/fortnite/skins/11780.jpg"
+  },
+  {
+    "name": "Perfect Execution Pack",
+    "image": "https://fortnite.gg/img/items/11781/bg.jpg?1",
+    "price": 449,
+    "filePath": "public/img/fortnite/skins/11781.jpg"
+  },
+  {
+    "name": "Vinderman 2.0 Pack",
+    "image": "https://fortnite.gg/img/items/11782/bg.jpg?1",
+    "price": 1849,
+    "filePath": "public/img/fortnite/skins/11782.jpg"
+  },
+  {
+    "name": "True Explorers Quest Pack",
+    "image": "https://fortnite.gg/img/items/10985/bg.jpg?1",
+    "price": 0,
+    "filePath": "public/img/fortnite/skins/10985.jpg"
+  }
+]

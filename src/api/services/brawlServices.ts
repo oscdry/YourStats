@@ -156,7 +156,7 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag);
 
-	
+
 	if (result.status === 403) {
 		Pino.trace('result:' + JSON.stringify(result));
 		throw new ExternalServiceError();
@@ -200,7 +200,7 @@ export const brawlInfo = async (battletag: string): Promise<{
 	return { user, imgID, brawlers };
 };
 
-export const getRankingSpain = async (){
+export const getRankingSpain = async () => {
 
 	const result = await fetch(BRAWL_API_ENDPOINT + 'rankings/es/players', {
 		headers: {
@@ -212,10 +212,10 @@ export const getRankingSpain = async (){
 	const data = await result.json();
 	const primeros5Jugadores = data.items.slice(0, 5);
 	return primeros5Jugadores;
-}
+};
 
 
-export const getRankingGlobal = async (){
+export const getRankingGlobal = async () => {
 
 	const result = await fetch(BRAWL_API_ENDPOINT + 'rankings/global/players', {
 		headers: {
@@ -227,25 +227,25 @@ export const getRankingGlobal = async (){
 	const data = await result.json();
 	const primeros5Jugadores = data.items.slice(0, 5);
 	return primeros5Jugadores;
-}
+};
 interface Player {
 	tag: string;
 	name: string;
 	nameColor: string;
 	icon: {
-	  id: number;
+		id: number;
 	};
 	trophies: number;
 	rank: number;
 	club: {
-	  name: string;
+		name: string;
 	};
-  }
-  
-  interface BrawlHomeData {
+}
+
+interface BrawlHomeData {
 	rankSpain: Player[];
 	rankGlobal: Player[];
-  }
+}
 interface BrawlData {
 	resumenPartidas: {
 		equipos: {
@@ -312,61 +312,61 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData> => {
 	};
 };
 export const GetHomeData = async (): Promise<BrawlHomeData> => {
-    const rankingGlobal = await getRankingGlobal();
-    const rankingSpain = await getRankingSpain();
+	const rankingGlobal = await getRankingGlobal();
+	const rankingSpain = await getRankingSpain();
 
-    const formattedRankSpain = rankingSpain.map((player: any) => ({
-        tag: player.tag,
-        name: player.name,
-        nameColor: '', 
-        icon: { id: 0 }, 
-        trophies: 0,
-        rank: player.rank,
-        club: { name: '' } 
-    }));
+	const formattedRankSpain = rankingSpain.map((player: any) => ({
+		tag: player.tag,
+		name: player.name,
+		nameColor: '',
+		icon: { id: 0 },
+		trophies: 0,
+		rank: player.rank,
+		club: { name: '' }
+	}));
 
-    const formattedRankGlobal = rankingGlobal.map((player: any) => ({
-        tag: player.tag,
-        name: player.name,
-        nameColor: '', 
-        icon: { id: 0 },
-        trophies: 0, 
-        rank: player.rank,
-        club: { name: '' } 
-    }));
+	const formattedRankGlobal = rankingGlobal.map((player: any) => ({
+		tag: player.tag,
+		name: player.name,
+		nameColor: '',
+		icon: { id: 0 },
+		trophies: 0,
+		rank: player.rank,
+		club: { name: '' }
+	}));
 	const skinsBrawls = [
 		{
-			"name": "Holiday Pam",
-			"image-url": "https://imagenesparapeques.com/wp-content/uploads/2020/12/Brawl-Stars-pam-veraniega.png",
-			"release-date": "25 june 2020"
+			'name': 'Holiday Pam',
+			'image-url': 'https://imagenesparapeques.com/wp-content/uploads/2020/12/Brawl-Stars-pam-veraniega.png',
+			'release-date': '25 june 2020'
 		},
 		{
-			"name": "Chester Loki",
-			"image-url": "https://www.brawlstarsdicas.com.br/wp-content/uploads/2022/12/chester-brawl-stars-skin-cetro-de-loki.png",
-			"release-date": "4 apr 2024"
+			'name': 'Chester Loki',
+			'image-url': 'https://www.brawlstarsdicas.com.br/wp-content/uploads/2022/12/chester-brawl-stars-skin-cetro-de-loki.png',
+			'release-date': '4 apr 2024'
 		},
 		{
-			"name": "Dynasty Mike",
-			"image-url": "https://static.wikia.nocookie.net/brawlstars/images/4/40/Dynamike_Skin-Dynasty_Mike.png",
-			"release-date": "5 mar 2024"
+			'name': 'Dynasty Mike',
+			'image-url': 'https://static.wikia.nocookie.net/brawlstars/images/4/40/Dynamike_Skin-Dynasty_Mike.png',
+			'release-date': '5 mar 2024'
 		},
 		{
-			"name": "Mariposa piper",
-			"image-url": "https://i.redd.it/the-first-time-i-saw-mariposa-pipers-pin-i-didnt-like-it-at-v0-0fb138fvk8ma1.png",
-			"release-date": "8 mar 2023"
+			'name': 'Mariposa piper',
+			'image-url': 'https://i.redd.it/the-first-time-i-saw-mariposa-pipers-pin-i-didnt-like-it-at-v0-0fb138fvk8ma1.png',
+			'release-date': '8 mar 2023'
 		},
 		{
-			"name": "Final Boss Rico",
-			"image-url": "https://static.wikia.nocookie.net/brawlstars/images/b/bf/Rico_Skin-Final_Boss.png",
-			"release-date": "5 jan 2024"
+			'name': 'Final Boss Rico',
+			'image-url': 'https://static.wikia.nocookie.net/brawlstars/images/b/bf/Rico_Skin-Final_Boss.png',
+			'release-date': '5 jan 2024'
 		}
 	];
-	
-    return {
-        rankSpain: formattedRankSpain,
-        rankGlobal: formattedRankGlobal,
-		skinsBrawls: skinsBrawls,
-    };
+
+	return {
+		rankSpain: formattedRankSpain,
+		rankGlobal: formattedRankGlobal,
+		skinsBrawls: skinsBrawls
+	};
 };
 
 //console.log(await GetHomeData());
