@@ -156,7 +156,7 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag);
 
-	// If 403, some key might be invalid
+	
 	if (result.status === 403) {
 		Pino.trace('result:' + JSON.stringify(result));
 		throw new ExternalServiceError();
