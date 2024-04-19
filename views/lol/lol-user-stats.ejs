@@ -7,19 +7,14 @@
 
 <%- include('../partials/components/banner.ejs', {mode: "lol", hide : true}) %>
 
-
 <main>
-    <%- include('../partials/components/game-stats-header.ejs', {name: 'League of Legends', href: '/lol', username: loldata.gameName}) %>
+    <%- include('../partials/components/game-stats-header.ejs', {name:
+    'League of Legends', href: '/lol', username: loldata.gameName}) %>
 
-    <div class="header my-5">
-        <div class="d-flex flex-column flex-wrap">
+    <div class="container header">
+        <div class="lol-user">
             <img src="<%= loldata.iconID %>">
-
-            <div class="lol-general-stats">
-                <p>Victorias: <%= loldata.wins %></p>
-                <p>Perdidas: <%= loldata.losses %></p>
-                <p>Total: <%= loldata.total %></p>
-            </div>
+            <h2><%= loldata.gameName %></h2>
         </div>
 
         <div class="lol-rank">
@@ -31,30 +26,35 @@
         </div>
     </div>
 
-        <%# Top 3 Champions %>
-        <div>
-            <p>Top 3 Campeones:</p>
-            <div class="lol-user-champions-top">
-                <% loldata.championsMasteryData.forEach(champion => { %>
-                <div class="lol-champion-card">
-                    <img src="/img/lol/champs/<%= champion.championID + ".webp" %>">
-                    <div class="d-flex flex-column justify-content-center">
-                        <p>Puntos de maestría</p>
+    <div class="lol-general-stats">
+        <p id="lol-win-matches">Victorias: <%= loldata.wins %></p>
+        <p id="lol-lose-matches">Perdidas: <%= loldata.losses %></p>
+        <p id="lol-total-matches">Total: <%= loldata.total %></p>
+    </div>
 
-                        <p><%= champion.championPoints %></p>
-                    </div>
+    <%# Top 3 Champions %>
+    <div class="container">
+        <p id="lol-top-champions">Top 3 Campeones:</p>
+        <div class="lol-user-champions-top">
+            <% loldata.championsMasteryData.forEach(champion => { %>
+            <div class="lol-champion-card">
+                <img src="/img/lol/champs/<%= champion.championID + ".webp" %>">
+                <div class="lol-champion-card-info">
+                    <h3><%= champion.championPoints %></h3>
+                    <p id="lol-mastery-points">Puntos de maestría</p>
                 </div>
-                <% }); %>
             </div>
-
+            <% }); %>
         </div>
 
-    <h3 class="py-3">Últimos 7 días:</h3>
-    <p>Partidas jugadas: <%= loldata.gamesLast7Days %></p>
+    </div>
+
+    <h3 class="container" id="lol-last-7days">Últimos 7 días:</h3>
+    <p id="lol-played-matches">Partidas jugadas: <%= loldata.gamesLast7Days %></p>
 
     <%# Positions Chart %>
-    <div>
-        <p>Posiciones jugadas: </p>
+    <h3 class="container" id="lol-played-positions">Posiciones jugadas: </h3>
+    <div class="container chart">
         <canvas id="positionChart"></canvas>
         <script type="module">
             var ctx = document.getElementById('positionChart').getContext('2d');
@@ -63,16 +63,15 @@
         </script>
     </div>
 
-    <p class="py-2">
-        Últimas <%= loldata.games.length%> partidas:
-    </p>
-    <div class="lol-games-div">
-        <% // Generate a card for each game of the user %>
+    <h3 class="container" id="lol-last-matches">Últimas <%= loldata.games.length %> partidas:</h3>
+    <div class="container lol-games-container">
+        <%# Generate a card for each game of the user %>
 
         <%
         let index = 0;
         loldata.games.resultsArray.forEach(lolgame => { %>
-        <%- include('./lol-game-card.ejs', {lolgame: lolgame, username: loldata.gameName, index}); %>
+        <%- include('./lol-game-card.ejs', {lolgame: lolgame, username:
+        loldata.gameName, playername: playername, index}); %>
         <% index++; }); %>
     </div>
 

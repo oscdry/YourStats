@@ -31,6 +31,9 @@ export const RiotStatusServer = async (): Promise<{
 };
 
 // Mostrar el Ranking de los mejores jugadores (los pasa todos)
+/**
+ * @deprecated
+ */
 export const LolRanking = async () => {
 	const result = await fetch(LOL_API_ENDPOINT + 'league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5', {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
@@ -38,7 +41,6 @@ export const LolRanking = async () => {
 	if (result.status != 200) { console.log('Error'); }
 
 	const json = await result.json();
-	console.log(json);
 };
 
 // Mostrar el Ranking de los 3 mejores jugadores (esta funciona)
@@ -49,7 +51,9 @@ export const LolRankingDemo = async () => {
 	if (result.status !== 200) { console.log('Error'); }
 
 	const json = await result.json();
-	const sortedData = json.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
+	const sortedData = json.entries.sort(
+		(a: { leaguePoints: number; },
+			b: { leaguePoints: number; }) => b.leaguePoints - a.leaguePoints);
 
 	const topUsers = sortedData.slice(0, 5);
 	
@@ -67,7 +71,6 @@ export const LolRankingDemo = async () => {
 	  }
 	console.log(topUsers);
 	const summonerDetails = topUsers.map(({ summonerName, leaguePoints }) => ({ summonerName, leaguePoints }));
-
 	return summonerDetails;
 };
 
@@ -79,7 +82,6 @@ export const LoLMostPlayed = async (puuid: string): Promise<{ championID: number
 	if (result.status != 200) { console.log('Error'); }
 
 	const json = await result.json();
-	console.log(json);
 	const championsMasteryData = json.map((champion: { championId: number, championPoints: number; }) => {
 		return { championID: champion.championId, championPoints: champion.championPoints };
 	});
@@ -88,7 +90,7 @@ export const LoLMostPlayed = async (puuid: string): Promise<{ championID: number
 };
 
 // Muestra datos de Usuario como: Partidas gnadas,perdidas, totales,puntos de liga , rango y tier
-export const LoLRankById = async (Id: string): Promise<object | null> => {
+export const LoLRankById = async (Id: string): Promise<LoLUserData | null> => {
 	if (!Id) {
 		return null;
 	}
@@ -96,10 +98,10 @@ export const LoLRankById = async (Id: string): Promise<object | null> => {
 	const result = await fetch(LOL_API_ENDPOINT + 'league/v4/entries/by-summoner/' + Id, {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
 	});
-	if (result.status != 200) { console.log('Error'); }
 
-	console.log(JSON.stringify(result));
-
+	if (result.status != 200) {
+		Pino.error('Error fetching lol rank by id: ' + result.statusText);
+	}
 
 	const json = await result.json();
 	const entry = Array.isArray(json) ? json[0] : json;
@@ -108,8 +110,6 @@ export const LoLRankById = async (Id: string): Promise<object | null> => {
 		Pino.trace('Usuario sin rango');
 		return null;
 	}
-
-	Pino.trace(JSON.stringify(entry) + entry);
 
 	const tier: string = entry.tier;
 	const rank: string = entry.rank;
@@ -129,7 +129,6 @@ export const LoLGamesByUUID = async (Puiid: string): Promise<string> => {
 	if (result.status != 200) { console.log('Error'); }
 
 	const json = await result.json();
-	console.log(json);
 	return json;
 };
 
@@ -143,7 +142,6 @@ export const LoLGameDetail = async (GameID: string): Promise<string> => {
 	if (result.status != 200) { console.log('Error'); }
 
 	const json = await result.json();
-	console.log(json);
 	return json;
 };
 
@@ -208,7 +206,7 @@ export const LoLGamesLast7days = async (Puiid: string): Promise<string | null> =
 
 	const json = await result.json();
 
-	console.log(json);
+	// console.log(json);
 	return json.length;
 };
 
@@ -248,6 +246,7 @@ export const LoLChampsLast10Games = async (Puiid: string): Promise<string> => {
 // Detalle ultimas 10 partidas con estadísticas incluidas, los items, si ganó,etc
 export const LoLGameChampWin = async (GameID: string, puuid: string):
 Promise<{ championName: string, isWinner: boolean; } | null> => {
+
 
 	const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/' + GameID, {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
@@ -356,8 +355,9 @@ Promise<{ championName: string, isWinner: boolean; } | null> => {
 	}
 
 	return {
-		championIdentifier, isWinner, arrayItems, stats, kda, gameMode, teamID, teamPosition, arrayTeammates
-		, arrayBlue, arrayRed
+		championIdentifier, isWinner, arrayItems, stats,
+		kda, gameMode, teamID, teamPosition, arrayTeammates,
+		arrayBlue, arrayRed
 	};
 };
 
@@ -435,8 +435,6 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
 	if (aramDifference > 0) {
 		teamPositionCount['ARAM'] = aramDifference;
 	}
-	console.log(totalPositions);
-	console.log(teamPositionCount);
 
 	const teamFilter: [string, number][] = Object.entries(teammatesPlayed);
 	teamFilter.sort((a, b) => b[1] - a[1]);
@@ -515,8 +513,15 @@ interface LoLGameChampWinResponse {
 	isWinner: boolean;
 	arrayItems: number[];
 	stats: ChampionStats;
-	kda: number;
+	kda: string;
 	gameMode: string;
+
+	teamID: string;
+
+	teamPosition: string;
+	arrayTeammates: { [nombre: string]: string; };
+	arrayBlue: { [nombre: string]: string; };
+	arrayRed: { [nombre: string]: string; };
 }
 
 //
@@ -543,7 +548,7 @@ console.log(await LolRankingDemo());
  * @param gameName
  * @returns Un objeto con todos los datos del usuario
  */
-export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => {
+export const GetLolUserData = async (gameName: string): Promise<LoLUserData | null> => {
 	const data = await RiotDataByName(gameName);
 	const urlImage = 'https://ddragon.leagueoflegends.com/cdn/14.6.1/img/profileicon/';
 	const preIcon = data?.profileIconId;
@@ -556,10 +561,12 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
 	}
 
 	const summonerId = data.id;
-	const numGames = await LoLGamesLast7days(puuid);
-	const LoLWinrateChamp = await LoLWinrateChamps(puuid, gameName);
-	const userData = await LoLRankById(summonerId);
-	const userPlayed = await LoLMostPlayed(puuid);
+	const [numGames, LoLWinrateChamp, userData, userPlayed] = await Promise.all([
+		LoLGamesLast7days(puuid),
+		LoLWinrateChamps(puuid, gameName),
+		LoLRankById(summonerId),
+		LoLMostPlayed(puuid)
+	]);
 
 	const lolData: LoLUserData = {
 		iconID: iconID,
@@ -575,7 +582,8 @@ export const GetLolUserData = async (gameName: string): Promise<LoLUserData> => 
 		championsMasteryData: userPlayed
 	};
 
-	Pino.debug(JSON.stringify(lolData));
+	// Pino.debug(JSON.stringify(lolData));
+	Pino.trace('Datos de usuario de LoL obtenidos correctamente');
 	return lolData;
 };
 
@@ -628,8 +636,7 @@ export const GetLolHomeData = async (): Promise<LolHomeData> => {
 		summonerDetails: ranking,
 		champList: list,
 		popularSkins: skins,
-		newSkins : newSkins
-
+		newSkins: newSkins
 	};
 
 	Pino.debug(JSON.stringify(LolHomeData));
@@ -661,6 +668,7 @@ interface LolHomeData {
 			price: number,
 		}
 	];
+
 	newSkins: [
 		skins: {
 			name: string,
@@ -672,11 +680,7 @@ interface LolHomeData {
 			landscapeURL: string,
 			chromaURL: string,
 		}
-	
 	];
-
-}
-
 //console.log(await GetLolHomeData());
-
 //console.log(JSON.stringify(await GetLolUserData(Gamename)));
+}

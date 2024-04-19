@@ -1,8 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import firestore from '../db/firebaseConnections.js';
-import Joi from 'joi';
 import { createUserSchema, passwordRegex } from './schemas.js';
 import { getFirebaseUserByUsername } from '../services/FirebaseServices.js';
+import { EmailUsedError } from '../errors/errors.js';
 
 // Validate the method for create users
 export const validateCreateUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +14,7 @@ export const validateCreateUser = async (req: Request, res: Response, next: Next
 	const { mail } = req.body;
 	const userExists = await getFirebaseUserByUsername(mail);
 	if (userExists)
-		throw new Error('Mail already used to create a user');
+		throw new EmailUsedError();
 
 	// Execute check
 	const { error } = createUserSchema.validate(req.body);

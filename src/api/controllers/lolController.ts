@@ -79,7 +79,8 @@ export const RenderLolIndex = async (_req: Request, res: Response, next: NextFun
  */
 export const renderLolStatsForPlayer = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const loldata = await GetLolUserData(req.params.gamename);
+		const gameName: string = req.params.gamename;
+		const loldata = await GetLolUserData(gameName);
 		if (!loldata) throw new UserNotFoundError();
 
 		Pino.info('rendering ' + loldata.gameName + ' stats ' + loldata.gamesLast7Days);
@@ -103,7 +104,9 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 			}
 		};
 
-		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData });
+		Pino.fatal(gameName);
+
+		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, playername: gameName });
 	} catch (error) {
 		const message = (error as Error).message;
 		const name = (error as Error).name;
