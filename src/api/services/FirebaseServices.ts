@@ -3,6 +3,7 @@ import { hash } from 'bcrypt';
 import { UserNotFoundError } from '../errors/errors.js';
 import Pino from '../../logger.js';
 import { FirebaseUser } from '../types/FirebaseUser.js';
+import { getUserByIdentifier } from '../controllers/userController.js';
 
 export const getFirebaseUserById = async (id: string): Promise<FirebaseUser | null> => {
 	if (!id) {
@@ -105,17 +106,31 @@ const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<Fir
 	};
 };
 
+export const userExists = async (username: string | null, mail: string | null) => {
+
+	const [user, userMail] = await Promise.all(
+		[username ? getUserByIdentifier(username, 'username') : null
+			, mail ? getUserByIdentifier(mail, 'email') : null]);
+
+	return [user, userMail];
+};
+
+
+export const userExistsByMail = async (mail: string) => {
+	return await getUserByIdentifier(mail, 'email');
+};
+
 export const getAllFirebaseUsers = async (): Promise<FirebaseUser[]> => {
 	const usersRef = await firestore.collection('users').get();
 	return usersRef.docs.map(buildFirebaseUser);
 };
 
 // metodo para obtener usuarios de firebase de 10 en 10
-export const getFirebaseUsersByPage = async (page: number): Promise<{ users: FirebaseUser[], count: number }> => {
+export const getFirebaseUsersByPage = async (page: number): Promise<{ users: FirebaseUser[], count: number; }> => {
 	const usersRef = await firestore.collection('users').orderBy('username').limit(10).offset((page - 1) * 10).get();
 	const count = await firestore.collection('users').count().get();
 	const users = usersRef.docs.map(buildFirebaseUser);
-	return { users, count: count.data().count};
+	return { users, count: count.data().count };
 };
 
 export const updateFirebaseUserById = async (id: string, updates: { username?: string; mail?: string; password?: string; role?: number; bio?: string; }): Promise<void> => {

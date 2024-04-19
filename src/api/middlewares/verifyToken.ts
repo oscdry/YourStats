@@ -36,7 +36,7 @@ export const verifyTokenOptional = (req: Request, res: Response, next: NextFunct
 			return;
 		}
 
-		Pino.trace('Valid Token verified for user:' + JSON.stringify(res.locals.user));
+		Pino.trace('Valid optional Token verified for user:' + JSON.stringify(res.locals.user));
 		next();
 	} catch (error) {
 		if (error instanceof Error && error.name === 'TokenExpiredError') {
@@ -84,6 +84,7 @@ export const verifyTokenRequired = (req: Request, res: Response, next: NextFunct
 		}
 
 		if (error instanceof TokenRequiredError) {
+			Pino.warn('Bad token on required token route');
 			next(error);
 		}
 	}

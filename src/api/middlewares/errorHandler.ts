@@ -75,6 +75,8 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 			return res.status(500).json({ error: 'Internal Server Error.' });
 		case 'SyntaxError':
 			return RenderErrorPage(res);
+		case 'ReferenceError':
+			return RenderErrorPage(res);
 		case 'TypeError':
 			return RenderErrorPage(res);
 		default:

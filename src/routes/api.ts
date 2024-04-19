@@ -1,10 +1,10 @@
 import { Request, Response, Router } from 'express';
-import { createUser, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, updateUserBio } from '../api/controllers/userController.js';
+import { createUserController, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, updateUserBioController, requestPasswordResetController, uploadUserImageController } from '../api/controllers/userController.js';
 import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
 import { LoginGoogleUser, LoginUser } from '../api/controllers/loginController.js';
 
-import { verifyTokenOptional, verifyTokenRequired } from '../api/middlewares/verifyToken.js';
+import { verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
 import { RiotUserExists, SendLolData, sendLolSkin } from '../api/controllers/lolController.js';
 import { HandleContactForm } from '../api/controllers/contactFormController.js';
@@ -18,15 +18,18 @@ import { searchByEmailBackoffice } from '../api/services/FirebaseServices.js';
 const apiRouter = Router();
 
 // Rutas públicas --------------------------------------------
-apiRouter.use(verifyTokenOptional);
 
 // Contact form
-apiRouter.post('/contact-form', joiValidate(contactFormSchema), HandleContactForm);
+apiRouter.post('/contact-form',
+	joiValidate(contactFormSchema, 'body'),
+	HandleContactForm);
 
 // Auth
 apiRouter.post('/login', LoginUser);
 apiRouter.post('/login-google', LoginGoogleUser);
-apiRouter.post('/register', joiValidate(createUserSchema), createUser);
+apiRouter.post('/register',
+	joiValidate(createUserSchema, 'body'),
+	createUserController);
 
 // League of Legends API
 apiRouter.post('/riot-user/', RiotUserExists);
@@ -38,52 +41,80 @@ apiRouter.post('/brawl-user/', BrawlUserExists);
 apiRouter.get('/brawl-data/:tag', SendBrawlData);
 
 // Rutas privadas --------------------------------------------
-apiRouter.use(verifyTokenRequired);
+apiRouter.post('/logout',
+	verifyTokenRequired,
+	LogoutUser);
 
-apiRouter.post('/logout', LogoutUser);
+apiRouter.get('/password-reset',
+	verifyTokenRequired,
+	requestPasswordResetController);
 
 // Users
-apiRouter.get('/users/search/:identifier', joiValidate(getUserSchema), (req) => {
-	const user = getUserByIdentifier(req.params.identifier, 'email');
-	return user;
-});
+apiRouter.get('/users/search/:identifier',
+	verifyTokenRequired,
+	joiValidate(getUserSchema, 'params'),
+	(req) => {
+		const user = getUserByIdentifier(req.params.identifier, 'email');
+		return user;
+	});
 
-apiRouter.get('/get-all-users', getAllUsers);
-apiRouter.delete('/delete-user/:identifier', joiValidate(getUserSchema), deleteUser);
-apiRouter.put('/update-user/:identifier', joiValidate(getUserSchema), validateUpdateUser, updateUser);
-apiRouter.put('/update-user-bio/:identifier', updateUserBio);
+/**
+ * @deprecated
+ */
+// privateApiRouter.get('/get-all-users', getAllUsers);
 
-apiRouter.get('/get-user/:identifier', joiValidate(getUserSchema), async (req, res, next) => {
-	const user = await getUserByIdentifier(req.params.identifier, 'username');
-	Pino.trace(JSON.stringify(user));
-	return res.json(user);
-});
-apiRouter.put('/update-user-username/:identifier', joiValidate(getUserSchema), validateNameUserUpdate, updateUserName);
+apiRouter.delete('/delete-user/:identifier',
+	verifyTokenRequired,
+	joiValidate(getUserSchema, 'params'),
+	deleteUser);
 
-apiRouter.post('/search-by-email', async (req, res) => {
-	try {
-		const { email } = req.body; // Suponiendo que el campo del correo se llama "email" en el body
-		if (!email) {
-			return res.status(400).json({ error: 'El campo de correo electrónico es obligatorio' });
+apiRouter.put('/update-user/:identifier',
+	verifyTokenRequired,
+	joiValidate(getUserSchema, 'params'),
+	validateUpdateUser,
+	updateUser);
+
+apiRouter.put('/update-user-bio/:identifier',
+	verifyTokenRequired,
+	joiValidate(getUserSchema, 'params'),
+	updateUserBioController);
+
+apiRouter.get('/get-user/:identifier',
+	verifyTokenRequired,
+	joiValidate(getUserSchema, 'params'),
+	async (req, res, next) => {
+		const user = await getUserByIdentifier(req.params.identifier, 'username');
+		Pino.trace(JSON.stringify(user));
+		return res.json(user);
+	});
+
+apiRouter.put('/update-user-username/:identifier',
+	verifyTokenRequired,
+	joiValidate(getUserSchema, 'params'),
+	validateNameUserUpdate,
+	updateUserName);
+
+apiRouter.post('/search-by-email',
+	verifyTokenRequired,
+	async (req, res) => {
+		try {
+			const { email } = req.body; // Suponiendo que el campo del correo se llama "email" en el body
+			if (!email) {
+				return res.status(400).json({ error: 'El campo de correo electrónico es obligatorio' });
+			}
+
+			const users = await searchByEmailBackoffice(email);
+			return res.json(users);
+		} catch (error) {
+			console.error('Error al buscar usuarios por correo electrónico:', error);
+			return res.status(500).json({ error: 'Error interno del servidor' });
 		}
+	});
 
-		const users = await searchByEmailBackoffice(email);
-		return res.json(users);
-	} catch (error) {
-		console.error('Error al buscar usuarios por correo electrónico:', error);
-		return res.status(500).json({ error: 'Error interno del servidor' });
-	}
-});
+// Ruta update image
+apiRouter.post('/upload/:userId',
+	verifyTokenRequired,
+	upload.single('image'),
+	uploadUserImageController);
 
-// ruta update image
-apiRouter.post('/upload/:userId', upload.single('image'), (req: Request, res: Response) => {
-	Pino.trace('hola');
-	if (req.file) {
-		Pino.debug('File uploaded:' + req.file);
-		res.sendStatus(200);
-	} else {
-		res.status(400).json({ message: 'Error uploading image' });
-	}
-});
-
-export default apiRouter;
+export { apiRouter };

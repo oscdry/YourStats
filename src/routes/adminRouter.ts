@@ -2,8 +2,15 @@ import { Router } from 'express';
 import { deleteFirebaseUserById } from '../api/services/FirebaseServices.js';
 import { updateFirebaseUserById } from '../api/services/FirebaseServices.js';
 import { getFirebaseUsersByPage } from '../api/services/FirebaseServices.js';
+import { verifyAdminUser } from '../api/middlewares/verifyAdminUser.js';
+import { RenderBackoffice } from '../api/controllers/backofficeController.js';
 
 const adminRouter = Router();
+
+adminRouter.use('/admin', verifyAdminUser);
+
+// Páginas de administrador
+adminRouter.get('/admin', RenderBackoffice);
 
 adminRouter.get('/users/delete/:id', async (_req, res) => {
 	await deleteFirebaseUserById(_req.params.id);
