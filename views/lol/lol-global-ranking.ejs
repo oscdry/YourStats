@@ -1,7 +1,7 @@
 <%# This component takes a (summonerDetails) object parameter to display the global ranking %>
 
 <div class="lol-ranking">
-    <h3>Ranking global</h3>
+    <h3 id="lol-ranking-global">Ranking global</h3>
 
     <div class="lol-ranking-container">
 
@@ -13,7 +13,7 @@
                 <p class="summoner-name"><%= summoner.summonerName %></p>
             </div>
             <p class="summoner-points"><%= summoner.leaguePoints %></p>
-            <p>League Points</p>
+            <p id="lol-league-points">League Points</p>
             </div>
         <% }) %>
     </div>

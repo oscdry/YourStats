@@ -21,12 +21,14 @@ changeUserNameBtn?.addEventListener('click', () => {
 
 	// Create save button
 	const saveBtn = document.createElement('button');
-	saveBtn.textContent = 'Save';
+	saveBtn.textContent = 'Guardar';
+	saveBtn.id = 'username-saveChanges';
 	userTitle.appendChild(saveBtn);
 
 	// Create cancel button
 	const cancelBtn = document.createElement('button');
-	cancelBtn.textContent = 'Cancel';
+	cancelBtn.textContent = 'Cancelar';
+	cancelBtn.id = 'username-cancelChanges';
 	userTitle.appendChild(cancelBtn);
 
 	// Add event listener for cancel button
@@ -103,12 +105,14 @@ changeUserBioBtn?.addEventListener('click', () => {
 
 	// Create save button
 	const saveBtn = document.createElement('button');
-	saveBtn.textContent = 'Save';
+	saveBtn.textContent = 'Guardar';
+	saveBtn.id = 'bio-saveChanges';
 	userBio.appendChild(saveBtn);
 
 	// Create cancel button
 	const cancelBtn = document.createElement('button');
-	cancelBtn.textContent = 'Cancel';
+	cancelBtn.textContent = 'Cancelar';
+	cancelBtn.id = 'bio-cancelChanges';
 	userBio.appendChild(cancelBtn);
 
 	// Add event listener for cancel button

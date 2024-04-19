@@ -181,16 +181,6 @@ const gameUsernameInput = document.getElementById('game-username-input');
 
 const dataMode = gameUsernameInput?.getAttribute('data-mode');
 
-switch (dataMode) {
-	case 'lol':
-		gameUsernameInput.placeholder = 'Enter your League of Legends username';
-		break;
-
-	case 'brawl':
-		gameUsernameInput.placeholder = 'Enter your Brawl Stars tag';
-		break;
-}
-
 
 // On submit of the game username form
 // Universal for all games, the mode is set in the data-mode attribute of the input

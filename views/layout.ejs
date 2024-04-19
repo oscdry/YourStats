@@ -29,6 +29,7 @@
         causes an error %>
         <script defer src="https://accounts.google.com/gsi/client"></script>
         <script defer src="/js/oauth.js" type="module"></script>
+        <script defer src="/js/traduccion.js" type="module"></script>
     </head>
     <body>
         <%- include('./partials/navbar.ejs') %>
@@ -36,8 +37,8 @@
     </body>
     <footer>
         <ul>
-            <li><a href="/">Trabaja con nosotros</a></li>
-            <li><a href="/about">Contacto</a></li>
+            <li><a href="/" id="work-with-us">Trabaja con nosotros</a></li>
+            <li><a href="/about" id="about-us">Contacto</a></li>
         </ul>
 
         <p>

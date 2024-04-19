@@ -60,7 +60,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="lol-game-info-modal-team team-blue">
-                    <p>Equipo Azul</p>
+                    <p lol-blue-team>Equipo Azul</p>
 
                     <% // Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayBlue) { %>
@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="lol-game-info-modal-team team-red">
-                    <p>Equipo Rojo</p>
+                    <p id="lol-red-team">Equipo Rojo</p>
 
                     <% for (const key in lolgame.arrayRed) { %>
                     <div class="lol-game-card team-member">

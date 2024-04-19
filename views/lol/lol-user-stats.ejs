@@ -27,22 +27,22 @@
     </div>
 
     <div class="lol-general-stats">
-        <p>Victorias: <%= loldata.wins %></p>
-        <p>Perdidas: <%= loldata.losses %></p>
-        <p>Total: <%= loldata.total %></p>
+        <p id="lol-win-matches">Victorias: <%= loldata.wins %></p>
+        <p id="lol-lose-matches">Perdidas: <%= loldata.losses %></p>
+        <p id="lol-total-matches">Total: <%= loldata.total %></p>
     </div>
 
 
     <%# Top 3 Champions %>
     <div class="container">
-        <p>Top 3 Campeones:</p>
+        <p id="lol-top-champions">Top 3 Campeones:</p>
         <div class="lol-user-champions-top">
             <% loldata.championsMasteryData.forEach(champion => { %>
             <div class="lol-champion-card">
                 <img src="/img/lol/champs/<%= champion.championID + ".webp" %>">
                 <div class="lol-champion-card-info">
                     <h3><%= champion.championPoints %></h3>
-                    <p>Puntos de maestría</p>
+                    <p id="lol-mastery-points">Puntos de maestría</p>
                 </div>
             </div>
             <% }); %>
@@ -50,11 +50,11 @@
 
     </div>
 
-    <h3 class="container">Últimos 7 días:</h3>
-    <p>Partidas jugadas: <%= loldata.gamesLast7Days %></p>
+    <h3 class="container" id="lol-last-7days">Últimos 7 días:</h3>
+    <p id="lol-played-matches">Partidas jugadas: <%= loldata.gamesLast7Days %></p>
 
     <%# Positions Chart %>
-    <h3 class="container">Posiciones jugadas: </h3>
+    <h3 class="container" id="lol-played-positions">Posiciones jugadas: </h3>
     <div class="container chart">
         <canvas id="positionChart"></canvas>
         <script type="module">
@@ -64,7 +64,7 @@
         </script>
     </div>
 
-    <h3 class="container">Últimas <%= loldata.games.length %> partidas:</h3>
+    <h3 class="container" id="lol-last-matches">Últimas <%= loldata.games.length %> partidas:</h3>
     <div class="container lol-games-container">
         <% // Generate a card for each game of the user %>
 

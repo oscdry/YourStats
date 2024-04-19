@@ -24,7 +24,7 @@
                     </p>
                 </div>
                 <div class="braw-user-trophies max-trophies">
-                    <p>
+                    <p id="brawl-best-user-trophies">
                         Máximo de trofeos: <%=
                         brawldata.usuarioBrawlInfo.user.highestTrophies %>
                     </p>
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <h3 class="container">Mejores brawlers:</h3>
+    <h3 class="container" id="brawl-best-brawlers">Mejores brawlers:</h3>
     <div class="container brawl-container flex-row">
         <% brawldata.usuarioBrawlInfo.brawlers.forEach((brawler) => { %>
         <div class="brawl-brawler">
@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="d-flex flex-row">
-                        <b>
+                        <b id="brawl-max-brawler-trophies">
                             Máximo:
                         </b>
                         <p>
@@ -79,7 +79,7 @@
         <% }) %>
     </div>
 
-    <h3 class="container">Últimas <%= brawldata.resumenPartidas.length %> partidas:</h3>
+    <h3 class="container" id="brawl-last-matches">Últimas <%= brawldata.resumenPartidas.length %> partidas:</h3>
     <div class="container brawl-games-container">
         <% brawldata.resumenPartidas.forEach((game) => { %>
         <%- include('./brawl-game-card.ejs', {game}) %>

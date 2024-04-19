@@ -1,12 +1,12 @@
 //user list with pagination
 
 document.addEventListener('DOMContentLoaded', () => {
-	let before = document.getElementById('previous-currentPage');
-	let current = document.getElementById('currentPage');
-	let after = document.getElementById('after-currentPage');
-	let prevButton = document.getElementById('prevPage');
-	let nextButton = document.getElementById('nextPage');
-	let count = document.getElementById('countUsers').textContent; // Obtener el count de usuarios desde el backend
+	const before = document.getElementById('previous-currentPage');
+	const current = document.getElementById('currentPage');
+	const after = document.getElementById('after-currentPage');
+	const prevButton = document.getElementById('prevPage');
+	const nextButton = document.getElementById('nextPage');
+	const count = document.getElementById('countUsers').textContent; // Obtener el count de usuarios desde el backend
 	let usersPerPage = 10; // Número de usuarios por página
 	let totalPages = Math.ceil(count / usersPerPage); // Calcular el número total de páginas
 	let currentPage = getPageNumberFromUrl(); // Obtener el número de página de la URL
