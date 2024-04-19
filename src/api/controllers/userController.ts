@@ -8,12 +8,12 @@ import Pino from '../../logger.js';
 import sendEmail from '../utils/mailer.js';
 import { NotFoundPage } from '../../routes/web.js';
 
-export const renderUserView = async (_req: Request, res: Response) => {
+export async function renderUserView(_req: Request, res: Response) {
 	const user = await getFirebaseUserById(_req.params.id);
 	if (!user) return NotFoundPage(_req, res);
 
 	res.render('./user.ejs', { title: 'User', userView: user });
-};
+}
 
 export const createUserController = async (req: Request, res: Response, next: NextFunction) => {
 	const { username, mail, password } = req.body;
