@@ -1,14 +1,21 @@
+import { validateEmail,
+	validatePassword,
+	validateUsername } from './constants.js';
+import { usernameChangeListener,
+	emailChangeListener,
+	passwordChangeListener,
+	passwordConfirmationChangeListener } from './registerModal.js';
+
 // Auth
 export const SaveToken = (token) => document.cookie = `token=${token};`;
-export const ClearToken = () => document.cookie = '';
+export const ClearToken = () => document.cookie = 'token=;';
 
 export const RedirectToHome = () => window.location.href = '/';
 export const ReloadPage = () => window.location.reload();
 
-// Regex
-const validateUsername = (username) => /^[a-zA-Z0-9_]{3,16}$/.test(username);
-const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-const validatePassword = (password) => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
+const SetStorageItem = (key, value) => localStorage.setItem
+(key, value);
+const GetStorageItem = (key) => localStorage.getItem(key);
 
 // Login ---------------------------
 const loginSubmit = document.getElementById('login-submit');
@@ -26,7 +33,6 @@ loginSubmit?.addEventListener('click', async (e) => {
 	if (username && password) {
 
 		//TODO: Check regex
-
 		try {
 
 			// Send request to server
@@ -73,14 +79,21 @@ const registerMailInput = document.getElementById('register-mail-input');
 const registerPasswordInput = document.getElementById('register-password-input');
 const registerPasswordConfirmationInput = document.getElementById('register-password-confirmation-input');
 
+const registerModalErrorText = document.getElementById('register-error-text');
+
+registerUsernameInput?.addEventListener('input', usernameChangeListener);
+registerMailInput?.addEventListener('input', emailChangeListener);
+registerPasswordInput?.addEventListener('input', passwordChangeListener);
+registerPasswordConfirmationInput?.addEventListener('input', passwordConfirmationChangeListener);
+
 registerSubmit?.addEventListener('click', async (e) => {
 	e.preventDefault();
 
-	const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
 	const username = registerUsernameInput.value.trim();
 	const mail = registerMailInput.value.trim();
 	const password = registerPasswordInput.value.trim();
 	const password_confirmation = registerPasswordConfirmationInput.value.trim();
+
 
 	// If filled inputs
 	if (username && mail && password && password_confirmation) {
@@ -88,25 +101,25 @@ registerSubmit?.addEventListener('click', async (e) => {
 		// Check regex
 		// Username
 		if (!validateUsername(username)) {
-			errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
+			registerModalErrorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
 			return;
 		}
 
 		// Mail
 		if (!validateEmail(mail)) {
-			errorText.innerHTML = 'Invalid mail';
+			registerModalErrorText.innerHTML = 'Invalid mail';
 			return;
 		}
 
 		// Password
 		if (!validatePassword(password)) {
-			errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
+			registerModalErrorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
 			return;
 		}
 
 		// Password confirmation
 		if (password !== password_confirmation) {
-			errorText.innerHTML = 'Passwords do not match';
+			registerModalErrorText.innerHTML = 'Passwords do not match';
 			return;
 		}
 
@@ -122,18 +135,19 @@ registerSubmit?.addEventListener('click', async (e) => {
 			});
 
 			if (!response.ok) {
-				errorText.innerHTML = json.error;
+				const json = await response.json();
+				registerModalErrorText.innerHTML = json.error;
 				return;
 			}
 
-			const json = await response.json();
 			const token = json.token;
 			SaveToken(token);
 			RedirectToHome();
 			return;
 
 		} catch (error) {
-			errorText.innerHTML = 'Server error, try again later';
+			console.log(error);
+			registerModalErrorText.innerHTML = 'Unknown server error, try again later';
 			return;
 		}
 	}
@@ -155,10 +169,9 @@ logoutButton?.addEventListener('click', async (e) => {
 			}
 		});
 
-		if (!response.ok) {
+		if (!response.ok)
 			console.error(response.status + ' ' + response.statusText);
-			return;
-		}
+
 
 		// Delete token
 		ClearToken();
@@ -166,7 +179,8 @@ logoutButton?.addEventListener('click', async (e) => {
 		return;
 
 	} catch (error) {
-		console.error('Server error, try again later');
+		ClearToken();
+		console.error(response.status + ' ' + response.statusText);
 		return;
 	}
 });
@@ -175,7 +189,6 @@ logoutButton?.addEventListener('click', async (e) => {
 // ---------------------------
 
 // Game input handling
-
 const gameUsernameForm = document.getElementById('game-username-form');
 const gameUsernameInput = document.getElementById('game-username-input');
 
@@ -231,3 +244,42 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 	}
 });
 
+// ---------------------------
+
+// Cookies handling
+const cookiesModal = document.getElementById('cookies-modal');
+
+if (cookiesModal && !GetStorageItem('cookies')) {
+	cookiesModal.classList.remove('hide');
+	const cookiesAcceptButton = document.getElementById('cookies-accept-button');
+	const cookiesRejectButton = document.getElementById('cookies-reject-button');
+	const cookiesConfigureButton = document.getElementById('cookies-configure-button');
+
+	const hideModal = () => {
+		cookiesModal.classList.add('hide');
+		setTimeout(() => {
+			cookiesModal.remove();
+		}, 1500);
+	};
+
+	const cookiesAccept = () => {
+		SetStorageItem('cookies', '1');
+		hideModal();
+	};
+
+	const cookiesReject = () => {
+		SetStorageItem('cookies', '0');
+		hideModal();
+	};
+
+	const cookiesConfigure = () => { // TODO: Que hacemos con esto?
+		SetStorageItem('cookies', '0.5');
+		hideModal();
+	};
+
+	cookiesAcceptButton.addEventListener('click', cookiesAccept);
+	cookiesRejectButton.addEventListener('click', cookiesReject);
+	cookiesConfigureButton.addEventListener('click', cookiesConfigure);
+}else{
+	cookiesModal.remove();
+}

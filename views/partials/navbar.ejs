@@ -2,6 +2,8 @@
 <%- include('./modal-login.ejs') %>
 <%- include('./modal-register.ejs') %>
 <% } %>
+
+
 <head>
     <style>
         .dropdown {
@@ -25,39 +27,46 @@
         .dropdown-content a:hover {background-color: #f1f1f1}
     </style>
 </head>
-<nav>
-    <a href="/" id="logo-nav"></a>
-    <ul class="navbar-list">
-        <li><a href="/about" id="navbar-about">Sobre Nosotros</a></li>
-    </ul>
 
-    <% // Logged in Check %>
-    <% if (typeof user === 'undefined') { %>
-    <ul id="nav-controls">
-        <li>
-            <button type="button" class="secondary" data-bs-toggle="modal"
-                data-bs-target="#modal-login" id="navbar-login">Inicia
-                sesión</button>
-        </li>
-        <li>
-            <button type="button" class="secondary" data-bs-toggle="modal"
-                data-bs-target="#modal-register" id="navbar-signUp">Regístrate</button>
-        </li>
-    </ul>
-    <% } else { %>
-    <ul>
-        <li>
-            <a href="/user/<%= user.id %>">
-                <%= user.username %>
-            </a>
-        </li>
-        <li>
-            <button id="logout-button" type="button" class="secondary" id="navbar-logout">Cerrar
-                sesión</button>
-        </li>
-    </ul>
-    <% } %>
-    <ul>
+<nav class="navbar navbar-expand-lg">
+    <a href="/" class="navbar-brand"></a>
+    <div class="navbar-collapse collapse" id="navbar">
+
+        <ul class="navbar-nav">
+            <li class="nav-item"><a id="navbar-about" class="nav-link" href="/about">Sobre
+                    Nosotros</a></li>
+            <%# Logged in Check %>
+            <% if (typeof user === 'undefined') { %>
+
+            <li class="nav-item">
+                <button type="button" class="nav-link secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-login" id="navbar-login">Inicia
+                    sesión</button>
+            </li>
+            <li class="nav-item">
+                <button type="button" class="nav-link secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-register" id="navbar-signUp">Regístrate</button>
+            </li>
+
+            <% } else { %>
+            <li class="nav-item">
+                <a href="/user/<%= user.id %>" class="nav-user secondary">
+                    <img src="/img/storage/users/<%= user.id %>.jpg"
+                        alt="Avatar <%= user.username %>"
+                        onerror="this.onerror=null; this.src='/img/storage/users/default.jpg'">
+                    <span><%= user.username %></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <button id="logout-button" type="button"
+                    class="secondary" id="navbar-logout">Cerrar
+                    sesión</button>
+            </li>
+            <% } %>
+        </ul>
+         <ul>
         <div class="dropdown">
             <button id="lang-toggle">Idioma</button>
             <div id="dropdown-content" class="dropdown-content">
@@ -67,5 +76,13 @@
             </div>
         </div>
     </ul>
+    </div>
 
+    <button class="navbar-toggler collapsed" type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar"
+        aria-controls="navbar" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 </nav>

@@ -1,4 +1,4 @@
-<%# This object receives a (lolgame) object to display a game as a card %>
+<%# This object receives a (lolgame) and (playername) object to display a game as a card %>
 <%# Along with the username, and the index of the game in the array %>
 
 <head>
@@ -11,7 +11,7 @@
         <img
             src="/img/lol/champs/<%= lolgame.championIdentifier.championId + ".webp"
             %>"
-        alt>
+        alt="Campeón jugado">
     </div>
 
     <div class="lol-game-card-champ">
@@ -62,16 +62,10 @@
                 <div class="lol-game-info-modal-team team-blue">
                     <p lol-blue-team>Equipo Azul</p>
 
-                    <% // Generate a card for each user in the game %>
+                    <%# Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayBlue) { %>
-                    <div class="lol-game-card team-member">
-                        <img
-                            src="/img/lol/champs/<%= lolgame.arrayBlue[key] %>.webp"
-                            alt>
-                        <p class="team-member-name">
-                            <%= key %>
-                        </p>
-                    </div>
+                    <%- include('./lol-team-member.ejs', {champ:
+                    lolgame.arrayBlue[key], name: key, playername: playername}); %>
                     <% } %>
                 </div>
 

@@ -32,7 +32,6 @@
         <p id="lol-total-matches">Total: <%= loldata.total %></p>
     </div>
 
-
     <%# Top 3 Champions %>
     <div class="container">
         <p id="lol-top-champions">Top 3 Campeones:</p>
@@ -66,13 +65,13 @@
 
     <h3 class="container" id="lol-last-matches">Últimas <%= loldata.games.length %> partidas:</h3>
     <div class="container lol-games-container">
-        <% // Generate a card for each game of the user %>
+        <%# Generate a card for each game of the user %>
 
         <%
         let index = 0;
         loldata.games.resultsArray.forEach(lolgame => { %>
         <%- include('./lol-game-card.ejs', {lolgame: lolgame, username:
-        loldata.gameName, index}); %>
+        loldata.gameName, playername: playername, index}); %>
         <% index++; }); %>
     </div>
 
