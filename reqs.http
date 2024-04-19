@@ -1,4 +1,4 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlvUkc1dFY3cE5ZTk5pTlBlUTRDIiwidXNlcm5hbWUiOiJwcnVlYmFtYWlsIiwibWFpbCI6InBvbGVjc2dvYWx0YWNjQGdtYWlsLmNvbSIsInJvbGUiOjAsImlhdCI6MTcxMzUzMzExNiwiZXhwIjoxNzEzNjE5NTE2fQ.8GXzrbm-POpzuW_tQmtnLq0LeC5ltLm1EBBQxuV9bfc
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlvUkc1dFY3cE5ZTk5pTlBlUTRDIiwidXNlcm5hbWUiOiJwcnVlYmFtYWlsIiwicm9sZSI6MCwiaWF0IjoxNzEzNTQyODg5LCJleHAiOjE3MTM2MjkyODl9.tpIIoacaqNFzuVWyVRLLPoQbxxHH-ipl1rBqD6vATOo
 
 GET http://localhost:80/
 
@@ -90,3 +90,18 @@ GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
 
 GET http://localhost:80/api/password-reset
 Cookie: token={{token}}
+
+###
+
+POST https://yourstats.kxnzen.me/api/login
+Content-Type: application/json
+
+{
+    "username": "pruebamail",
+    "password": "Abc.1234"
+}
+
+###
+
+GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
+

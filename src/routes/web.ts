@@ -1,10 +1,9 @@
 import { Router, type Response, type Request, NextFunction } from 'express';
-import { getFirebaseUserById } from '../api/services/FirebaseServices.js';
+import { renderUserView } from '../api/controllers/userController.js';
 import { lolTestData } from '../api/types/testData/lolTestData.js';
 import { RenderLolIndex, renderLolStatsForPlayer } from '../api/controllers/lolController.js';
 import { brawlTestData } from '../api/types/testData/brawlTestData.js';
 import { RenderBrawlStats } from '../api/controllers/brawlController.js';
-import { renderUserView } from '../api/controllers/userController.js';
 
 const webRouter = Router();
 
