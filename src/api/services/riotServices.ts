@@ -27,6 +27,18 @@ export const RiotPUUIDByTagName = async (gameName: string, tagLine: string): Pro
 
 };
 
+export const getAccountbyId = async (id: string): Promise<string> => {
+	const result = await fetch(RIOT_API_ENDPOINT + 'riot/account/v1/accounts/by-puuid/' + id, {
+		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
+	});
+	if (result.status != 200) { console.log('Error'); return ''; }
+
+	const json = await result.json();
+
+	return json['gameName'];
+
+
+};
 
 export const RiotDataByName = async (gameName: string): Promise<RiotData | null> => {
 	const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/by-name/' + gameName, {
