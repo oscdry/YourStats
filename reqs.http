@@ -73,6 +73,14 @@ Authorization
 
 
 ###
+GET https://fortnite-api.com/v2/stats/br/v2/?name=Duality&accountType=epic&timeWindow=lifetime&image=image
+Authorization: Bearer dc5019c1-500e-4522-a3bd-146df37214fb
+
+
+
+
+
+###
 POST http://localhost:8080/api/upload/asdasdasd
 
 ###
@@ -82,6 +90,7 @@ GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
 
 GET http://localhost:80/api/password-reset
 Cookie: token={{token}}
+
 ###
 
 POST https://yourstats.kxnzen.me/api/login

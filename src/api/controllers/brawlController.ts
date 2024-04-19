@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { brawlInfo, GetBrawlData } from '../services/brawlServices.js';
+import { brawlInfo, GetBrawlData, GetHomeData } from '../services/brawlServices.js';
 import { UserNotFoundError } from '../errors/errors.js';
+
 
 export const BrawlUserExists = async (req: Request, res: Response, next: NextFunction) => {
 	const userTag = req.body.tag;
@@ -21,7 +22,13 @@ export const SendBrawlData = async (req: Request, res: Response, next: NextFunct
 		next(error);
 	}
 };
-
+export const SendBrawlHomeData = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		return res.json(await GetHomeData());
+	} catch (error) {
+		next(error);
+	}
+};
 export const RenderBrawlStats = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const userTag = req.params.tag;
