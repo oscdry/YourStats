@@ -1,6 +1,7 @@
 import { type Request, type Response, NextFunction } from 'express';
-import { generateTokenForUserId } from './tokenController.js';
+import { randomBytes } from 'crypto';
 
+import { generateTokenForUserId } from './tokenController.js';
 import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio, userExistsByMail, userExists } from '../services/FirebaseServices.js';
 import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUserBioError, UpdateUsernameError } from '../errors/errors.js';
 import { FirebaseUser } from '../types/FirebaseUser.js';
@@ -8,6 +9,8 @@ import Pino from '../../logger.js';
 import sendEmail from '../utils/mailer.js';
 import { NotFoundPage } from '../../routes/web.js';
 
+//! TODO: Hay un problema aquí, ha de ser función declarada para que funcione
+// Si no, se utiliza antes de ser declarada, y peta todo, ????
 export async function renderUserView(_req: Request, res: Response) {
 	const user = await getFirebaseUserById(_req.params.id);
 	if (!user) return NotFoundPage(_req, res);
@@ -157,14 +160,38 @@ export const requestPasswordResetController = async (req: Request, res: Response
 
 		Pino.debug('Sending email for password reset to user:' + user.mail);
 
+		// Generate a token and set its expiration time to 1 hour from now
+		const resetToken = randomBytes(20).toString('hex');
+		const resetTokenExpiration = Date.now() + 3600000; // 1 hour
+
+		// Save the token and its expiration time in the database
+		user.resetPasswordToken = resetToken;
+		user.resetPasswordExpires = resetTokenExpiration;
+		await updateFirebaseUserById(user.id, user);
 		const backendUrl = req.protocol + '://' + req.get('host');
+
+		Pino.trace('Token saved for password reset');
 
 		await sendEmail(mail,
 			'Password reset',
-			`${backendUrl}/password-reset/${user.id}`);
+			`${backendUrl}/password-reset/${user.resetPasswordToken}`);
 
 		res.json({ message: 'Email sent' });
 	} catch (error) {
+		next(error);
+	}
+};
+
+export const renderPasswordResetView = async (req: Request, res: Response, next: NextFunction) => {
+	const { token } = req.params;
+
+	try {
+		const user = res.locals.user;
+		if (!user) return NotFoundPage(req, res);
+
+		res.render('./password-reset.ejs', { title: 'Password Reset', user });
+	} catch (error) {
+		Pino.error('Error rendering password reset view:', error);
 		next(error);
 	}
 };
@@ -173,7 +200,12 @@ export const requestPasswordResetController = async (req: Request, res: Response
 export const resetPasswordController = (req: Request, res: Response, next: NextFunction) => {
 	const { token } = req.params;
 
+	try {
 
+
+	} catch (error) {
+
+	}
 
 };
 
