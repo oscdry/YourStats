@@ -38,6 +38,13 @@ export const SendLolData = async (req: Request, res: Response, next: NextFunctio
 		next(error);
 	}
 };
+export const SendLolHomeData = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		return res.json(await GetLolHomeData());
+	} catch (error) {
+		next(error);
+	}
+};
 
 export const sendLolSkin = async (req: Request, res: Response, next: NextFunction) => {
 	try {

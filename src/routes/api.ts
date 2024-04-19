@@ -7,17 +7,18 @@ import { LoginUser } from '../api/controllers/loginController.js';
 import { validateUserIdentifier } from '../api/middlewares/validateUserIdentifier.js';
 
 import { errorHandler } from '../api/middlewares/errorHandler.js';
-import { GetLolUserData } from '../api/services/lolServices.js';
+import { GetLolHomeData, GetLolUserData } from '../api/services/lolServices.js';
 import { updateFirebaseUserById, updateFirebaseUserName, searchByEmailBackoffice } from '../api/services/FirebaseServices.js';
 
 import { verifyTokenOptional } from '../api/middlewares/verifyToken.js';
 import Pino from '../logger.js';
-import { RiotUserExists, SendLolData, sendLolSkin } from '../api/controllers/lolController.js';
+import { RiotUserExists, SendLolData, SendLolHomeData, sendLolSkin } from '../api/controllers/lolController.js';
 import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { JoiValidate } from '../api/middlewares/joiValidate.js';
 import { contactFormSchema } from '../api/middlewares/schemas.js';
 import { searchSkinByName } from '../api/services/lolSkinsServices.js';
-import { BrawlUserExists, SendBrawlData } from '../api/controllers/brawlController.js';
+import { BrawlUserExists, SendBrawlData, SendBrawlHomeData } from '../api/controllers/brawlController.js';
+import { GetBrawlData, GetHomeData } from 'src/api/services/brawlServices.js';
 
 
 const apiRouter = Router();
@@ -52,10 +53,12 @@ apiRouter.get('/get-all-users', getAllUsers);
 // League of Legends API
 apiRouter.post('/riot-user/', RiotUserExists);
 apiRouter.get('/lol/skins/:skinName', sendLolSkin);
+apiRouter.get('/lol-home', SendLolHomeData);
 apiRouter.get('/lol-data/:username', SendLolData);
 
 // Brawl Stars API
 apiRouter.post('/brawl-user/', BrawlUserExists);
+apiRouter.get('/brawl-home', SendBrawlHomeData);
 
 apiRouter.get('/brawl-data/:tag', SendBrawlData);
 

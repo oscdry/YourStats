@@ -210,6 +210,7 @@ export const getRankingSpain = async () => {
 
 	});
 	const data = await result.json();
+	console.log(data.items);
 	const primeros5Jugadores = data.items.slice(0, 5);
 	return primeros5Jugadores;
 };
@@ -225,6 +226,7 @@ export const getRankingGlobal = async () => {
 
 	});
 	const data = await result.json();
+	console.log(data.items);
 	const primeros5Jugadores = data.items.slice(0, 5);
 	return primeros5Jugadores;
 };
@@ -361,7 +363,7 @@ export const GetHomeData = async (): Promise<BrawlHomeData> => {
 			'release-date': '5 jan 2024'
 		}
 	];
-
+	
 	return {
 		rankSpain: formattedRankSpain,
 		rankGlobal: formattedRankGlobal,
