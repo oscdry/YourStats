@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { getUserByIdentifier, userExists, userExistsByMail } from './userController.js';
+import { getUserByIdentifier } from './userController.js';
 import { generateTokenForUserId as generateTokenForUser } from './tokenController.js';
 import { LoginError } from '../errors/errors.js';
 import Pino from '../../logger.js';
 import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { createFirebaseUser } from '../services/FirebaseServices.js';
+import { createFirebaseUser, userExistsByMail } from '../services/FirebaseServices.js';
 
 export const LoginUser = async (req: Request, res: Response, next: NextFunction) => {
 	const { username, password } = req.body;
@@ -33,6 +33,7 @@ export const LoginUser = async (req: Request, res: Response, next: NextFunction)
 		const payload: TokenPayload = {
 			id: user.id,
 			username: user.username,
+			mail: user.mail,
 			role: user.role
 		};
 
@@ -90,6 +91,7 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 
 		const payload: TokenPayload = {
 			id: userId ? userId : existingUser!.id,
+			mail: result.user.email ? result.user.email : '',
 			username: result.user.displayName ? result.user.displayName : 'Unnamed User',
 			role: existingUser ? existingUser.role : 0
 		};

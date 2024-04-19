@@ -1,4 +1,4 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVCY2QzT2JRVHlGQlRDcFpHbnpoIiwidXNlcm5hbWUiOiJwZXBlIiwicm9sZSI6MCwiaWF0IjoxNzEyODIxNzcwLCJleHAiOjE3MTI5MDgxNzB9.ZsOWqO2Jczdex15No2jKtTtzRiSf6m5JFeQSX5RKaO8
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlvUkc1dFY3cE5ZTk5pTlBlUTRDIiwidXNlcm5hbWUiOiJwcnVlYmFtYWlsIiwibWFpbCI6InBvbGVjc2dvYWx0YWNjQGdtYWlsLmNvbSIsInJvbGUiOjAsImlhdCI6MTcxMzUzMzExNiwiZXhwIjoxNzEzNjE5NTE2fQ.8GXzrbm-POpzuW_tQmtnLq0LeC5ltLm1EBBQxuV9bfc
 
 GET http://localhost:80/
 
@@ -29,7 +29,7 @@ POST http://localhost:80/api/login
 Content-Type: application/json
 
 {
-    "username": "pepe",
+    "username": "pruebamail",
     "password": "Abc.1234"
 }
 
@@ -77,3 +77,8 @@ POST http://localhost:8080/api/upload/asdasdasd
 
 ###
 GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
+
+###
+
+GET http://localhost:80/api/password-reset
+Cookie: token={{token}}

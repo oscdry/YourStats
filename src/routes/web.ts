@@ -1,12 +1,10 @@
 import { Router, type Response, type Request, NextFunction } from 'express';
 import { getFirebaseUserById } from '../api/services/FirebaseServices.js';
-import { verifyTokenOptional, verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 import { lolTestData } from '../api/types/testData/lolTestData.js';
 import { RenderLolIndex, renderLolStatsForPlayer } from '../api/controllers/lolController.js';
 import { brawlTestData } from '../api/types/testData/brawlTestData.js';
 import { RenderBrawlStats } from '../api/controllers/brawlController.js';
-import { RenderBackoffice } from '../api/controllers/backofficeController.js';
-import { verifyAdminUser } from '../api/middlewares/verifyAdminUser.js';
+import { renderUserView } from '../api/controllers/userController.js';
 
 const webRouter = Router();
 
@@ -15,27 +13,23 @@ export const NotFoundPage = (_req: Request, res: Response) => {
 	res.status(404).render('404.ejs', { title: 'Page not found' });
 };
 
+// Error page
 export const RenderErrorPage = (res: Response) => {
 	res.status(500).render('500.ejs', { title: 'Error' });
 };
 
 // Páginas publicas
-webRouter.use(verifyTokenOptional);
-
 webRouter.get('/', (_req: Request, res: Response) => {
-	res.render('index', { title: 'Homepage' });
+	res.render('index', { title: 'Inicio' });
 });
 
-webRouter.get('/user/:id', async (_req: Request, res: Response) => {
-	const user = await getFirebaseUserById(_req.params.id);
-	if (!user) return NotFoundPage(_req, res);
-
-	res.render('./user.ejs', { title: 'User', userView: user });
-});
+webRouter.get('/user/:id', renderUserView);
 
 webRouter.get('/about', (_req: Request, res: Response) => {
 	res.render('./about.ejs', { title: 'Contacto' });
 });
+
+webRouter.get('/password-reset/:token');
 
 // Brawl Stars ---------------------------------------------------------
 webRouter.get('/brawl', (_req: Request, res: Response) => {
@@ -48,7 +42,6 @@ webRouter.get('/brawl/stats/asd', async (_req: Request, res: Response, next: Nex
 });
 
 webRouter.get('/brawl/stats/:tag', RenderBrawlStats);
-
 
 // League of Legends ---------------------------------------------------------
 webRouter.get('/lol', RenderLolIndex);
@@ -75,7 +68,7 @@ webRouter.get('/lol/stats/asd', async (_req: Request, res: Response, next: NextF
 		}
 	};
 
-	return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata: lolTestData, lolPositionsChartData });
+	return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata: lolTestData, lolPositionsChartData, playername: 'OSCDRY' });
 });
 
 webRouter.get('/lol/stats/chart', async (_req: Request, res: Response, next: NextFunction) => {
@@ -157,8 +150,4 @@ webRouter.get('/lol/stats/chart', async (_req: Request, res: Response, next: Nex
 
 webRouter.get('/lol/stats/:gamename', renderLolStatsForPlayer);
 
-// Páginas privadas
-webRouter.use(verifyTokenRequired);
-webRouter.use(verifyAdminUser);
-webRouter.get('/admin', RenderBackoffice);
 export default webRouter;
