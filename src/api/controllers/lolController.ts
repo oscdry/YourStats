@@ -67,6 +67,7 @@ export const RenderLolIndex = async (_req: Request, res: Response, next: NextFun
 		const data = await GetLolHomeData();
 		res.render('./lol/index.ejs', { title: 'LoL', server, homedata: data, user : res.locals.user});
 	} catch (error) {
+		Pino.error('Error rendering LoL index: ' + (error as Error).message);
 		next(error);
 	}
 };

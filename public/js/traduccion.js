@@ -10,17 +10,25 @@ const es = document.getElementById('es');
 const en = document.getElementById('en');
 const ca = document.getElementById('ca');
 
-es.addEventListener('click', async () => await selectLanguage('es'));
-en.addEventListener('click', async () => await selectLanguage('en'));
-ca.addEventListener('click', async () => await selectLanguage('ca'));
+es.addEventListener('click', async (e) => await selectLanguage('es', e));
+en.addEventListener('click', async (e) => await selectLanguage('en', e));
+ca.addEventListener('click', async (e) => await selectLanguage('ca', e));
 
 const toggleDropdown = () => {
 	toggle.classList.toggle('active');
 	dropdownContent.classList.toggle('hide');
 };
 
-const selectLanguage = async (language) => {
-	toggleDropdown(); // Cierra el dropdown después de la selección
+const hideDropdown = () => {
+	toggle.classList.remove('active');
+	dropdownContent.classList.add('hide');
+};
+
+const selectLanguage = async (language, e) => {
+	e.preventDefault();
+	if (getItem('lang') === language) return hideDropdown(); // Evita la recarga si el idioma es el mismo
+
+	hideDropdown(); // Cierra el dropdown después de la selección
 	await changeLanguage(language); // Llama a cambiar el idioma incluso si es español
 };
 
@@ -28,7 +36,7 @@ const changeLanguage = async (lang) => {
 	langText.textContent = lang.toUpperCase();
 
 	const currentLang = getItem('lang');
-	if (currentLang === lang) return toggleDropdown();
+	if (currentLang === lang) return;
 
 	const url = new URL(window.location.href);  // Utiliza window.location.href
 
@@ -70,7 +78,6 @@ const changeLanguage = async (lang) => {
 					}
 				}
 			}
-			toggleDropdown();
 		} catch (e) {
 			console.error('Error al cargar el archivo JSON:', e);
 		}

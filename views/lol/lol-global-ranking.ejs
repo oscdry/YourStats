@@ -2,6 +2,8 @@
 global ranking %>
 
 <h3 class="container-fluid mb-3">Ranking global</h3>
+<% if (summonerDetails) { %>
+
 <div class="lol-ranking container-fluid ">
     <div class="lol-ranking-container">
         <% let index = 1
@@ -11,11 +13,16 @@ global ranking %>
                 <p class="summoner-position"><%= index++ %>.&nbsp;</p>
                 <p class="summoner-name"><%= summoner.summonerName %></p>
             </div>
-            <p class="summoner-points" ><%= summoner.leaguePoints %></p>
-           
+            <p class="summoner-points"><%= summoner.leaguePoints %></p>
+
             <p id="lol-league-points">League Points</p>
         </a>
 
         <% }) %>
     </div>
 </div>
+<% } else { %>
+<div class="lol-ranking container-fluid">
+    <p>No se ha podido cargar el ranking global</p>
+</div>
+<% } %>
