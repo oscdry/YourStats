@@ -9,13 +9,13 @@ import Pino from '../../logger.js';
 import sendEmail from '../utils/mailer.js';
 import { NotFoundPage } from '../../routes/web.js';
 
-//! TODO: Hay un problema aquí, ha de ser función declarada para que funcione
+//! TODO: Hay un problema aquí, ha de ser función declarada con function para que funcione
 // Si no, se utiliza antes de ser declarada, y peta todo, ????
 export async function renderUserView(_req: Request, res: Response) {
 	const user = await getFirebaseUserById(_req.params.id);
 	if (!user) return NotFoundPage(_req, res);
 
-	res.render('./user.ejs', { title: 'User', userView: user });
+	res.render('./user.ejs', { title: 'User', user: res.locals.user, userView: user });
 }
 
 export const createUserController = async (req: Request, res: Response, next: NextFunction) => {
@@ -237,7 +237,7 @@ export async function getUserByIdentifier(identifier: string,
 	}
 
 	if (!user) {
-		Pino.error('User not found getting user by identifier:' + identifier + ' + type:' + type);
+		Pino.warn('User not found getting user by identifier:' + identifier + ' + type:' + type);
 		return null;
 	}
 

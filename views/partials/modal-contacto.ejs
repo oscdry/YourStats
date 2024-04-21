@@ -16,8 +16,8 @@
                 <%- include('./components/input-mail.ejs',
                 {id:"contact-mail-input"}) %>
 
-                <%- include('./components/input-generic.ejs',
-                {label:"text", labelText:"Asunto", id:"contact-content-input"})
+                <%- include('./components/textarea-generic.ejs',
+                {label:"text", name:"Asunto", id:"contact-content-input"})
                 %>
             </div>
             <p class="error-text" id="contact-error-text"></p>

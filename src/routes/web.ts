@@ -9,30 +9,30 @@ const webRouter = Router();
 
 // Not found page
 export const NotFoundPage = (_req: Request, res: Response) => {
-	res.status(404).render('404.ejs', { title: 'Page not found' });
+	res.status(404).render('404.ejs', { title: 'Page not found', user : res.locals.user});
 };
 
 // Error page
 export const RenderErrorPage = (res: Response) => {
-	res.status(500).render('500.ejs', { title: 'Error' });
+	res.status(500).render('500.ejs', { title: 'Error', user : res.locals.user });
 };
 
 // Páginas publicas
 webRouter.get('/', (_req: Request, res: Response) => {
-	res.render('index', { title: 'Inicio' });
+	res.render('index', { title: 'Inicio', user: res.locals.user });
 });
 
 webRouter.get('/user/:id', renderUserView);
 
 webRouter.get('/about', (_req: Request, res: Response) => {
-	res.render('./about.ejs', { title: 'Contacto' });
+	res.render('./about.ejs', { title: 'Contacto', user: res.locals.user });
 });
 
 webRouter.get('/password-reset/:token');
 
 // Brawl Stars ---------------------------------------------------------
 webRouter.get('/brawl', (_req: Request, res: Response) => {
-	res.render('./brawl/index.ejs', { title: 'Brawl Stars' });
+	res.render('./brawl/index.ejs', { title: 'Brawl Stars', user: res.locals.user });
 });
 
 //! Testing routes Brawl Stars

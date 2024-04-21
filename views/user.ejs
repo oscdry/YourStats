@@ -1,8 +1,6 @@
 
 <head>
     <link rel="stylesheet" href="/css/user.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <script src="/js/user.js" type="module" defer></script>
 </head>
 
@@ -14,7 +12,7 @@
             <img src="/img/storage/users/<%= userView.id %>.jpg"
                 alt="Foto de perfil" class="profile-pic"
                 onerror="this.onerror=null; this.src='/img/storage/users/default.jpg'">
-            <button id="uploadPicBtn" class="upload-pic-btn"
+            <button id="uploadPicBtn" class="upload-pic-btn secondary"
                 style="display:none;">Cambiar imagen
                 <br>
                 (.jpg)
@@ -24,10 +22,10 @@
             <p class="error-text">
             </p>
         </div>
-        <div class="user-title">
-            <h1 id="currentUserName" class="title"><%= userView.username%></h1>
-            <button id="changeUserNameBtn" class="primary"><i
-                    class="fa-solid fa-pencil"></i></button>
+        <div class="user-title" id="user-title">
+            <h1 id="current-username" class="title"><%=
+                userView.username%></h1>
+
             <div class="points-div" id="userView-userPoints">
                 <p class="points">
                     50125
@@ -35,6 +33,22 @@
                 Puntos
             </div>
         </div>
+        <button id="edit-username" class="primary small"><i
+                class="fa-solid fa-pencil"></i>
+        </button>
+        <form class="user-title-editing input-row hide" id="user-title-editing">
+            <input type="text" id="new-username-input" class="input-row-labeled"
+                value="<%= userView.username%>">
+            <p class="error-text"></p>
+            <div class="d-flex flex-row ">
+                <button type="submit" id="submit-username" class="primary"><i
+                        class="fa-solid fa-check"></i>
+                </button>
+                <button type="button" id="cancel-username" class="secondary"><i
+                        class="fa-solid fa-times"></i>
+                </button>
+            </div>
+        </form>
     </div>
     <div class="bio-info">
         <p id="currentUserBio" class="bio">

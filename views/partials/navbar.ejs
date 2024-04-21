@@ -3,38 +3,24 @@
 <%- include('./modal-register.ejs') %>
 <% } %>
 
-
-<head>
-    <style>
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .dropdown-content a:hover {background-color: #f1f1f1}
-    </style>
-</head>
-
 <nav class="navbar navbar-expand-lg">
     <a href="/" class="navbar-brand"></a>
     <div class="navbar-collapse collapse" id="navbar">
 
         <ul class="navbar-nav">
-            <li class="nav-item"><a id="navbar-about" class="nav-link" href="/about">Sobre
+            <li class="nav-item"><a id="navbar-about" class="nav-link"
+                    href="/about">Sobre
                     Nosotros</a></li>
+
+            <li class="nav-item dropdown" id="lang-toggle">
+                <p id="lang-text">ES</p>
+                <i class="fa-solid fa-chevron-down"></i>
+                <div id="dropdown-content" class="dropdown-content hide">
+                    <a id="ca">Català</a>
+                    <a id="es">Español</a>
+                    <a id="en">English</a>
+                </div>
+            </li>
             <%# Logged in Check %>
             <% if (typeof user === 'undefined') { %>
 
@@ -47,7 +33,8 @@
             <li class="nav-item">
                 <button type="button" class="nav-link secondary"
                     data-bs-toggle="modal"
-                    data-bs-target="#modal-register" id="navbar-signUp">Regístrate</button>
+                    data-bs-target="#modal-register"
+                    id="navbar-signUp">Regístrate</button>
             </li>
 
             <% } else { %>
@@ -60,22 +47,12 @@
                 </a>
             </li>
             <li class="nav-item">
-                <button id="logout-button" type="button"
-                    class="secondary" id="navbar-logout">Cerrar
+                <button id="navbar-logout" type="button"
+                    class="secondary">Cerrar
                     sesión</button>
             </li>
             <% } %>
         </ul>
-         <ul>
-        <div class="dropdown">
-            <button id="lang-toggle">Idioma</button>
-            <div id="dropdown-content" class="dropdown-content">
-                <a id="ca">Català</a>
-                <a id="es">Español</a>
-                <a id="en">English</a>
-            </div>
-        </div>
-    </ul>
     </div>
 
     <button class="navbar-toggler collapsed" type="button"

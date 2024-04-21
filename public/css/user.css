@@ -1,3 +1,49 @@
+.profile
+{
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+
+}
+
+#edit-username
+{
+    position: absolute;
+    top: 0vw;
+    right: 0vw;
+
+    z-index: 3;
+}
+
+.user-title-editing
+{
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+
+    width: 100%;
+
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    z-index: 2;
+}
+
+
+.user-title-editing.hide
+{
+    transform: translateX(100%);
+    transition: transform 0.5s;
+    z-index: 1;
+}
+
 .user-title
 {
     display: flex;
@@ -6,57 +52,68 @@
     justify-content: center;
     gap: 1rem;
 
-    width: 100%;
+    margin: 0 auto;
+    margin-left: 0;
+
+    min-width: 200px;
+    max-width: 70vw;
+
+    transform: translateY(0);
+    transition: transform 0.5s;
+    z-index: 3;
 }
 
-.profile
+.user-title.hide
 {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-
+    transform: translateY(-50vh);
+    transition: transform 0.5s;
+    z-index: 1;
 }
 
-main img
+.user-title.title
 {
-    min-width: 250px;
-    min-height: 250px;
-    max-width: 275px;
-    max-height: 275px;
+    max-width: 60%;
+}
 
-    width: 35%;
+.profile-pic-container
+{
+    position: relative;
+    width: fit-content;
+}
 
-    margin: 2rem;
+.profile-pic-container img
+{
+    min-width: 150px;
+    min-height: 150px;
+    max-width: 20vw;
+    max-height: 20vw;
+
+
+    margin: 1vw;
 
     object-fit: cover;
     background-color: var(--gray);
 }
 
-.profile-pic-container {
-    position: relative;
-    width: fit-content;
-    }
 
-    .profile-pic {
-        display: block;
-        width: 100%; /* o el tamaño que prefieras */
-    }
 
-    .upload-pic-btn {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none; /* Asegúrate de que esté oculto inicialmente */
-        z-index: 10; /* Asegura que el botón se muestre por encima de la imagen */
-        background-color: white; /* Fondo para que el texto sea legible */
-        color: black; /* Color del texto */
-        border: 1px solid black; /* Hace que el botón sea más visible */
-        padding: 5px 10px; /* Espaciado interno */
-        cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
-    }
+.profile-pic
+{
+    display: block;
+    width: 100%;
+    /* o el tamaño que prefieras */
+}
+
+.upload-pic-btn
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    cursor: pointer;
+    z-index: 10;
+}
 
 .points-div
 {
