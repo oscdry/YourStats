@@ -289,6 +289,6 @@ if (cookiesModal && !GetStorageItem('cookies')) {
 	cookiesModal.remove();
 }
 
-setInterval(() => {
-	console.log(getCookie('token'));
-}, 500);
+// setInterval(() => {
+// 	console.log(getCookie('token'));
+// }, 500);

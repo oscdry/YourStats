@@ -1481,6 +1481,12 @@ div.lol-game-card.loss
     background-color: rgb(255, 178, 178);
 }
 
+.draw,
+div.lol-game-card.draw
+{
+    background-color: rgb(255, 220, 66);
+}
+
 /* Responsive */
 
 @media screen and (max-width: 1024px)
