@@ -1,26 +1,19 @@
-import { Request, Response, Router } from 'express';
-import { createUserController, getUserByIdentifier, deleteUser, updateUser, LogoutUser, getAllUsers, updateUserName, updateUserBioController, requestPasswordResetController, uploadUserImageController } from '../api/controllers/userController.js';
+import { Router } from 'express';
+import Pino from '../logger.js';
+import { joiValidate } from '../api/middlewares/joiValidate.js';
+
+import { createUserController, getUserByIdentifier, deleteUser, updateUser, LogoutUser, updateUserName, updateUserBioController, requestPasswordResetController, uploadUserImageController } from '../api/controllers/userController.js';
 import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
 import { LoginGoogleUser, LoginUser } from '../api/controllers/loginController.js';
-
-import { errorHandler } from '../api/middlewares/errorHandler.js';
-import { GetLolHomeData, GetLolUserData } from '../api/services/lolServices.js';
-import { updateFirebaseUserById, updateFirebaseUserName, searchByEmailBackoffice } from '../api/services/FirebaseServices.js';
-
-import { verifyTokenOptional } from '../api/middlewares/verifyToken.js';
-
-import Pino from '../logger.js';
-import { RiotUserExists, SendLolData, SendLolHomeData, sendLolSkin } from '../api/controllers/lolController.js';
-import { HandleContactForm } from '../api/controllers/contactFormController.js';
-import { searchSkinByName } from '../api/services/lolSkinsServices.js';
-import { BrawlUserExists, SendBrawlData, SendBrawlHomeData } from '../api/controllers/brawlController.js';
-import { GetBrawlData, GetHomeData } from 'src/api/services/brawlServices.js';
-import { joiValidate } from '../api/middlewares/joiValidate.js';
-import { contactFormSchema, createUserSchema, getUserSchema } from '../api/middlewares/schemas.js';
-import { upload } from '../api/middlewares/multer.js';
 import { searchByEmailBackoffice } from '../api/services/FirebaseServices.js';
 
+import { RiotUserExists, SendLolData, SendLolHomeData, sendLolSkin } from '../api/controllers/lolController.js';
+import { HandleContactForm } from '../api/controllers/contactFormController.js';
+import { BrawlUserExists, SendBrawlData, SendBrawlHomeData } from '../api/controllers/brawlController.js';
+import { contactFormSchema, createUserSchema, getUserSchema } from '../api/middlewares/schemas.js';
+import { upload } from '../api/middlewares/multer.js';
+import { verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 
 const apiRouter = Router();
 

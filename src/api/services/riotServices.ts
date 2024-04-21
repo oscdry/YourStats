@@ -23,8 +23,6 @@ export const RiotPUUIDByTagName = async (gameName: string, tagLine: string): Pro
 	const json = await result.json();
 
 	return json['puuid'];
-
-
 };
 
 export const getAccountbyId = async (id: string): Promise<string> => {

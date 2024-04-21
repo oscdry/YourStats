@@ -10,13 +10,13 @@ export async function validateNameUserUpdate(req: Request, res: Response, next: 
 	if (username) {
 		const user = await getUserByIdentifier(username, 'username');
 		if (user) {
-			next(new UsernameUsedError());
+			throw new UsernameUsedError();
 		}
 	}
 
 	// Execute check
 	const { error } = updateUsernameSchema.validate(req.body);
 	if (error)
-		next(Error(error.details[0].message));
+		next(error);
 	next();
 }

@@ -43,7 +43,7 @@ export const getFirebaseUserByUsername = async (username: string): Promise<Fireb
 
 	const userRef = await firestore.collection('users').where('username', '==', username).get();
 	if (userRef.empty) {
-		Pino.error('Users not found getting by username: ' + username);
+		Pino.warn('Users not found getting by username: ' + username);
 		return null;
 	}
 

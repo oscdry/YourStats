@@ -1,64 +1,46 @@
 const userId = window.location.pathname.split('/').pop();
 
 // update username in user view
-const changeUserNameBtn = document.getElementById('changeUserNameBtn');
-const currentUserName = document.getElementById('currentUserName');
-const userTitle = document.querySelector('.user-title');
+const usernameTitleDiv = document.getElementById('user-title');
+const usernameEditForm = document.getElementById('user-title-editing');
+
+const changeUserNameBtn = document.getElementById('edit-username');
+const currentUserName = document.getElementById('current-username');
+const usernameInput = document.getElementById('new-username-input');
+const submitUsername = document.getElementById('submit-username');
+const cancelUsername = document.getElementById('cancel-username');
+
+const errorText = usernameEditForm.querySelector('.error-text');
 
 changeUserNameBtn?.addEventListener('click', () => {
-	const userName = currentUserName.textContent;
-
-	// Create input field
-	const inputChange = document.createElement('input');
-	inputChange.value = userName;
-	userTitle.insertBefore(inputChange, changeUserNameBtn);
+	const curUserName = currentUserName.textContent;
 
 	// Hide current username display
-	currentUserName.style.display = 'none';
-
-	// Hide changeUserNameBtn
+	usernameTitleDiv.classList.add('hide');
+	usernameEditForm.classList.remove('hide');
 	changeUserNameBtn.style.display = 'none';
 
-	// Create save button
-	const saveBtn = document.createElement('button');
-	saveBtn.textContent = 'Guardar';
-	saveBtn.id = 'username-saveChanges';
-	userTitle.appendChild(saveBtn);
-
-	// Create cancel button
-	const cancelBtn = document.createElement('button');
-	cancelBtn.textContent = 'Cancelar';
-	cancelBtn.id = 'username-cancelChanges';
-	userTitle.appendChild(cancelBtn);
-
 	// Add event listener for cancel button
-	cancelBtn.addEventListener('click', () => {
-
-		// Remove input field
-		inputChange.remove();
-
-		// Show current username display
-		currentUserName.style.display = 'block';
-
-		// Show changeUserNameBtn
-		changeUserNameBtn.style.display = 'inline';
-
-		// Remove save and cancel buttons
-		saveBtn.remove();
-		cancelBtn.remove();
+	cancelUsername.addEventListener('click', () => {
+		usernameTitleDiv.classList.remove('hide');
+		usernameEditForm.classList.add('hide');
+		changeUserNameBtn.style.display = 'block';
 	});
 
 	// Add event listener for save button
-	saveBtn.addEventListener('click', async () => {
+	usernameEditForm.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const newUsername = usernameInput.value;
+		if (!newUsername || newUsername === curUserName) {
+			usernameTitleDiv.classList.remove('hide');
+			usernameEditForm.classList.add('hide');
+			return;
+		}
 
-		// Update username
-		const newUserName = inputChange.value;
-
-		// Your AJAX call to update the username
 		try {
 			const response = await fetch(`/api/update-user-username/${userId}`, {
 				method: 'PUT',
-				body: JSON.stringify({ username: newUserName }),
+				body: JSON.stringify({ username: newUsername }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -67,16 +49,13 @@ changeUserNameBtn?.addEventListener('click', () => {
 			if (response.ok) {
 
 				// Reload the view after successful update
-				const json = await response.json();
-				const token = json.token;
-				ClearToken();
-				SaveToken(token);
 				window.location.reload();
 				return;
 			} else {
 
 				// Handle error response
-				console.error('Failed to update username');
+				const json = await response.json();
+				errorText.textContent = json.error;
 			}
 		} catch (error) {
 			console.error('Error:', error);
@@ -181,7 +160,7 @@ uploadPicBtn.addEventListener('click', () => {
 });
 
 // Manejar la selección de archivo y enviar la imagen al servidor
-fileInput.addEventListener('change', async function () {
+fileInput.addEventListener('change', async  () => {
 	const file = this.files[0];
 	if (file) {
 		const formData = new FormData();

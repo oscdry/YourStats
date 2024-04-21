@@ -38,7 +38,8 @@ export const LoginUser = async (req: Request, res: Response, next: NextFunction)
 		};
 
 		const token = generateTokenForUser(payload);
-
+		const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+		res.cookie('token', token, { expires, httpOnly: true });
 		Pino.info('User ' + username + ' logged in');
 		return res.json({ token });
 	} catch (error) {
@@ -88,7 +89,6 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 			Pino.debug('User ' + user.username + ' created in google login');
 		}
 
-
 		const payload: TokenPayload = {
 			id: userId ? userId : existingUser!.id,
 			mail: result.user.email ? result.user.email : '',
@@ -97,6 +97,8 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 		};
 
 		const token = generateTokenForUser(payload);
+		const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+		res.cookie('token', token, { expires, httpOnly: true });
 		return res.json({ token });
 	} catch (error) {
 		if (error instanceof Error) {
@@ -104,15 +106,16 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 			return next(error);
 		}
 
-		// Handle Errors here.
-		const errorCode = error.code;
-		const errorMessage = error.message;
+		const googleError = error as any;
+
+		const errorCode = googleError.code;
+		const errorMessage = googleError.message;
 
 		// The email of the user's account used.
-		const email = error.customData.email;
+		const email = googleError.customData.email;
 
 		// The AuthCredential type that was used.
-		const credential = GoogleAuthProvider.credentialFromError(error);
+		const credential = GoogleAuthProvider.credentialFromError(googleError);
 		next(error);
 	}
 

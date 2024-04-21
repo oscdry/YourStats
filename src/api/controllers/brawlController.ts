@@ -37,7 +37,7 @@ export const RenderBrawlStats = async (req: Request, res: Response, next: NextFu
 		if (!brawlData)
 			throw new UserNotFoundError();
 
-		return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlData });
+		return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlData, user: res.locals.user});
 	} catch (error) {
 		next(error);
 	}
