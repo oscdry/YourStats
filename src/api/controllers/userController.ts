@@ -1,19 +1,17 @@
 import { type Request, type Response, NextFunction } from 'express';
-import { randomBytes } from 'crypto';
 
 import { generateTokenForUserId } from './tokenController.js';
-import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio, userExistsByMail, userExists } from '../services/FirebaseServices.js';
-import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUserBioError, UpdateUsernameError } from '../errors/errors.js';
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio,  userExists} from '../services/FirebaseServices.js';
+import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUsernameError} from '../errors/errors.js';
 import { FirebaseUser } from '../types/FirebaseUser.js';
 import Pino from '../../logger.js';
-import sendEmail from '../utils/mailer.js';
 import { NotFoundPage } from '../../routes/web.js';
 
 //! TODO: Hay un problema aquí, ha de ser función declarada con function para que funcione
 // Si no, se utiliza antes de ser declarada, y peta todo, ????
 export async function renderUserView(_req: Request, res: Response) {
 	const user = await getFirebaseUserById(_req.params.id);
-	if (!user) return NotFoundPage(_req, res);
+	if (!user) return NotFoundPage(res);
 
 	res.render('./user.ejs', { title: 'User', user: res.locals.user, userView: user });
 }
@@ -146,67 +144,17 @@ export async function updateUserBioController(req: Request, res: Response, next:
 	}
 }
 
-// User has to call this to generate a password reset token
-export const requestPasswordResetController = async (req: Request, res: Response, next: NextFunction) => {
-	const { mail } = res.locals.user;
 
-	try {
-		const user = await userExistsByMail(mail);
 
-		if (!user) {
-			Pino.trace('User not found for password reset');
-			return res.json({ message: 'Email sent' });
-		}
-
-		Pino.debug('Sending email for password reset to user:' + user.mail);
-
-		// Generate a token and set its expiration time to 1 hour from now
-		const resetToken = randomBytes(20).toString('hex');
-		const resetTokenExpiration = Date.now() + 3600000; // 1 hour
-
-		// Save the token and its expiration time in the database
-		user.resetPasswordToken = resetToken;
-		user.resetPasswordExpires = resetTokenExpiration;
-		await updateFirebaseUserById(user.id, user);
-		const backendUrl = req.protocol + '://' + req.get('host');
-
-		Pino.trace('Token saved for password reset');
-
-		await sendEmail(mail,
-			'Password reset',
-			`${backendUrl}/password-reset/${user.resetPasswordToken}`);
-
-		res.json({ message: 'Email sent' });
-	} catch (error) {
-		next(error);
+// Gets the identifier type of the provided identifier
+export const getUserIdentifierType = (identifier: string): 'email' | 'username' | 'id' => {
+	if (identifier.includes('@')) {
+		return 'email';
+	} else if (identifier.length === 20) { // Firebase ID
+		return 'id';
+	} else {
+		return 'username';
 	}
-};
-
-export const renderPasswordResetView = async (req: Request, res: Response, next: NextFunction) => {
-	const { token } = req.params;
-
-	try {
-		const user = res.locals.user;
-		if (!user) return NotFoundPage(req, res);
-
-		res.render('./password-reset.ejs', { title: 'Password Reset', user });
-	} catch (error) {
-		Pino.error('Error rendering password reset view:', error);
-		next(error);
-	}
-};
-
-// User has to call this to reset the password after receiving the email
-export const resetPasswordController = (req: Request, res: Response, next: NextFunction) => {
-	const { token } = req.params;
-
-	try {
-
-
-	} catch (error) {
-
-	}
-
 };
 
 // Main function to get user by identifier from Firebase Services

@@ -1,19 +1,21 @@
 import { Router } from 'express';
-import Pino from '../logger.js';
 import { joiValidate } from '../api/middlewares/joiValidate.js';
+import Pino from '../logger.js';
 
-import { createUserController, getUserByIdentifier, deleteUser, updateUser, LogoutUser, updateUserName, updateUserBioController, requestPasswordResetController, uploadUserImageController } from '../api/controllers/userController.js';
-import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
-import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
 import { LoginGoogleUser, LoginUser } from '../api/controllers/loginController.js';
+import { validateNameUserUpdate } from '../api/middlewares/validateNameUserUpdate.js';
+import { validateUpdateUser } from '../api/middlewares/validateUpdateUser.js';
 import { searchByEmailBackoffice } from '../api/services/FirebaseServices.js';
 
-import { RiotUserExists, SendLolData, SendLolHomeData, sendLolSkin } from '../api/controllers/lolController.js';
-import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { BrawlUserExists, SendBrawlData, SendBrawlHomeData } from '../api/controllers/brawlController.js';
-import { contactFormSchema, createUserSchema, getUserSchema } from '../api/middlewares/schemas.js';
+import { HandleContactForm } from '../api/controllers/contactFormController.js';
+import { RiotUserExists, SendLolData, SendLolHomeData, sendLolSkin } from '../api/controllers/lolController.js';
 import { upload } from '../api/middlewares/multer.js';
+import { contactFormSchema, createUserSchema, getUserSchema, passwordResetEnterFormSchema, passwordResetTokenSchema } from '../api/middlewares/schemas.js';
 import { verifyTokenRequired } from '../api/middlewares/verifyToken.js';
+import { deleteUser } from 'firebase/auth';
+import { requestPasswordResetController, renderPasswordResetView, resetPasswordSubmitController } from '../api/controllers/passwordResetController.js';
+import { createUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController } from '../api/controllers/userController.js';
 
 const apiRouter = Router();
 
@@ -47,9 +49,17 @@ apiRouter.post('/logout',
 	verifyTokenRequired,
 	LogoutUser);
 
-apiRouter.get('/password-reset',
-	verifyTokenRequired,
+apiRouter.post('/password-reset',
+	joiValidate(getUserSchema, 'body'),
 	requestPasswordResetController);
+
+apiRouter.get('/password-reset/:token',
+	joiValidate(passwordResetTokenSchema, 'params'),
+	renderPasswordResetView);
+
+apiRouter.post('/password-reset-submit',
+	joiValidate(passwordResetEnterFormSchema, 'body'),
+	resetPasswordSubmitController);
 
 // Users
 apiRouter.get('/users/search/:identifier',

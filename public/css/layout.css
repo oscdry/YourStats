@@ -1253,7 +1253,7 @@ input[type="password"].invalid:not(:focus)
     align-self: flex-end;
 }
 
-.notfoundpage
+.bigpage
 {
     height: 80vh;
 
@@ -1261,13 +1261,9 @@ input[type="password"].invalid:not(:focus)
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
+    text-align: center;
 
     gap: 1rem;
-}
-
-.notfoundpage
-{
-    text-align: center;
 }
 
 /* ------------------ Bootstrap Overrides -------------------- */

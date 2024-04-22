@@ -5,6 +5,7 @@ export interface FirebaseUser {
 	bio: string,
 	hash: string,
 	role: number,
+	google: number,
 	resetPasswordToken: string,
 	resetPasswordExpires: number,
 }

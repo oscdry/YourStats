@@ -72,7 +72,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 
 		// Internal errors
 		case 'FirebaseError':
-			return res.status(500).json({ error: 'Internal Server Error.' });
+			return res.status(500).json({ error: 'Internal server error.' });
 		case 'SyntaxError':
 			return RenderErrorPage(res);
 		case 'ReferenceError':
@@ -84,5 +84,5 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 	}
 
 	Pino.error('Unknown error: ' + (err instanceof Error ? err.message : err));
-	return res.status(500).json({ error: 'Internal Server Error' });
+	return res.status(500).json({ error: 'Internal server error' });
 };
