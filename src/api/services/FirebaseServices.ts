@@ -5,6 +5,26 @@ import Pino from '../../logger.js';
 import { FirebaseUser } from '../types/FirebaseUser.js';
 import { getUserByIdentifier } from '../controllers/userController.js';
 
+/**
+ * Converts a Firestore DocumentSnapshot to a FirebaseUser object
+ * @param querySnapshot Firestore DocumentSnapshot
+ * @returns FirebaseUser object
+ */
+const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>): FirebaseUser => {
+	const doc = querySnapshot.data();
+	return {
+		id: querySnapshot.id,
+		username: doc!.username,
+		mail: doc!.mail,
+		bio: doc!.bio,
+		hash: doc!.hash,
+		role: doc!.role,
+		google: doc!.google,
+		resetPasswordToken: doc!.token,
+		resetPasswordExpires: doc!.expires
+	};
+};
+
 export const getFirebaseUserById = async (id: string): Promise<FirebaseUser | null> => {
 	if (!id) {
 		console.error('No user ID provided getting by ID');
@@ -31,6 +51,33 @@ export const getFirebaseUserByMail = async (mail: string): Promise<FirebaseUser 
 		return null;
 	}
 	return buildFirebaseUser(userRef.docs[0]);
+};
+
+export const getFirebaseUserByResetPasswordToken = async (token: string): Promise<FirebaseUser | null> => {
+	if (!token) {
+		Pino.error('No token provided getting by reset password token');
+		return null;
+	}
+
+	const userRef = await firestore.collection('users').where('resetPasswordToken', '==', token).get();
+	if (userRef.empty) {
+		Pino.error('Users not found getting by reset password token');
+		return null;
+	}
+
+	return buildFirebaseUser(userRef.docs[0]);
+};
+
+export const clearResetPasswordToken = async (id: string): Promise<void> => {
+	if (!id) {
+		Pino.error('No user ID provided clearing reset password token');
+		return;
+	}
+
+	await firestore.collection('users').doc(id).update({
+		resetPasswordToken: null,
+		resetPasswordExpires: null
+	});
 };
 
 export const getFirebaseUserByUsername = async (username: string): Promise<FirebaseUser | null> => {
@@ -94,17 +141,6 @@ export const createFirebaseUser = async (username: string, mail: string, passwor
 	return buildFirebaseUser(await userRef.get());
 };
 
-const buildFirebaseUser = (querySnapshot: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>): FirebaseUser => {
-	const doc = querySnapshot.data();
-	return {
-		id: querySnapshot.id,
-		username: doc!.username,
-		mail: doc!.mail,
-		bio: doc!.bio,
-		hash: doc!.hash,
-		role: doc!.role
-	};
-};
 
 export const userExists = async (username: string | null, mail: string | null) => {
 
@@ -115,6 +151,11 @@ export const userExists = async (username: string | null, mail: string | null) =
 	return [user, userMail];
 };
 
+export const updateUserPassword = async (user: FirebaseUser, password: string) => {
+	return firestore.collection('users').doc(user.id).update({
+		hash: await hash(password, 10)
+	});
+};
 
 export const userExistsByMail = async (mail: string) => {
 	return await getUserByIdentifier(mail, 'email');

@@ -36,3 +36,13 @@ export const createUserSchema = Joi.object({
 export const updateUsernameSchema = Joi.object({
 	username: Joi.string().required().min(3).max(16).regex(usernameRegex)
 });
+
+export const passwordResetTokenSchema = Joi.object({
+	token: Joi.string().required()
+});
+
+export const passwordResetEnterFormSchema = Joi.object({
+	password: Joi.string().required().regex(passwordRegex),
+	password_confirmation: Joi.required().valid(Joi.ref('password')),
+	token: Joi.string().required()
+});

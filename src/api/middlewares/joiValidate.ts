@@ -8,12 +8,14 @@ export const joiValidate = (schema: ObjectSchema, target: 'body' | 'headers' | '
 		if (error)
 			throw error;
 
+		Pino.trace('middleware of' + schema._flags.name + ' JoiValidate success');
+
 		next();
 	} catch (error) {
 		if (error instanceof Error)
-			Pino.warn('middelware JoiValidate error: ', error.message);
+			Pino.warn('middleware JoiValidate error: ' + error.message);
 
-		Pino.warn('middelware JoiValidate error: ', error);
+		Pino.warn('middleware JoiValidate error: ' + error);
 		next(error);
 	}
 };
