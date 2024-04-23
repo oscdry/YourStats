@@ -277,17 +277,22 @@ if (cookiesModal && !GetStorageItem('cookies')) {
 		hideModal();
 	};
 
-	const cookiesConfigure = () => { // TODO: Que hacemos con esto?
-		SetStorageItem('cookies', '0.5');
-		hideModal();
-	};
-
 	cookiesAcceptButton.addEventListener('click', cookiesAccept);
 	cookiesRejectButton.addEventListener('click', cookiesReject);
-	cookiesConfigureButton.addEventListener('click', cookiesConfigure);
 }else{
 	cookiesModal.remove();
 }
+
+const toggleEventListener = (e) => {
+	e.preventDefault();
+	e.target.classList.toggle('active');
+};
+
+const toggles = document.querySelectorAll('.toggle');
+
+toggles.forEach(toggle => {
+	toggle.addEventListener('click', toggleEventListener);
+});
 
 // setInterval(() => {
 // 	console.log(getCookie('token'));
