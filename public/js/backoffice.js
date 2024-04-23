@@ -61,6 +61,48 @@ function updatePageNumbers() {
 	after.textContent = currentPage + 1;
 }
 
+// backoffice delete
+
+document.addEventListener('DOMContentLoaded', function () {
+	const deleteButtons = document.querySelectorAll('.backoffice-delete-btn');
+	const deleteModal = document.getElementById('deleteModal');
+	const deleteButton2 = document.getElementById('deleteButton2');
+	const cancelbtn = document.getElementById('modal-conf-delete-cancelBtn');
+
+	deleteButtons.forEach(button => {
+		button.addEventListener('click', function (event) {
+
+			// Prevent default link behavior
+			event.preventDefault();
+
+			// Pass the user ID to the delete button in the modal
+			const userId = this.getAttribute('data-id');
+			deleteButton2.setAttribute('data-id', userId);
+		});
+	});
+
+	deleteButton2.addEventListener('click', function () {
+		const userId = this.getAttribute('data-id');
+		fetch(`/admin/users/delete/${userId}`, {
+			method: 'DELETE'
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('User deleted:', response);
+					return response.json();
+				}
+				throw new Error('Something went wrong');
+			})
+			.then(data => {
+				console.log('User deleted:', data);
+				
+				// Remove the row from the table
+				document.querySelector(`a[data-id="${userId}"]`).closest('tr').remove();
+			})
+			.catch(error => console.error('Error:', error));
+	});
+});
+
 // backoffice update
 
 const backUpdateSubmit = document.getElementById('back-update-button-submit');

@@ -3,6 +3,7 @@
 </head>
 
 <%- include('../partials/modal-back-update.ejs') %>
+<%- include('../partials/modal-confirm-delete.ejs') %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
 <main>
@@ -41,7 +42,7 @@
                         data-mail="<%= user.mail %>"
                         data-role="<%= user.role %>"
                         class="edit-btn" id="backoffice-edit-btn">Editar</a></td>
-                    <td><a href="/admin/users/delete/<%= user.id %>" class="backoffice-delete-btn">Eliminar</a></td>
+                    <td><a class="backoffice-delete-btn" data-id="<%= user.id %>" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</a></td>
                 </tr>
             <% }); %>
         </tbody>
