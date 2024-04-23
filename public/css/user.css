@@ -30,9 +30,33 @@ main img
 
     margin: 2rem;
 
-    object-fit: contain;
+    object-fit: cover;
     background-color: var(--gray);
 }
+
+.profile-pic-container {
+    position: relative;
+    width: fit-content;
+    }
+
+    .profile-pic {
+        display: block;
+        width: 100%; /* o el tamaño que prefieras */
+    }
+
+    .upload-pic-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none; /* Asegúrate de que esté oculto inicialmente */
+        z-index: 10; /* Asegura que el botón se muestre por encima de la imagen */
+        background-color: white; /* Fondo para que el texto sea legible */
+        color: black; /* Color del texto */
+        border: 1px solid black; /* Hace que el botón sea más visible */
+        padding: 5px 10px; /* Espaciado interno */
+        cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+    }
 
 .points-div
 {

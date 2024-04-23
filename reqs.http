@@ -1,12 +1,19 @@
-GET http://localhost:8080/
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlvUkc1dFY3cE5ZTk5pTlBlUTRDIiwidXNlcm5hbWUiOiJwcnVlYmFtYWlsIiwibWFpbCI6InBvbGVjc2dvYWx0YWNjQGdtYWlsLmNvbSIsInJvbGUiOjAsImlhdCI6MTcxMzUzMzExNiwiZXhwIjoxNzEzNjE5NTE2fQ.8GXzrbm-POpzuW_tQmtnLq0LeC5ltLm1EBBQxuV9bfc
+
+GET http://localhost:80/
 
 ###
 
-GET http://localhost:8080/
+GET
 
 ###
 
-POST http://localhost:8080/api/register
+GET http://localhost:80/api/get-all-users
+Cookie: token={{token}}
+
+###
+
+POST http://localhost:80/api/register
 Content-Type: application/json
 
 {
@@ -18,16 +25,18 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/api/login
+POST http://localhost:80/api/login
 Content-Type: application/json
 
 {
-    "username": "John",
-    "mail": "a@mail.com",
+    "username": "pruebamail",
     "password": "Abc.1234"
 }
 
 ###
+
+POST http://localhost:80/api/logout
+Cookie: token={{token}}
 
 https://api.brawlstars.com/v1/players/%23YCQLVQV
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImE3OGZhZmI5LTQ3N2QtNGQ0MC05OTdkLTFlMjcxMmI0ZjIxMyIsImlhdCI6MTcxMjA2NjA5OSwic3ViIjoiZGV2ZWxvcGVyL2FhZGU3NjBhLWM4OTgtZDc5OC0yZDU1LTg2NjlmN2Q3NjY2MyIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiODAuMjguMTIxLjk3Il0sInR5cGUiOiJjbGllbnQifV19.A1PNSUgAaaQ2_9CWWjIErmXJv_uBjICk-EUVxUjq6k1laGXXJLV8dHM2L0ZTacr4j32A05dP1bXefc39PLYQ3A
@@ -36,12 +45,12 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LT
 
 // LOL testing
 
-GET http://localhost:8080/api/lol-data/OSCDRY
+GET http://localhost:80/api/lol-data/OSCDRY
 
 
 ###
 
-POST http://localhost:8080/api/brawl-user
+POST http://localhost:80/api/brawl-user
 Content-Type: application/json
 
 {
@@ -55,7 +64,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LT
 
 ###
 
-GET http://localhost:8080/api/brawl-data/YCQLVQV
+GET http://localhost:80/api/brawl-data/YCQLVQV
 
 ###
 
@@ -63,12 +72,6 @@ GET https://api.brawlstars.com/v1/players/%23YCQLVQV
 Authorization
 
 
-
-
-
-
-
-----------------------------------------------------------------------------------------
 ###
 GET https://fortnite-api.com/v2/stats/br/v2/?name=Duality&accountType=epic&timeWindow=lifetime&image=image
 Authorization: Bearer dc5019c1-500e-4522-a3bd-146df37214fb
@@ -76,3 +79,14 @@ Authorization: Bearer dc5019c1-500e-4522-a3bd-146df37214fb
 
 
 
+
+###
+POST http://localhost:8080/api/upload/asdasdasd
+
+###
+GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
+
+###
+
+GET http://localhost:80/api/password-reset
+Cookie: token={{token}}

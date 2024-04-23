@@ -7,6 +7,11 @@ import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
 
 config();
 
+const apiKey = process.env.BRAWL_API_KEY;
+if (!apiKey)
+	throw new Error('No Brawl API Key in env');
+
+
 export const brawlRecentBattle = async (battletag: string): Promise<{
 	resumeMatch: any[];
 	mostPlayedmode: [string, number][];
@@ -14,7 +19,7 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 } | null> => {
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog', {
 		headers: {
-			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Authorization': 'Bearer ' + apiKey,
 			'Content-Type': 'application/json'
 		}
 	});
@@ -144,12 +149,12 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 export const brawlInfo = async (battletag: string): Promise<{
 	user: object;
 	imgID: string;
-	brawlers: object[];
+	brawlers: any[];
 } | null> => {
 
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag, {
 		headers: {
-			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Authorization': 'Bearer ' + apiKey,
 			'Content-Type': 'application/json'
 		}
 	});
@@ -158,16 +163,15 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 
 	if (result.status === 403) {
-		Pino.trace('result:' + JSON.stringify(result));
+		const json = await result.json();
+		Pino.trace('Brawl info result: ' + json.reason + ' | ' + result.status + ' | ' + result.statusText + ' | ' + json.message);
 		throw new ExternalServiceError();
 	} else if (result.status !== 200) {
-		Pino.error(result.status);
-		return null;
+		Pino.error('Error fetching to Brawl API: ' + result.status + ' | ' + result.statusText);
+		throw new UserNotFoundError();
 	}
 
 	const userData = await result.json();
-	if (!userData) { return null; }
-
 	const user = {
 		tag: userData.tag,
 		name: userData.name,
@@ -180,19 +184,25 @@ export const brawlInfo = async (battletag: string): Promise<{
 		duoVictories: userData.duoVictories
 	};
 
-	const sortByTrophies = userData.brawlers.sort((a, b) => b.trophies - a.trophies);
+	const sortByTrophies = userData.brawlers.sort(
+		(a: { trophies: number; }, b: { trophies: number; }) => b.trophies - a.trophies);
 	const topBrawlersByTrophies = sortByTrophies.slice(0, 10);
 
-	const brawlers = topBrawlersByTrophies.sort((a, b) => b.highestTrophies - a.highestTrophies).slice(0, 3).map(brawler => ({
-		id: brawler.id,
-		name: brawler.name,
-		power: brawler.power,
-		gears: brawler.gears,
-		trophies: brawler.trophies,
-		highestTrophies: brawler.highestTrophies,
-		starPowers: brawler.starPowers,
-		gadgets: brawler.gadgets
-	}));
+	const brawlers = topBrawlersByTrophies.sort(
+		(a: { highestTrophies: number; }, b: { highestTrophies: number; }
+		) => b.highestTrophies - a.highestTrophies).slice(0, 3)
+		.map((brawler: { id: any; name: any; power: any; gears: any; trophies: any; highestTrophies: any; starPowers: any; gadgets: any; }) => (
+			{
+				id: brawler.id,
+				name: brawler.name,
+				power: brawler.power,
+				gears: brawler.gears,
+				trophies: brawler.trophies,
+				highestTrophies: brawler.highestTrophies,
+				starPowers: brawler.starPowers,
+				gadgets: brawler.gadgets
+			}
+		));
 
 	const iconId = userData.icon.id;
 	const imgID = 'https://media.brawltime.ninja/avatars/' + iconId + '.webp';
@@ -292,9 +302,20 @@ interface BrawlData {
 	};
 }
 
-export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData> => {
+export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | null> => {
 	const partidas = await brawlRecentBattle(playerTagEX);
 	const infoJugador = await brawlInfo(playerTagEX);
+
+	if (!partidas) {
+		Pino.warn('El usuario: ' + playerTagEX + ' no tiene partidas de brawl');
+		return null;
+	}
+
+	if (!infoJugador) {
+		Pino.error('No se ha encontrado datos de brawl para el jugador: ' + playerTagEX);
+		return null;
+	}
+
 
 	Pino.trace(JSON.stringify(partidas));
 	Pino.trace(JSON.stringify(infoJugador));

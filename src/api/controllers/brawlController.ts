@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { brawlInfo, GetBrawlData, GetHomeData } from '../services/brawlServices.js';
+import { UserNotFoundError } from '../errors/errors.js';
+
 
 export const BrawlUserExists = async (req: Request, res: Response, next: NextFunction) => {
 	const userTag = req.body.tag;
 
 	try {
 		const user = await brawlInfo(userTag);
-		if (!user)
-			throw new Error('User not found');
-
 		res.sendStatus(200);
 	} catch (error) {
 		next(error);
@@ -34,6 +33,9 @@ export const RenderBrawlStats = async (req: Request, res: Response, next: NextFu
 	try {
 		const userTag = req.params.tag;
 		const brawlData = await GetBrawlData(userTag);
+
+		if (!brawlData)
+			throw new UserNotFoundError();
 
 		return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlData });
 	} catch (error) {

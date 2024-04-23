@@ -1,3 +1,5 @@
+const userId = window.location.pathname.split('/').pop();
+
 // update username in user view
 const changeUserNameBtn = document.getElementById('changeUserNameBtn');
 const currentUserName = document.getElementById('currentUserName');
@@ -5,7 +7,6 @@ const userTitle = document.querySelector('.user-title');
 
 changeUserNameBtn?.addEventListener('click', () => {
 	const userName = currentUserName.textContent;
-	const userId = userTitle.getAttribute('data-user-id');
 
 	// Create input field
 	const inputChange = document.createElement('input');
@@ -20,12 +21,14 @@ changeUserNameBtn?.addEventListener('click', () => {
 
 	// Create save button
 	const saveBtn = document.createElement('button');
-	saveBtn.textContent = 'Save';
+	saveBtn.textContent = 'Guardar';
+	saveBtn.id = 'username-saveChanges';
 	userTitle.appendChild(saveBtn);
 
 	// Create cancel button
 	const cancelBtn = document.createElement('button');
-	cancelBtn.textContent = 'Cancel';
+	cancelBtn.textContent = 'Cancelar';
+	cancelBtn.id = 'username-cancelChanges';
 	userTitle.appendChild(cancelBtn);
 
 	// Add event listener for cancel button
@@ -88,7 +91,6 @@ const userBio = document.querySelector('.bio-info');
 
 changeUserBioBtn?.addEventListener('click', () => {
 	const userBioText = currentUserBio.textContent;
-	const userId = userTitle.getAttribute('data-user-id');
 
 	// Create textarea field
 	const textareaChange = document.createElement('textarea');
@@ -103,12 +105,14 @@ changeUserBioBtn?.addEventListener('click', () => {
 
 	// Create save button
 	const saveBtn = document.createElement('button');
-	saveBtn.textContent = 'Save';
+	saveBtn.textContent = 'Guardar';
+	saveBtn.id = 'bio-saveChanges';
 	userBio.appendChild(saveBtn);
 
 	// Create cancel button
 	const cancelBtn = document.createElement('button');
-	cancelBtn.textContent = 'Cancel';
+	cancelBtn.textContent = 'Cancelar';
+	cancelBtn.id = 'bio-cancelChanges';
 	userBio.appendChild(cancelBtn);
 
 	// Add event listener for cancel button
@@ -153,4 +157,53 @@ changeUserBioBtn?.addEventListener('click', () => {
 			console.error('Error:', error);
 		}
 	});
+});
+
+// user change image
+const uploadPicBtn = document.getElementById('uploadPicBtn');
+const profilePicContainer = document.querySelector('.profile-pic-container');
+const profilePic = document.querySelector('.profile-pic');
+const fileInput = document.getElementById('fileInput');
+
+// Mostrar el botón de subir imagen al pasar el mouse sobre la imagen de perfil
+profilePicContainer.addEventListener('mouseover', () => {
+	uploadPicBtn.style.display = 'block';
+});
+
+// Ocultar el botón de subir imagen cuando el mouse sale del contenedor
+profilePicContainer.addEventListener('mouseout', () => {
+	uploadPicBtn.style.display = 'none';
+});
+
+// Abrir el selector de archivos al hacer clic en el botón
+uploadPicBtn.addEventListener('click', () => {
+	fileInput.click();
+});
+
+// Manejar la selección de archivo y enviar la imagen al servidor
+fileInput.addEventListener('change', async function () {
+	const file = this.files[0];
+	if (file) {
+		const formData = new FormData();
+		formData.append('image', file);
+		formData.append('userId', userId);
+
+		// Realizar la petición fetch para subir la imagen
+		const response = await fetch('/api/upload/' + userId, {
+			method: 'POST',
+			body: formData
+		});
+
+		if (response.ok) {
+
+			// Recargar la página después de subir la imagen
+			window.location.reload();
+		} else {
+			console.error('Failed to upload image: ' + response.status + ' ' + response.statusText);
+			const json = await response.json();
+
+			const errorText = document.querySelector('.error-text');
+			errorText.textContent = json.error;
+		}
+	}
 });
