@@ -4,6 +4,7 @@ const RIOT_API_ENDPOINT = 'https://europe.api.riotgames.com';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { RiotDataByName } from './riotServices.js';
+import { RiotPUUIDbySum } from './riotServices.js';
 import { getAccountbyId } from './riotServices.js';
 import { getNewSkins } from './lolSkinsServices.js';
 import { ExternalServiceError } from '../errors/errors.js';
@@ -81,14 +82,16 @@ export const LolRankingDemo = async () => {
 
 	for (let player of summonerData) {
 		const summonerId = player.summonerId;
-		const prepuuid = await getAccountbyId(summonerId);
-		const puuid = prepuuid.puuid;
-		const summonerName = await getAccountbyId(summonerId); // Esperamos a que se resuelva la promesa
-		player.summonerName = summonerName; // Agregamos el summonerName como un nuevo campo al jugador
-
+		//console.log(summonerId);
+		const puuid = await getAccountbyId(summonerId);
+		//console.log(puuid);
+		const summonerName = await RiotPUUIDbySum(puuid);
+		//console.log(summonerName);
+		player.summonerName = summonerName;
 	}
+
 	console.log(topUsers);
-	const summonerDetails = topUsers.map(
+	const summonerDetails = summonerData.map(
 		({ summonerName, leaguePoints }: { summonerName: string, leaguePoints: number; }) => ({ summonerName, leaguePoints }));
 	return summonerDetails;
 };
