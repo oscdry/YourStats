@@ -82,10 +82,13 @@ export const LolRankingDemo = async () => {
 
 	for (let player of summonerData) {
 		const summonerId = player.summonerId;
+
 		//console.log(summonerId);
 		const puuid = await getAccountbyId(summonerId);
+
 		//console.log(puuid);
 		const summonerName = await RiotPUUIDbySum(puuid);
+
 		//console.log(summonerName);
 		player.summonerName = summonerName;
 	}
@@ -267,19 +270,19 @@ export const LoLChampsLast10Games = async (Puiid: string): Promise<string> => {
 
 // Detalle ultimas 10 partidas con estadísticas incluidas, los items, si ganó,etc
 export const LoLGameChampWin = async (GameID: string, puuid: string):
-Promise<{
-	championIdentifier: ChampionIdentifier,
-	isWinner: boolean,
-	arrayItems: number[],
-	stats: ChampionStats,
-	kda: string,
-	gameMode: string,
-	teamID: string,
-	teamPosition: string,
-	arrayTeammates: { [nombre: string]: string; },
-	arrayBlue: { [nombre: string]: string; },
-	arrayRed: { [nombre: string]: string; };
-} | null> => {
+	Promise<{
+		championIdentifier: ChampionIdentifier,
+		isWinner: boolean,
+		arrayItems: number[],
+		stats: ChampionStats,
+		kda: string,
+		gameMode: string,
+		teamID: string,
+		teamPosition: string,
+		arrayTeammates: { [nombre: string]: string; },
+		arrayBlue: { [nombre: string]: string; },
+		arrayRed: { [nombre: string]: string; };
+	} | null> => {
 
 	const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/' + GameID, {
 		headers: { 'X-Riot-Token': RIOT_API_KEY }
@@ -661,15 +664,13 @@ interface LoLUserData {
 
 export const GetLolHomeData = async (): Promise<LolHomeData> => {
 
-	// TODO: Desactvado por ahora
-	// const ranking = await LolRankingDemo();
+	const ranking = await LolRankingDemo();
 	const list = getLastChamps();
 	const skins = getPopularSkins();
 	const newSkins = getNewSkins();
 
 	const LolHomeData: LolHomeData = {
-
-		// summonerDetails: ranking,
+		summonerDetails: ranking,
 		champList: list,
 		popularSkins: skins,
 		newSkins: newSkins
