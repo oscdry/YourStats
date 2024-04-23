@@ -28,6 +28,9 @@ export const RiotPUUIDByTagName = async (gameName: string, tagLine: string): Pro
 	return json['puuid'];
 };
 
+
+
+
 export const getAccountbyId = async (id: string): Promise<string> => {
 	const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/' + id, {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
