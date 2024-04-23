@@ -1,13 +1,15 @@
 <%# This component takes a (popularSkins) object parameter to display the popular skins %>
 
+<h3 class="container-fluid mb-3" id="lol-popular-skins">Skins populares</h3>
 <div class="lol-skins-showcase">
-    <h3>Skins populares</h3>
-
     <div class="lol-skins-container">
         <% popularSkins.forEach(skin => { %>
         <div class="lol-skin-card">
             <img src="<%= skin.skinURL %>" alt="<%= skin.name %>">
-            <p class="skin-name"><%= skin.skinName %></p>
+            <div class="skin-info">
+                <p class="skin-name"><%= skin.skinName %></p>
+                <p class="skin-price">Precio: <%= skin.price %></p>
+            </div>
         </div>
         <% }) %>
     </div>

@@ -1,32 +1,31 @@
 <head>
-    <script src="/js/backoffice.js" type="module"></script>
+    <script src="/js/backoffice.js" type="module" defer></script>
 </head>
 
 <%- include('../partials/modal-back-update.ejs') %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
 <main>
-    <h1 class="title">Users</h1>
+    <h1 class="title" id="backoffice-pageTitle">Usuarios</h1>
     <!--search by username-->
     <form action="get">
         <%- include('../partials/components/input-mail.ejs',
         {id:"back-search-mail-input"})%>
-        <button id="back-search-button" type="submit" class="primary">Search</button>
-        <button id="clear-search-button" style="display: none;">Clear</button>
+        <button id="back-search-button" type="submit" class="primary">Buscar</button>
         <p id="error-search-back" class="error-text"></p>
     </form>
     <div>
-        <p>Total users: <p id="countUsers"><%= count %></p></p>
+        <p id="back-office-totalUsers">Total de usuarios: <p id="countUsers"><%= count %></p></p>
     </div>
     <table>
 
         <tbody>
 
             <thead>
-                <td>ID</td>
-                <td>Username</td>
-                <td>Mail</td>
-                <td>Role</td>
+                <td id="backoffice-ID">ID</td>
+                <td id="backoffice-username">Nombre de usuario</td>
+                <td id="backoffice-mail">Correo</td>
+                <td id="backoffice-role">Rol</td>
                 <td></td>
                 <td></td>
             </thead>
@@ -41,8 +40,8 @@
                         data-username="<%= user.username %>"
                         data-mail="<%= user.mail %>"
                         data-role="<%= user.role %>"
-                        class="edit-btn">Edit</a></td>
-                    <td><a href="/admin/users/delete/<%= user.id %>">Delete</a></td>
+                        class="edit-btn" id="backoffice-edit-btn">Editar</a></td>
+                    <td><a href="/admin/users/delete/<%= user.id %>" class="backoffice-delete-btn">Eliminar</a></td>
                 </tr>
             <% }); %>
         </tbody>

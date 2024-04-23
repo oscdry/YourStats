@@ -6,10 +6,10 @@
 <%- include('./partials/modal-contacto.ejs') %>
 
 <main class="d-flex flex-column">
-    <h1 class="title">Contacto</h1>
+    <h1 class="title" id="contact">Contacto</h1>
     <section class>
-        <h2>¿Quiénes somos?</h2>
-        <p>
+        <h2 id="who-are-we">¿Quiénes somos?</h2>
+        <p id="about-description">
             Somos un grupo de estudiantes de ciclo superior de Desarrollo de
             Aplicaciones Web en La Salle Gracia.
         </p>
@@ -40,16 +40,16 @@
     </section>
 
     <section>
-        <h2>
+        <h2 id="mision-title">
             Nuestra misión
         </h2>
 
-        <p>
+        <p id="mision-definition1">
             Nuestra misión es ayudarte a encontrar la información que necesitas
             para mejorar en tus juegos favoritos.
         </p>
 
-        <p>
+        <p id="mision-definition2">
             Diferenciándonos de otras webs, nosotros te ofrecemos información de
             tus juegos favoritos de manera cómoda y sin distracciones.
         </p>
@@ -57,21 +57,21 @@
     </section>
 
     <section>
-        <h2>
+        <h2 id="how-contact-title">
             ¿Cómo contactar con nosotros?
         </h2>
 
         <p>
-            Puedes contactar con nosotros a través de nuestro correo
-            electrónico:
+            <p id="contact-form1">Puedes contactar con nosotros a través de nuestro correo
+            electrónico:</p>
             <a
                 href="mailto:stevewozniakyourstats@gmail.com">stevewozniakyourstats@gmail.com</a>
 
-            o a través de este formulario:
+            <p id="contact-form2">o a través de este formulario:</p>
         </p>
 
         <button type="button" class="primary" data-bs-toggle="modal"
-            data-bs-target="#modal-contacto">
+            data-bs-target="#modal-contacto" id="contact-btn">
             Contactar
         </button>
 

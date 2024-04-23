@@ -1,26 +1,29 @@
 import { config } from 'dotenv';
+import initFirebase from './api/firebase/firebaseApp.js';
+initFirebase();
 config();
 
-import adminRouter from './routes/adminRouter.js';
-
-import path from 'path';
-import { fileURLToPath } from 'url';
-import express, { NextFunction, Response } from 'express';
+import fs from 'fs';
+import http, { type Server as HTTPServer } from 'http';
+import https, { type Server as HTTPSServer } from 'https';
+import express from 'express';
 import cookieParser from 'cookie-parser';
 import expressLayouts from 'express-ejs-layouts';
+import Pino from './logger.js';
 
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// import { Client, LegacyClient, Auth } from 'osu-web.js';
-// Client for the current API (API v2)
-// const client = new Client('eUPnOYKsnu4dBD6BJzjtsrtFpf91r7LFK7MTkbAa');
-
-import apiRouter from './routes/api.js';
-import webRouter from './routes/web.js';
-import Pino from './logger.js';
+import adminRouter from './routes/adminRouter.js';
+import { apiRouter } from './routes/api.js';
+import webRouter, { NotFoundPage } from './routes/web.js';
 import { errorHandler } from './api/middlewares/errorHandler.js';
+import { verifyTokenOptional } from './api/middlewares/verifyToken.js';
 
 const app = express();
+
+app.disable('x-powered-by');
 
 // Logging of requests
 app.use((req, _res, next) => {
@@ -40,37 +43,51 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
 app.use(expressLayouts);
 
-// server.get('/hola', async (req: Request, res: Response): Promise<void> => {
-//     res.sendStatus(200);
-// });
+// HTTPS / HTTP
+// Checks if the server is running in HTTPS mode
+// In order to load the certificate and keys
 
-// server.use(() => console.log('hola'));
+let server: HTTPServer | HTTPSServer;
+let port: number = 80;
 
-// console.log("RiotAcc:");
-// await RiotPUUIDByTagName("OSCDRY", "Jonan");
+// HTTPS Server setup / HTTP if not available
+try {
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = dirname(__filename);
 
-// console.log("RiotCall:");
-// await RiotCallExample();
+	// TLS Support
+	const key = fs.readFileSync(
+		path.resolve(__dirname, '../certs/privkey.pem'), 'utf8');
+	const cert = fs.readFileSync(
+		path.resolve(__dirname, '../certs/cert.pem'), 'utf8');
 
-// // API v2
-// let v2User = await client.users.getUser(16615204, {
-//     urlParams: {
-//         mode: 'osu'
-//     }
-// });
-// console.log(v2User.id);
+	server = https.createServer(
+		{
+			key: key,
+			cert: cert
+		},
+		app);
 
-// const cs2 = await Cs2CallExample("76561198161126716");
+	port = 443;
+	Pino.info('RUNNING IN HTTPS MODE OK');
+} catch (error) {
+	server = http.createServer(app);
+	Pino.warn('RUNNING IN HTTP UNSAFE MODE, reason: ' + error);
+}
 
-// console.log(JSON.stringify(cs2));
+app.use(verifyTokenOptional);
 
-app.use('/api', apiRouter);
 app.use(webRouter);
+app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
+
+// Not found page for unmatched routes
+app.use('*', (_req, res) => {
+	NotFoundPage(res);
+});
 
 app.use(errorHandler);
 
-const port = 8080;
-app.listen(port, () => Pino.info(`Server listening on port ${port}`));
+server.listen(port, () => Pino.info(`Server listening on port ${port}`));
 
 export default app;

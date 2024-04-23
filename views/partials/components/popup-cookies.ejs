@@ -1,0 +1,103 @@
+<%# Popup Cookies %>
+<div class="cookies-container hide" id="cookies-modal">
+    <div class="d-flex flex-row cookies-header" id="cookies-popup-title">
+        Nuestro sitio web utiliza cookies.
+    </div>
+    <div class="d-flex flex-row justify-content-between w-100">
+        <button id="cookies-reject-button" class="secondary w-50">
+            Rechazar todas
+        </button>
+        <button id="cookies-accept-button" class="primary w-50">
+            Aceptar
+        </button>
+    </div>
+    <div class="d-flex flex-row w-100">
+        <button id="cookies-configure-button" class="secondary mw-100"
+            data-bs-toggle="modal" data-bs-target="#cookies-configure-modal">
+            Configurar preferencias
+        </button>
+    </div>
+</div>
+
+<%# Modal Cookies %>
+<div class="modal fade" id="cookies-configure-modal" tabindex="-1"
+    aria-labelledby="cookies-configure-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content cookies-modal">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 ">Configurar cookies</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body
+            ">
+                <p>Este sitio web utiliza cookies para mejorar su experiencia.
+                    Puede configurar sus preferencias de cookies a
+                    continuación.</p>
+                <div
+                    class="d-flex flex-row justify-content-around align-items-center w-100">
+                    <div class="d-flex flex-column">
+                        <h4 class="w-100" id="cookies-session-header">Cookies de sesión</h4>
+                        <p id="cookies-session-text">
+                            Las cookies de sesión son necesarias para el
+                            correcto
+                            funcionamiento del sitio web y no pueden ser
+                            desactivadas.
+                        </p>
+
+                    </div>
+                    <div class="toggle active disabled">
+                    </div>
+                </div>
+
+                <div
+                    class="d-flex flex-row justify-content-around  align-items-center w-100">
+                    <div class="d-flex flex-column">
+                        <h4 class="w-100" id="cookies-customization-header">Cookies de
+                            personalización</h4>
+                        <p id="cookies-customization-text">
+                            Las cookies de personalización permiten a los
+                            usuarios
+                            acceder a servicios según sus preferencias (idioma,
+                            navegador, configuración, etc.).
+                        </p>
+                    </div>
+                    <div class="toggle active">
+                    </div>
+                </div>
+
+                <div
+                    class="d-flex flex-row justify-content-around align-items-center w-100">
+                    <div class="d-flex flex-column">
+                        <h4 class="w-100"
+                            id="cookies-analysis-header">Cookies de análisis
+                            y rastreo</h4>
+                        <p id="cookies-analysis-text">
+                            Las cookies de análisis y rastreo permiten a los
+                            administradores del sitio web analizar el
+                            comportamiento
+                            de los usuarios y medir el rendimiento del sitio.
+                        </p>
+                    </div>
+                    <div class="toggle active">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="primary wide"
+                    data-bs-dismiss="modal">
+                    Aceptar todas
+                </button>
+                <button type="button" class="primary" data-bs-dismiss="modal">
+                    Guardar cambios
+                </button>
+                <button type="button" class="secondary" data-bs-dismiss="modal">
+                    Restablecer preferencias
+                </button>
+                <button type="button" class="secondary" data-bs-dismiss="modal">
+                    Rechazar todas
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

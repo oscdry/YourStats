@@ -1,66 +1,65 @@
-//user list with pagination
+import { emailRegex, passwordRegex, usernameRegex } from './constants.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-	let before = document.getElementById('previous-currentPage');
-	let current = document.getElementById('currentPage');
-	let after = document.getElementById('after-currentPage');
-	let prevButton = document.getElementById('prevPage');
-	let nextButton = document.getElementById('nextPage');
-	let count = document.getElementById('countUsers').textContent; // Obtener el count de usuarios desde el backend
-	let usersPerPage = 10; // Número de usuarios por página
-	let totalPages = Math.ceil(count / usersPerPage); // Calcular el número total de páginas
-	let currentPage = getPageNumberFromUrl(); // Obtener el número de página de la URL
+// User list with pagination
+const before = document.getElementById('previous-currentPage');
+const current = document.getElementById('currentPage');
+const after = document.getElementById('after-currentPage');
+const prevButton = document.getElementById('prevPage');
+const nextButton = document.getElementById('nextPage');
+const count = document.getElementById('countUsers').textContent; // Obtener el count de usuarios desde el backend
+let usersPerPage = 10; // Número de usuarios por página
+let totalPages = Math.ceil(count / usersPerPage); // Calcular el número total de páginas
+let currentPage = getPageNumberFromUrl(); // Obtener el número de página de la URL
 
+updatePageNumbers();
+
+document.getElementById('nextPage').addEventListener('click', () => {
+	currentPage++;
+	window.location.href = `/admin?page=${currentPage}`;
+
+	// Llamamos a updatePageNumbers después de cambiar la página
 	updatePageNumbers();
-
-	document.getElementById('nextPage').addEventListener('click', () => {
-		currentPage++;
-		window.location.href = `/admin?page=${currentPage}`;
-
-		// Llamamos a updatePageNumbers después de cambiar la página
-		updatePageNumbers();
-	});
-
-	document.getElementById('prevPage').addEventListener('click', () => {
-		currentPage = Math.max(1, currentPage - 1);
-		window.location.href = `/admin?page=${currentPage}`;
-
-		// Llamamos a updatePageNumbers después de cambiar la página
-		updatePageNumbers();
-	});
-
-	function getPageNumberFromUrl() {
-		const urlParams = new URLSearchParams(window.location.search);
-		const page = parseInt(urlParams.get('page'));
-		return isNaN(page) ? 1 : page; // Si no se encuentra 'page' en la URL, devuelve 1
-	}
-
-	function updatePageNumbers() {
-		current.textContent = currentPage;
-
-		// Establecer el texto de 'before' como el número de página actual menos 1
-		before.textContent = Math.max(1, currentPage - 1);
-
-		if (currentPage <= 1) {
-			prevButton.disabled = true;
-			before.style.display = 'none'; // Ocultar el botón 'before'
-		} else {
-			prevButton.disabled = false;
-			before.style.display = 'inline'; // Mostrar el botón 'before'
-		}
-
-		// Si currentPage es igual al número total de páginas, deshabilitar el botón "next" y ocultar el botón "after"
-		if (currentPage >= totalPages) {
-			nextButton.disabled = true;
-			after.style.display = 'none'; // Ocultar el botón 'after'
-		} else {
-			nextButton.disabled = false;
-			after.style.display = 'inline'; // Mostrar el botón 'after'
-		}
-
-		after.textContent = currentPage + 1;
-	}
 });
+
+document.getElementById('prevPage').addEventListener('click', () => {
+	currentPage = Math.max(1, currentPage - 1);
+	window.location.href = `/admin?page=${currentPage}`;
+
+	// Llamamos a updatePageNumbers después de cambiar la página
+	updatePageNumbers();
+});
+
+function getPageNumberFromUrl() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const page = parseInt(urlParams.get('page'));
+	return isNaN(page) ? 1 : page; // Si no se encuentra 'page' en la URL, devuelve 1
+}
+
+function updatePageNumbers() {
+	current.textContent = currentPage;
+
+	// Establecer el texto de 'before' como el número de página actual menos 1
+	before.textContent = Math.max(1, currentPage - 1);
+
+	if (currentPage <= 1) {
+		prevButton.disabled = true;
+		before.style.display = 'none'; // Ocultar el botón 'before'
+	} else {
+		prevButton.disabled = false;
+		before.style.display = 'inline'; // Mostrar el botón 'before'
+	}
+
+	// Si currentPage es igual al número total de páginas, deshabilitar el botón "next" y ocultar el botón "after"
+	if (currentPage >= totalPages) {
+		nextButton.disabled = true;
+		after.style.display = 'none'; // Ocultar el botón 'after'
+	} else {
+		nextButton.disabled = false;
+		after.style.display = 'inline'; // Mostrar el botón 'after'
+	}
+
+	after.textContent = currentPage + 1;
+}
 
 // backoffice update
 
@@ -73,33 +72,29 @@ const backUpdatePasswordConfirmationInput = document.getElementById('back-update
 
 let currentUserId = null;
 
-document.addEventListener('DOMContentLoaded', function () {
 
-	// Seleccionar todos los botones de editar
-	const editButtons = document.querySelectorAll('.edit-btn');
+// Seleccionar todos los botones de editar
+const editButtons = document.querySelectorAll('.edit-btn');
 
-	// Añadir un listener a cada botón de editar
-	editButtons?.forEach(button => {
-		button.addEventListener('click', function () {
+// Añadir un listener a cada botón de editar
+editButtons?.forEach(button => {
+	button.addEventListener('click', function () {
 
-			// Obtener los datos del usuario desde los atributos data-*
-			const username = this.getAttribute('data-username');
-			const mail = this.getAttribute('data-mail');
-			const role = this.getAttribute('data-role');
-			const userId = this.getAttribute('data-id');
+		// Obtener los datos del usuario desde los atributos data-*
+		const username = this.getAttribute('data-username');
+		const mail = this.getAttribute('data-mail');
+		const role = this.getAttribute('data-role');
+		const userId = this.getAttribute('data-id');
 
-			// Establecer los valores en el formulario del modal
-			backUpdateUsernameInput.value = username;
-			backUpdateMailInput.value = mail;
-			backUpdateRoleInput.value = role;
-			currentUserId = userId;
+		// Establecer los valores en el formulario del modal
+		backUpdateUsernameInput.value = username;
+		backUpdateMailInput.value = mail;
+		backUpdateRoleInput.value = role;
+		currentUserId = userId;
 
-			// Limpiar los mensajes de error
-			const errorText = this.closest('.modal-content').querySelector('.error-text');
-			errorText.textContent = ''; // Limpiar los mensajes de error al abrir el modal
-		});
 	});
 });
+
 backUpdateSubmit?.addEventListener('click', async (e) => {
 	e.preventDefault();
 
@@ -115,19 +110,19 @@ backUpdateSubmit?.addEventListener('click', async (e) => {
 
 		// Check regex
 		// Username
-		if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
+		if (!usernameRegex.test(username)) {
 			errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
 			return;
 		}
 
 		// Mail
-		if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(mail)) {
+		if (!emailRegex.test(mail)) {
 			errorText.innerHTML = 'Invalid mail';
 			return;
 		}
 
 		// Password
-		if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password)) {
+		if (!passwordRegex.test(password)) {
 			errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
 			return;
 		}
@@ -295,9 +290,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 						backUpdateMailInput.value = mail;
 						backUpdateRoleInput.value = role;
 						currentUserId = userId;
-
-						const errorText = this.closest('.modal-content').querySelector('.error-text');
-						errorText.textContent = '';
 					});
 				}
 			});

@@ -16,8 +16,10 @@
                 <%- include('./components/input-password.ejs',
                 {id:"login-password-input"}) %>
 
-                <a href>
-                    <p>
+                <%- include('./components/oauth-button.ejs', {mode: "login"}) %>
+
+                <a href="/password-reset">
+                    <p id="modal-login-forgotPassword">
                         ¿Has olvidado tu contraseña?
                     </p>
                 </a>
