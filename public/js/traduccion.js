@@ -35,8 +35,10 @@ const selectLanguage = async (language, e) => {
 const changeLanguage = async (lang) => {
 	langText.textContent = lang.toUpperCase();
 
+	// console.log('Cambiando idioma a:', lang+ ' current lang:', getItem('lang'));
 	const currentLang = getItem('lang');
-	if (currentLang === lang) return;
+
+	// if (currentLang === lang) return;
 
 	const url = new URL(window.location.href);  // Utiliza window.location.href
 
@@ -97,5 +99,6 @@ if (!lang) {
 	if (lang && lang !== 'es') {
 		await changeLanguage(lang);
 	}
-	console.log('Idioma:', lang);
+
+	// console.log('Idioma:', lang);
 })();

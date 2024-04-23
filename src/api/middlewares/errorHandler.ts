@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Pino from '../../logger.js';
-import { RenderErrorPage } from '../../routes/web.js';
+import { NotFoundPage, RenderErrorPage } from '../../routes/web.js';
 
 /**
  * @param req
@@ -45,7 +45,10 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 			res.clearCookie('token');
 			return handleApiError(req, res, 'Not Authorized', 401);
 		case 'MissingPrivilegesError':
-			return handleApiError(req, res, 'Not Authorized', 403);
+			if (req.url.includes('/api'))
+				return handleApiError(req, res, 'Not Authorized', 403);
+
+			return NotFoundPage(res);
 
 		// Auth/User Errors
 		case 'LoginError':
