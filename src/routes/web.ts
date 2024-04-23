@@ -1,39 +1,43 @@
-import { Router, type Response, type Request, NextFunction } from 'express';
-import { getFirebaseUserById } from '../api/services/FirebaseServices.js';
-import { lolTestData } from '../api/types/testData/lolTestData.js';
+import { NextFunction, Router, type Request, type Response } from 'express';
+import { RenderBrawlStats } from '../api/controllers/brawlController.js';
 import { RenderLolIndex, renderLolStatsForPlayer } from '../api/controllers/lolController.js';
 import { brawlTestData } from '../api/types/testData/brawlTestData.js';
-import { RenderBrawlStats } from '../api/controllers/brawlController.js';
+import { lolTestData } from '../api/types/testData/lolTestData.js';
+import { renderPasswordResetView, renderPasswordResetViewSent, renderPasswordResetSuccess } from '../api/controllers/passwordResetController.js';
 import { renderUserView } from '../api/controllers/userController.js';
 
 const webRouter = Router();
 
 // Not found page
-export const NotFoundPage = (_req: Request, res: Response) => {
-	res.status(404).render('404.ejs', { title: 'Page not found' });
+export const NotFoundPage = (res: Response) => {
+	res.status(404).render('404.ejs', { title: 'Page not found', user : res.locals.user});
 };
 
 // Error page
 export const RenderErrorPage = (res: Response) => {
-	res.status(500).render('500.ejs', { title: 'Error' });
+	res.status(500).render('500.ejs', { title: 'Error', user : res.locals.user });
 };
 
 // Páginas publicas
 webRouter.get('/', (_req: Request, res: Response) => {
-	res.render('index', { title: 'Inicio' });
+	res.render('index', { title: 'Inicio', user: res.locals.user });
 });
 
 webRouter.get('/user/:id', renderUserView);
 
 webRouter.get('/about', (_req: Request, res: Response) => {
-	res.render('./about.ejs', { title: 'Contacto' });
+	res.render('./about.ejs', { title: 'Contacto', user: res.locals.user });
 });
 
-webRouter.get('/password-reset/:token');
+webRouter.get(['/password-reset/:token', '/password-reset'], renderPasswordResetView);
+
+webRouter.get('/password-reset-sent', renderPasswordResetViewSent);
+
+webRouter.get('/password-reset-success', renderPasswordResetSuccess);
 
 // Brawl Stars ---------------------------------------------------------
 webRouter.get('/brawl', (_req: Request, res: Response) => {
-	res.render('./brawl/index.ejs', { title: 'Brawl Stars' });
+	res.render('./brawl/index.ejs', { title: 'Brawl Stars', user: res.locals.user });
 });
 
 //! Testing routes Brawl Stars

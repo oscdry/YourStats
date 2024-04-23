@@ -1,7 +1,8 @@
+import jwt from 'jsonwebtoken';
+import { Response } from 'express';
 import { config } from 'dotenv';
 config();
 
-import jwt from 'jsonwebtoken';
 import Pino from '../../logger.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;

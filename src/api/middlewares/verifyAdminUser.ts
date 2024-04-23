@@ -8,6 +8,11 @@ import Pino from '../../logger.js';
 export const verifyAdminUser = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 
+		if (!res.locals.user) {
+			Pino.trace('User is not logged in');
+			throw new MissingPrivilegesError();
+		}
+
 		// Check if the user is an admin
 		if (parseInt(res.locals.user.role) !== 1) {
 			Pino.trace('User ' + JSON.stringify(res.locals.user) + ' is not an admin');

@@ -80,7 +80,7 @@ app.use(verifyTokenOptional);
 
 app.use(webRouter);
 app.use('/api', apiRouter);
-app.use('/admin', adminRouter);
+app.use(adminRouter);
 
 app.use(errorHandler);
 

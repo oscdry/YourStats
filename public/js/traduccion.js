@@ -1,5 +1,6 @@
 const toggle = document.getElementById('lang-toggle');
-const dropdown = document.getElementById('dropdown-content');
+const langText = document.getElementById('lang-text');
+const dropdownContent = document.getElementById('dropdown-content');
 
 const setItem = (key, value) => { localStorage.setItem(key, value); };
 const getItem = (key) => { return localStorage.getItem(key); };
@@ -9,20 +10,35 @@ const es = document.getElementById('es');
 const en = document.getElementById('en');
 const ca = document.getElementById('ca');
 
-es.addEventListener('click', async () => await selectLanguage('es'));
-en.addEventListener('click', async () => await selectLanguage('en'));
-ca.addEventListener('click', async () => await selectLanguage('ca'));
+es.addEventListener('click', async (e) => await selectLanguage('es', e));
+en.addEventListener('click', async (e) => await selectLanguage('en', e));
+ca.addEventListener('click', async (e) => await selectLanguage('ca', e));
 
 const toggleDropdown = () => {
-	dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+	toggle.classList.toggle('active');
+	dropdownContent.classList.toggle('hide');
 };
 
-const selectLanguage = async (language) => {
-	toggleDropdown(); // Cierra el dropdown después de la selección
+const hideDropdown = () => {
+	toggle.classList.remove('active');
+	dropdownContent.classList.add('hide');
+};
+
+const selectLanguage = async (language, e) => {
+	e.preventDefault();
+	if (getItem('lang') === language) return hideDropdown(); // Evita la recarga si el idioma es el mismo
+
+	hideDropdown(); // Cierra el dropdown después de la selección
 	await changeLanguage(language); // Llama a cambiar el idioma incluso si es español
 };
+
 const changeLanguage = async (lang) => {
-	console.log('Cambiando a idioma:', lang);
+	langText.textContent = lang.toUpperCase();
+
+	// console.log('Cambiando idioma a:', lang+ ' current lang:', getItem('lang'));
+	const currentLang = getItem('lang');
+
+	// if (currentLang === lang) return;
 
 	const url = new URL(window.location.href);  // Utiliza window.location.href
 
@@ -71,8 +87,6 @@ const changeLanguage = async (lang) => {
 };
 
 
-console.log('Traducción cargada');
-
 toggle.addEventListener('click', toggleDropdown);
 
 // Cargar idioma de las cookies o usar 'es' como predeterminado
@@ -85,5 +99,6 @@ if (!lang) {
 	if (lang && lang !== 'es') {
 		await changeLanguage(lang);
 	}
-	console.log('Idioma:', lang);
+
+	// console.log('Idioma:', lang);
 })();

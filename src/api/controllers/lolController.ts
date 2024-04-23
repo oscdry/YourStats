@@ -65,8 +65,9 @@ export const RenderLolIndex = async (_req: Request, res: Response, next: NextFun
 	try {
 		const server = await RiotStatusServer();
 		const data = await GetLolHomeData();
-		res.render('./lol/index.ejs', { title: 'LoL', server, homedata: data });
+		res.render('./lol/index.ejs', { title: 'LoL', server, homedata: data, user : res.locals.user});
 	} catch (error) {
+		Pino.error('Error rendering LoL index: ' + (error as Error).message);
 		next(error);
 	}
 };
@@ -106,7 +107,7 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 
 		Pino.fatal(gameName);
 
-		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, playername: gameName });
+		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, playername: gameName, user: res.locals.user});
 	} catch (error) {
 		const message = (error as Error).message;
 		const name = (error as Error).name;

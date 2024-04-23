@@ -1,4 +1,4 @@
-import { RedirectToHome, SaveToken } from './index.js';
+import { RedirectToHome } from './index.js';
 
 // Callback api call for Google Oauth login/register
 const handleCredentialResponse = async (response) =>{
@@ -34,10 +34,6 @@ const handleCredentialResponse = async (response) =>{
 		return;
 	}
 
-	const json = await apiResponse.json();
-	const token = json.token;
-
-	SaveToken(token);
 	RedirectToHome();
 };
 

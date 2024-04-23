@@ -6,9 +6,6 @@ import { usernameChangeListener,
 	passwordChangeListener,
 	passwordConfirmationChangeListener } from './registerModal.js';
 
-// Auth
-export const SaveToken = (token) => document.cookie = `token=${token};`;
-export const ClearToken = () => document.cookie = 'token=;';
 
 export const RedirectToHome = () => window.location.href = '/';
 export const ReloadPage = () => window.location.reload();
@@ -21,6 +18,22 @@ const GetStorageItem = (key) => localStorage.getItem(key);
 const loginSubmit = document.getElementById('login-submit');
 const loginUsernameInput = document.getElementById('login-username-input');
 const loginPasswordInput = document.getElementById('login-password-input');
+
+function getCookie(cname) {
+	let name = cname + '=';
+	let decodedCookie = decodeURIComponent(document.cookie);
+	let ca = decodedCookie.split(';');
+	for(let i = 0; i <ca.length; i++) {
+	  let c = ca[i];
+	  while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+	  }
+	  if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+	  }
+	}
+	return '';
+}
 
 loginSubmit?.addEventListener('click', async (e) => {
 	e.preventDefault();
@@ -50,17 +63,15 @@ loginSubmit?.addEventListener('click', async (e) => {
 				return;
 			}
 
-			const json = await response.json();
 
 			// API returns 400 if the user is not found
 			// Which is not an error
 			if (response.status === 400) {
+				const json = await response.json();
 				errorText.innerHTML = json.error;
 				return;
 			}
 
-			const token = json.token;
-			SaveToken(token);
 			RedirectToHome();
 			return;
 
@@ -140,8 +151,6 @@ registerSubmit?.addEventListener('click', async (e) => {
 				return;
 			}
 
-			const token = json.token;
-			SaveToken(token);
 			RedirectToHome();
 			return;
 
@@ -154,7 +163,7 @@ registerSubmit?.addEventListener('click', async (e) => {
 });
 
 // Logout ---------------------------
-const logoutButton = document.getElementById('logout-button');
+const logoutButton = document.getElementById('navbar-logout');
 
 logoutButton?.addEventListener('click', async (e) => {
 	e.preventDefault();
@@ -172,14 +181,10 @@ logoutButton?.addEventListener('click', async (e) => {
 		if (!response.ok)
 			console.error(response.status + ' ' + response.statusText);
 
-
-		// Delete token
-		ClearToken();
 		ReloadPage();
 		return;
 
 	} catch (error) {
-		ClearToken();
 		console.error(response.status + ' ' + response.statusText);
 		return;
 	}
@@ -272,14 +277,23 @@ if (cookiesModal && !GetStorageItem('cookies')) {
 		hideModal();
 	};
 
-	const cookiesConfigure = () => { // TODO: Que hacemos con esto?
-		SetStorageItem('cookies', '0.5');
-		hideModal();
-	};
-
 	cookiesAcceptButton.addEventListener('click', cookiesAccept);
 	cookiesRejectButton.addEventListener('click', cookiesReject);
-	cookiesConfigureButton.addEventListener('click', cookiesConfigure);
 }else{
 	cookiesModal.remove();
 }
+
+const toggleEventListener = (e) => {
+	e.preventDefault();
+	e.target.classList.toggle('active');
+};
+
+const toggles = document.querySelectorAll('.toggle');
+
+toggles.forEach(toggle => {
+	toggle.addEventListener('click', toggleEventListener);
+});
+
+// setInterval(() => {
+// 	console.log(getCookie('token'));
+// }, 500);
