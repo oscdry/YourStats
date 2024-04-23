@@ -163,7 +163,7 @@
     justify-content: space-between;
     align-items: center;
 
-    width: 40%;
+    width: 60%;
     height: 100%;
 
     gap: 1rem;
@@ -461,4 +461,8 @@ div.lol-item-icon-empty
 .lol-summoner-card .summoner-points
 {
     font-size: 2.5rem;
+}
+
+img.unranked {
+    filter: grayscale(100%) brightness(0.1);
 }
