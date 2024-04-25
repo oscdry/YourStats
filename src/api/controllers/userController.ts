@@ -1,8 +1,8 @@
 import { type Request, type Response, NextFunction } from 'express';
 
-import { generateTokenForUserId } from './tokenController.js';
-import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio,  userExists} from '../services/FirebaseServices.js';
-import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUsernameError} from '../errors/errors.js';
+import { generateTokenForUserId, setTokenToCookie } from './tokenController.js';
+import { createFirebaseUser, deleteFirebaseUserById, deleteFirebaseUserByMail, getFirebaseUserById, getFirebaseUserByMail, getFirebaseUserByUsername, updateFirebaseUserById, getAllFirebaseUsers, updateFirebaseUserName, updateFirebaseUserBio, userExists } from '../services/FirebaseServices.js';
+import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUsernameError } from '../errors/errors.js';
 import { FirebaseUser } from '../types/FirebaseUser.js';
 import Pino from '../../logger.js';
 import { NotFoundPage } from '../../routes/web.js';
@@ -16,7 +16,7 @@ export async function renderUserView(_req: Request, res: Response) {
 	res.render('./user.ejs', { title: 'User', user: res.locals.user, userView: user });
 }
 
-export const createUserController = async (req: Request, res: Response, next: NextFunction) => {
+export const registerUserController = async (req: Request, res: Response, next: NextFunction) => {
 	const { username, mail, password } = req.body;
 
 	Pino.info('UserController Creating User' + { username, mail, password });
@@ -40,7 +40,8 @@ export const createUserController = async (req: Request, res: Response, next: Ne
 			username: createUser.username,
 			role: createUser.role
 		});
-		return res.json({ token });
+		setTokenToCookie(res, token);
+		return res.status(200).json({ token });
 	} catch (error) {
 		next(error);
 	}

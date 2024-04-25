@@ -11,15 +11,17 @@ if (!JWT_SECRET) {
 
 /**
  * Validates the login token (Optional).
+ * This middleware is executed app wide, it checks if the token is valid and sets the user in the res.locals.
+ * It also sets the language in the res.locals to be used in EJS templates.
  * @param req
  * @param res
  * @param next
- * @returns
  * @author @polcondal
  */
 export const verifyTokenOptional = (req: Request, res: Response, next: NextFunction): void => {
 	try {
 		const cookieToken = req.cookies.token || null;
+		const lang = req.cookies.lang || 'es';
 
 		if (!cookieToken) {
 			Pino.trace('No optional token provided in web');
@@ -29,6 +31,7 @@ export const verifyTokenOptional = (req: Request, res: Response, next: NextFunct
 
 		// Save the payload in the res.locals
 		res.locals.user = verifyToken(cookieToken) as TokenPayload;
+		res.locals.lang = lang;
 
 		if (!res.locals.user) {
 			Pino.trace('No valid optional token provided');

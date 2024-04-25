@@ -7,6 +7,18 @@
 %>
 
 <main>
+    <%# Breadcrumb %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/brawl">Brawl Stars</a></li>
+            <li class="breadcrumb-item active"
+                aria-current="page">
+                <%= brawldata.usuarioBrawlInfo.user.name %>
+            </li>
+        </ol>
+    </nav>
+
     <%- include('../partials/components/game-stats-header.ejs', {name:
     'Brawl Stars', href: '/brawl', username:
     brawldata.usuarioBrawlInfo.user.name}) %>

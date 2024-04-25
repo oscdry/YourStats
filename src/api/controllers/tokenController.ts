@@ -15,3 +15,9 @@ export const generateTokenForUserId = (payload: TokenPayload): string => {
 	Pino.debug('Generating token for user id: ' + payload.id);
 	return jwt.sign(payload, JWT_SECRET!, { expiresIn: '1d' });
 };
+
+
+export const setTokenToCookie = (res: Response, token: string) => {
+	const expires = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000); // 1 days
+	res.cookie('token', token, { expires, httpOnly: true });
+};

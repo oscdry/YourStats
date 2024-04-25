@@ -121,3 +121,13 @@ GET http://localhost/api/lol-home
 ###
 
 POST http://localhost/admin/users/
+
+###
+
+GET http://localhost/api/lol/skins/akali
+
+###
+
+GET https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/OSCDRY
+X-Riot-Token: RGAPI-0602ed17-6cfb-487d-8692-8a761a471850
+
