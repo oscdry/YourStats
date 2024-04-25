@@ -375,7 +375,7 @@ export const GetHomeData = async (): Promise<BrawlHomeData> => {
 		},
 		{
 			'name': 'Mariposa piper',
-			'image-url': 'https://i.redd.it/the-first-time-i-saw-mariposa-pipers-pin-i-didnt-like-it-at-v0-0fb138fvk8ma1.png',
+			'image-url': 'https://server.blix.gg/imgproxy/KyQLh3Rm99ZeABxCJxO4J48HGn74Gdoz2WiZBV_3sac/rs:fit:260:260:0/g:no/aHR0cDovL21pbmlvOjkwMDAvaW1hZ2VzLzQxNWI3MDM3MzY3MzQ5NjY5NGZlYTkyMjc1YjI2NzkyLnBuZw.webp',
 			'release-date': '8 mar 2023'
 		},
 		{
