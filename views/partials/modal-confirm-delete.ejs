@@ -1,9 +1,17 @@
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <h4>¿Estás seguro de eliminar al usuario?</h4>
-    </div>
-    <div class="modal-footer">
-        <button class="secondary" id="modal-conf-delete-cancelBtn">Cancelar</button>
-        <button id="deleteButton2" class="danger">Eliminar</button>
+<div id="deleteModal" class="modal fade" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">¿Estás seguro de eliminar al usuario?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-delete-description">Esta acción no se puede deshacer. El usuario será eliminado permanentemente.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-conf-delete-cancelBtn" data-bs-dismiss="modal">Cancelar</button>
+                <button id="deleteButton2" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
     </div>
 </div>

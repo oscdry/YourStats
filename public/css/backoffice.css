@@ -1,0 +1,39 @@
+#prevPage, #previous-currentPage, #currentPage, #after-currentPage, #nextPage {
+    display: flex;
+    margin-top: 1% !important;
+    margin: -0.5%;            
+    width: 4%;            
+    height: 0;              
+    padding: 2% 0;          
+    border-radius: 5px;     
+    text-align: center;     
+    line-height: normal;
+    align-items: center;
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+#currentPage { 
+    color: white;
+}
+
+form {
+    display: flex;
+    align-items: center; /* Alinea verticalmente los elementos del formulario */
+    gap: 10px; /* Espacio entre los elementos del formulario */
+}
+
+/* Estilos para los botones y campo de entrada */
+input, button {
+    height: 40px; /* Altura uniforme para el campo de entrada y botones */
+    padding: 0 10px; /* Padding horizontal para textos dentro de los elementos */
+}
+
+#back-clear-button, #back-search-button {
+    margin-top: 3.5% !important;
+}
+
+/* Ajustes adicionales en caso de ser necesario para la mejor visualización */
+input#back-search-mail-input {
+    flex-grow: 1; /* Permite que el campo de entrada se expanda para llenar el espacio disponible */
+}
