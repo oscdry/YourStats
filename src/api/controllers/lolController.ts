@@ -34,7 +34,8 @@ export const RiotUserExists = async (req: Request, res: Response, next: NextFunc
 export const SendLolData = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const userName = req.params.username;
-		return res.json(await GetLolUserData(userName));
+		const userTAG = req.params.gameTAG;
+		return res.json(await GetLolUserData(userName, userTAG));
 	} catch (error) {
 		next(error);
 	}
@@ -82,7 +83,8 @@ export const RenderLolIndex = async (_req: Request, res: Response, next: NextFun
 export const renderLolStatsForPlayer = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const gameName: string = req.params.gamename;
-		const loldata = await GetLolUserData(gameName);
+		const gameTAG: string = req.params.gameTAG;
+		const loldata = await GetLolUserData(gameName, gameTAG);
 		if (!loldata) throw new UserNotFoundError();
 
 		Pino.info('rendering ' + loldata.gameName + ' stats ' + loldata.gamesLast7Days);

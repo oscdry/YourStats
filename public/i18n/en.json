@@ -92,5 +92,10 @@
     "username-cancelChanges": "Cancel",
     "username-saveChanges": "Save",
     "who-are-we": "Who are we?",
-    "work-with-us": "Work with us"
+    "work-with-us": "Work with us",
+    "deleteModalLabel": "Are you sure you want to delete the user?",
+    "confirm-delete-description": "This action cannot be undone. The user will be permanently deleted.",
+    "modal-conf-delete-cancelBtn": "Cancel",
+    "deleteButton2": "Delete user",
+    "back-clear-button": "Clear"
 }

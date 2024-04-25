@@ -1583,6 +1583,25 @@ div.lol-game-card.draw
     background-color: rgb(255, 220, 66);
 }
 
+#confirm-delete-description {
+    text-align: center;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2%; /* Esto crea espacio entre los botones */
+    }
+
+.pagination-btn {
+    padding: 0.5em; /* Este es un buen punto de partida, ajusta según necesites */
+    flex: 0 0 auto; /* Esto asegura que los botones no crezcan o se encojan */
+    text-align: center;
+    border-radius: 4px; /* Ajusta esto a tu preferencia */
+    /* Resto de tu estilo de botón */
+}
+
 /* Responsive */
 
 @media screen and (max-width: 1024px)

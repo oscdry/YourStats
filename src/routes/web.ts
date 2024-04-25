@@ -157,6 +157,6 @@ webRouter.get('/lol/stats/chart', async (_req: Request, res: Response, next: Nex
 	res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats Chart', loldata: lolTestData, chartdata: dataDonut });
 });
 
-webRouter.get('/lol/stats/:gamename', renderLolStatsForPlayer);
+webRouter.get('/lol/stats/:gamename/:gameTAG', renderLolStatsForPlayer);
 
 export default webRouter;

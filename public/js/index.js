@@ -1,17 +1,20 @@
-import { validateEmail,
+import {
+	validateEmail,
 	validatePassword,
-	validateUsername } from './constants.js';
-import { usernameChangeListener,
+	validateUsername
+} from './constants.js';
+import {
+	usernameChangeListener,
 	emailChangeListener,
 	passwordChangeListener,
-	passwordConfirmationChangeListener } from './registerModal.js';
+	passwordConfirmationChangeListener
+} from './registerModal.js';
 
 
 export const RedirectToHome = () => window.location = '/';
 export const ReloadPage = () => window.location.reload();
 
-const SetStorageItem = (key, value) => localStorage.setItem
-(key, value);
+const SetStorageItem = (key, value) => localStorage.setItem(key, value);
 const GetStorageItem = (key) => localStorage.getItem(key);
 
 // Login ---------------------------
@@ -23,14 +26,14 @@ function getCookie(cname) {
 	let name = cname + '=';
 	let decodedCookie = decodeURIComponent(document.cookie);
 	let ca = decodedCookie.split(';');
-	for(let i = 0; i <ca.length; i++) {
-	  let c = ca[i];
-	  while (c.charAt(0) == ' ') {
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) == ' ') {
 			c = c.substring(1);
-	  }
-	  if (c.indexOf(name) == 0) {
+		}
+		if (c.indexOf(name) == 0) {
 			return c.substring(name.length, c.length);
-	  }
+		}
 	}
 	return '';
 }
@@ -281,7 +284,7 @@ if (cookiesModal && !GetStorageItem('cookies')) {
 
 	cookiesAcceptButton.addEventListener('click', cookiesAccept);
 	cookiesRejectButton.addEventListener('click', cookiesReject);
-}else{
+} else {
 	cookiesModal.remove();
 }
 

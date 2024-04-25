@@ -37,7 +37,7 @@ apiRouter.post('/register',
 apiRouter.post('/riot-user/', RiotUserExists);
 apiRouter.get('/lol/skins/:skinName', sendLolSkin);
 apiRouter.get('/lol-home', SendLolHomeData);
-apiRouter.get('/lol-data/:username', SendLolData);
+apiRouter.get('/lol-data/:username/:gameTAG', SendLolData);
 
 // Brawl Stars API
 apiRouter.post('/brawl-user/', BrawlUserExists);
