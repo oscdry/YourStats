@@ -44,6 +44,9 @@ apiRouter.post('/brawl-user/', BrawlUserExists);
 apiRouter.get('/brawl-home', SendBrawlHomeData);
 apiRouter.get('/brawl-data/:tag', SendBrawlData);
 
+//Fortnite API
+apiRouter
+
 // Rutas privadas --------------------------------------------
 apiRouter.post('/logout',
 	verifyTokenRequired,

@@ -137,7 +137,7 @@ interface AllStats {
 
 interface FortniteData {
 	account: Account;
-	battlePass: BattlePass;
+	battlePass: BattlePass
 	allStats: AllStats;
 	banner: FortniteBanner
 }

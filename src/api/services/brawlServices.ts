@@ -186,11 +186,11 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 	const sortByTrophies = userData.brawlers.sort(
 		(a: { trophies: number; }, b: { trophies: number; }) => b.trophies - a.trophies);
-	const topBrawlersByTrophies = sortByTrophies.slice(0, 10);
+	const topBrawlersByTrophies = sortByTrophies;
 
 	const brawlers = topBrawlersByTrophies.sort(
 		(a: { highestTrophies: number; }, b: { highestTrophies: number; }
-		) => b.highestTrophies - a.highestTrophies).slice(0, 3)
+		) => b.highestTrophies - a.highestTrophies)
 		.map((brawler: { id: any; name: any; power: any; gears: any; trophies: any; highestTrophies: any; starPowers: any; gadgets: any; }) => (
 			{
 				id: brawler.id,
@@ -391,6 +391,7 @@ export const GetHomeData = async (): Promise<BrawlHomeData> => {
 		skinsBrawls: skinsBrawls
 	};
 };
+console.log(await GetBrawlData('YCQLVQV'));
 
 //console.log(await GetHomeData());
 //console.log(await getRankingSpain());
