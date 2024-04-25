@@ -1,22 +1,38 @@
+<%# This component takes a (locale) mode parameter to determine the placeholder
+text and the form class %>
+
 <% const gameMode = typeof mode !== "undefined" ? mode : ""
-const placeholder = gameMode === "lol" ? "Introduce tu nombre de invocador" : "Introduce tu tag de jugador"
+const placeholder = gameMode === "lol" ? "Introduce tu nombre de invocador" :
+"Introduce tu tag de jugador"
+const localeParam = typeof locale !== "undefined" ? locale : "es"
 %>
 
+<div class="game-input-username-container justify-content-center input-row">
 
-<div class="w-100 p-5 input-row">
+    <%# Username input form %>
+        <form id="game-username-form"
+            class="<%= gameMode %> game-username-form">
 
-    <% // Username input form %>
-    <div class="w-100 justify-content-center">
-        <form id="game-username-form">
-
-            <input type="text" name="username" id="game-username-input" required
+            <% if (gameMode === "lol") { %>
+            <input type="text" name="username" id="game-username-input"
+                class="game-input-username-<%= gameMode %>" required
                 placeholder="<%= placeholder %>" data-mode="<%= mode %>">
+
+            <div class="game-tag-input-container">
+                <input type="text" name="tag" id="game-tag-input"
+                    class="game-input-tag-<%= gameMode %>" required
+                    placeholder="Tag" >
+            </div>
+            <% } else { %>
+            <input type="text" name="username" id="game-username-input"
+                class="game-input-username-<%= gameMode %>" required
+                placeholder="<%= placeholder %>" data-mode="<%= mode %>"
+                data-locale="<%= localeParam %>">
+            <% } %>
 
             <button class="primary" type="submit" id="game-input-username-btn">
                 Buscar
             </button>
             <p class="error-text"></p>
         </form>
-    </div>
-
 </div>

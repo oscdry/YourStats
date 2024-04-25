@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { getUserByIdentifier } from './userController.js';
-import { generateTokenForUserId as generateTokenForUser } from './tokenController.js';
+import { generateTokenForUserId as generateTokenForUser, setTokenToCookie } from './tokenController.js';
 import { LoginError } from '../errors/errors.js';
 import Pino from '../../logger.js';
 import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
@@ -38,8 +38,7 @@ export const LoginUser = async (req: Request, res: Response, next: NextFunction)
 		};
 
 		const token = generateTokenForUser(payload);
-		const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-		res.cookie('token', token, { expires, httpOnly: true });
+		setTokenToCookie(res, token);
 		Pino.info('User ' + username + ' logged in');
 		return res.json({ token });
 	} catch (error) {
@@ -70,8 +69,9 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 		// Create the user
 		if (!existingUser) {
 			Pino.trace('User ' + result.user.displayName + ' not found for login, creating user');
+			const trimmedName = result.user.displayName ? result.user.displayName.substring(0, 16) : 'Unnamed User';
 			const user = await createFirebaseUser(
-				result.user.displayName ? result.user.displayName : 'Unnamed User',
+				trimmedName,
 				result.user.email ? result.user.email : '',
 				'',
 				'',

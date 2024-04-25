@@ -68,6 +68,17 @@ const changeLanguage = async (lang) => {
 			const data = await response.json();
 
 			for (const key in data) {
+				if (key.includes('@placeholder')) {
+					const selector = key.split('@')[0];
+					console.log(selector);
+					const elems = document.getElementsByClassName(selector);
+					console.log(elems);
+
+					for(const elem of elems)
+						elem.setAttribute('placeholder', data[key]);
+					continue;
+				}
+
 				const elementById = document.getElementById(key);
 				if (elementById) {
 					elementById.innerText = data[key];

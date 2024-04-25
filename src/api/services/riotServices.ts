@@ -1,3 +1,4 @@
+import Pino from '../../logger.js';
 import { UserNotFoundError } from '../errors/errors.js';
 import { config } from 'dotenv';
 
@@ -36,7 +37,7 @@ export const getAccountbyId = async (id: string): Promise<string> => {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
 	});
 	if (result.status != 200) { console.log('Error'); return ''; }
-	
+
 	const json = await result.json();
 
 	return json['puuid'];
@@ -48,7 +49,10 @@ export const RiotDataByName = async (gameName: string): Promise<RiotData | null>
 	const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/by-name/' + gameName, {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
 	});
-	if (result.status != 200) { throw new UserNotFoundError(); }
+	if (result.status != 200) {
+		Pino.error(result.status + ' ' + result.statusText);
+		throw new UserNotFoundError();
+	}
 
 	const json = await result.json();
 	return json;

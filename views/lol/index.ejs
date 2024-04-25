@@ -1,19 +1,31 @@
-<%# This view takes a (server) object parameter to display the server status and a
+<%# This view takes a (server) object parameter to display the server status and
+a
 (homedata) object parameter to display the home data %>
 
 <%- include('../partials/components/banner.ejs', {mode: "lol"}) %>
 
 <main class="banner-main">
-    <h1 class="title">League of Legends</h1>
-    <%- include('../partials/components/game-input-username.ejs', {mode : "lol"}) %>
+    <%# Breadcrumb %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">League of Legends</li>
+        </ol>
+    </nav>
 
-    <div class="d-flex flex-column gap-3">
+    <h1 class="title">League of Legends</h1>
+    <%- include('../partials/components/game-input-username.ejs', {mode :
+    "lol"}) %>
+
+    <div class="container-fluid my-3 d-flex flex-column gap-3">
         <h3 id="lol-server-status">Estado de los servidores</h3>
         <%- include('../partials/server-status-card.ejs', {server}) %>
     </div>
 
-<%- include('./lol-skins-showcase.ejs', {popularSkins: homedata.popularSkins}) %>
+    <%- include('./lol-global-ranking.ejs', {summonerDetails:
+    homedata.summonerDetails}) %>
 
-<%- include('./lol-global-ranking.ejs', {summonerDetails: homedata.summonerDetails}) %>
+    <%- include('./lol-skins-showcase.ejs', {popularSkins:
+    homedata.popularSkins}) %>
 
 </main>

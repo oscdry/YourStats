@@ -10,12 +10,12 @@ const webRouter = Router();
 
 // Not found page
 export const NotFoundPage = (res: Response) => {
-	res.status(404).render('404.ejs', { title: 'Page not found', user : res.locals.user});
+	res.status(404).render('404.ejs', { title: 'Page not found', user: res.locals.user });
 };
 
 // Error page
 export const RenderErrorPage = (res: Response) => {
-	res.status(500).render('500.ejs', { title: 'Error', user : res.locals.user });
+	res.status(500).render('500.ejs', { title: 'Error', user: res.locals.user });
 };
 
 // Páginas publicas
@@ -46,6 +46,11 @@ webRouter.get('/brawl/stats/asd', async (_req: Request, res: Response, next: Nex
 });
 
 webRouter.get('/brawl/stats/:tag', RenderBrawlStats);
+
+// Fortnite ---------------------------------------------------------
+webRouter.get('/fortnite', (_req: Request, res: Response) => {
+	res.render('./fortnite/index.ejs', { title: 'Fortnite', user: res.locals.user });
+});
 
 // League of Legends ---------------------------------------------------------
 webRouter.get('/lol', RenderLolIndex);

@@ -17,7 +17,8 @@ export const usernameChangeListener = (e) => {
 	const username = e.target.value;
 
 	const valid = validateUsername(username);
-	console.log(valid);
+
+	// console.log(valid);
 	if (valid) {
 		e.target.classList.remove('invalid');
 		usernameCheckbox.setAttribute('checked', '');
@@ -35,7 +36,8 @@ export const emailChangeListener = (e) => {
 	const email = e.target.value;
 
 	const valid = validateEmail(email);
-	console.log(valid);
+
+	// console.log(valid);
 	if (valid) {
 		e.target.classList.remove('invalid');
 		mailCheckbox.setAttribute('checked', '');
@@ -53,7 +55,8 @@ export const passwordChangeListener = (e) => {
 	const password = e.target.value;
 
 	const valid = validatePassword(password);
-	console.log(valid);
+
+	// console.log(valid);
 	if (valid) {
 		e.target.classList.remove('invalid');
 		passwordCheckbox.setAttribute('checked', '');
@@ -71,7 +74,8 @@ export const passwordConfirmationChangeListener = (e) => {
 	const password = e.target.value;
 
 	const valid = password === registerPasswordInput.value.trim();
-	console.log(valid);
+
+	// console.log(valid);
 	if (valid && password !== '' && registerPasswordInput.value.trim() !== '') {
 		e.target.classList.remove('invalid');
 		passwordConfirmationCheckbox.setAttribute('checked', '');
