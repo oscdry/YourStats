@@ -88,6 +88,10 @@ GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
 
 ###
 
+GET https://yourstats.kxnzen.me/api/brawl-home
+
+###
+
 GET http://localhost:80/api/password-reset
 Cookie: token={{token}}
 
@@ -109,3 +113,11 @@ GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
 
 GET https://euw1.api.riotgames.com/lol/status/v4/platform-data
 X-Riot-Token: RGAPI-0602ed17-6cfb-487d-8692-8a761a471850
+
+###
+
+GET http://localhost/api/lol-home
+
+###
+
+POST http://localhost/admin/users/

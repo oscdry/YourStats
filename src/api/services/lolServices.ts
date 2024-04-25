@@ -83,10 +83,13 @@ export const LolRankingDemo = async () => {
 
 	for (let player of summonerData) {
 		const summonerId = player.summonerId;
+
 		//console.log(summonerId);
 		const puuid = await getAccountbyId(summonerId);
+
 		//console.log(puuid);
 		const summonerName = await RiotPUUIDbySum(puuid);
+
 		//console.log(summonerName);
 		player.summonerName = summonerName;
 	}
@@ -695,15 +698,13 @@ interface LoLUserData {
 
 export const GetLolHomeData = async (): Promise<LolHomeData> => {
 
-	// TODO: Desactvado por ahora
-	// const ranking = await LolRankingDemo();
+	const ranking = await LolRankingDemo();
 	const list = getLastChamps();
 	const skins = getPopularSkins();
 	const newSkins = getNewSkins();
 
 	const LolHomeData: LolHomeData = {
-
-		// summonerDetails: ranking,
+		summonerDetails: ranking,
 		champList: list,
 		popularSkins: skins,
 		newSkins: newSkins
@@ -753,5 +754,5 @@ interface LolHomeData {
 	];
 
 	//console.log(await GetLolHomeData());
-	console.log(JSON.stringify(await GetLolUserData(Gamename, gameTAG)));
+	// console.log(JSON.stringify(await GetLolUserData(Gamename, gameTAG)));
 }
