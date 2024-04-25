@@ -46,7 +46,6 @@ function updatePageNumbers() {
 		before.style.display = 'none'; // Ocultar el botón 'before'
 	} else {
 		prevButton.disabled = false;
-		before.style.display = 'inline'; // Mostrar el botón 'before'
 	}
 
 	// Si currentPage es igual al número total de páginas, deshabilitar el botón "next" y ocultar el botón "after"
@@ -55,11 +54,53 @@ function updatePageNumbers() {
 		after.style.display = 'none'; // Ocultar el botón 'after'
 	} else {
 		nextButton.disabled = false;
-		after.style.display = 'inline'; // Mostrar el botón 'after'
 	}
 
 	after.textContent = currentPage + 1;
 }
+
+// backoffice delete
+
+document.addEventListener('DOMContentLoaded', function () {
+	const deleteButtons = document.querySelectorAll('.backoffice-delete-btn');
+	const deleteModal = document.getElementById('deleteModal');
+	const deleteButton2 = document.getElementById('deleteButton2');
+	const cancelbtn = document.getElementById('modal-conf-delete-cancelBtn');
+
+	deleteButtons.forEach(button => {
+		button.addEventListener('click', function (event) {
+
+			// Prevent default link behavior
+			event.preventDefault();
+
+			// Pass the user ID to the delete button in the modal
+			const userId = this.getAttribute('data-id');
+			deleteButton2.setAttribute('data-id', userId);
+		});
+	});
+
+	deleteButton2.addEventListener('click', function () {
+		const userId = this.getAttribute('data-id');
+		fetch(`/admin/users/delete/${userId}`, {
+			method: 'DELETE'
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('User deleted:', response);
+					window.location.reload();
+					return response.json();
+				}
+				throw new Error('Something went wrong');
+			})
+			.then(data => {
+				console.log('User deleted:', data);
+
+				// Remove the row from the table
+				document.querySelector(`a[data-id="${userId}"]`).closest('tr').remove();
+			})
+			.catch(error => console.error('Error:', error));
+	});
+});
 
 // backoffice update
 
@@ -211,54 +252,37 @@ backUpdateSubmit?.addEventListener('click', async (e) => {
 // backoffice search user by mail
 
 document.addEventListener('DOMContentLoaded', async () => {
-
 	const searchBtn = document.getElementById('back-search-button');
+	const clearBtn = document.getElementById('back-clear-button');
 	const searchInput = document.getElementById('back-search-mail-input');
 	const errorSearch = document.getElementById('error-search-back');
 	const tbody = document.querySelector('tbody');
-	const beforeBtn = document.getElementById('prevPage');
-	const afterBtn = document.getElementById('nextPage');
-	const numBeforePage = document.getElementById('previous-currentPage');
-	const numCurrentPage = document.getElementById('currentPage');
-	const numAfterPage = document.getElementById('after-currentPage');
 
 	searchBtn.addEventListener('click', async (e) => {
 		e.preventDefault();
-
 		const email = searchInput.value.trim();
-
 		if (!email) {
 			errorSearch.textContent = 'El campo de correo electrónico es obligatorio';
-
-			// Recargar la página /admin
-			window.location.href = '/admin';
 			return;
 		}
-
 		errorSearch.textContent = '';
-
+		clearBtn.style.display = 'inline';
 		try {
 			const response = await fetch('/api/search-by-email', {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email })
 			});
-
 			if (!response.ok) {
 				throw new Error('Error al buscar usuarios por correo electrónico');
 			}
-
 			const users = await response.json();
-
 			const existingRows = document.querySelectorAll('.user-row');
 			existingRows.forEach(row => {
 				if (!users.find(user => user.id === parseInt(row.children[0].textContent))) {
 					row.remove();
 				}
 			});
-
 			users.forEach(user => {
 				if (!document.querySelector(`.user-row[data-id="${user.id}"]`)) {
 					const tr = document.createElement('tr');
@@ -278,14 +302,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <td><a href="/admin/users/delete/${user.id}">Delete</a></td>
                     `;
 					tbody.appendChild(tr);
-
 					const editButton = tr.querySelector('.edit-btn');
 					editButton.addEventListener('click', function () {
 						const username = this.getAttribute('data-username');
 						const mail = this.getAttribute('data-mail');
 						const role = this.getAttribute('data-role');
 						const userId = this.getAttribute('data-id');
-
 						backUpdateUsernameInput.value = username;
 						backUpdateMailInput.value = mail;
 						backUpdateRoleInput.value = role;
@@ -293,18 +315,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 					});
 				}
 			});
-
-			// Ocultar los botones de paginación
-			beforeBtn.style.display = 'none';
-			afterBtn.style.display = 'none';
-			numBeforePage.style.display = 'none';
-			numCurrentPage.style.display = 'none';
-			numAfterPage.style.display = 'none';
-
 		} catch (error) {
 			console.error('Error al buscar usuarios por correo electrónico:', error);
 			errorSearch.textContent = 'Error interno del servidor';
 		}
 	});
-});
 
+	clearBtn.addEventListener('click', () => {
+		searchInput.value = '';
+		errorSearch.textContent = '';
+		clearBtn.style.display = 'none';
+		window.location.href = '/admin?page=1';
+	});
+});

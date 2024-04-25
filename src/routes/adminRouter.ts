@@ -12,9 +12,9 @@ adminRouter.use(verifyAdminUser);
 // Páginas de administrador
 adminRouter.get('/', RenderBackoffice);
 
-adminRouter.get('/users/delete/:id', async (req, res) => {
+adminRouter.delete('/users/delete/:id', async (req, res) => {
 	await deleteFirebaseUserById(req.params.id);
-	res.redirect('/admin');
+	res.status(200).json({ message: 'User deleted' });
 });
 
 adminRouter.post('/users/update/:id', async (req, res) => {
