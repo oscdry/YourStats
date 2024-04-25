@@ -7,28 +7,28 @@ import { RenderBackoffice } from '../api/controllers/backofficeController.js';
 
 const adminRouter = Router();
 
-adminRouter.use('/admin', verifyAdminUser);
+adminRouter.use(verifyAdminUser);
 
 // Páginas de administrador
-adminRouter.get('/admin', RenderBackoffice);
+adminRouter.get('/', RenderBackoffice);
 
-adminRouter.get('/users/delete/:id', async (_req, res) => {
-	await deleteFirebaseUserById(_req.params.id);
+adminRouter.get('/users/delete/:id', async (req, res) => {
+	await deleteFirebaseUserById(req.params.id);
 	res.redirect('/admin');
 });
 
-adminRouter.post('/users/update/:id', async (_req, res) => {
-	await updateFirebaseUserById(_req.params.id, {
-		username: _req.body.username,
-		mail: _req.body.mail,
-		password: _req.body.password,
-		role: _req.body.role
+adminRouter.post('/users/update/:id', async (req, res) => {
+	await updateFirebaseUserById(req.params.id, {
+		username: req.body.username,
+		mail: req.body.mail,
+		password: req.body.password,
+		role: req.body.role
 	});
 	res.redirect('/admin');
 });
 
-adminRouter.get('/users-list/:page', async (_req, res) => {
-	const users = await getFirebaseUsersByPage(parseInt(_req.params.page));
+adminRouter.get('/users-list/:page', async (req, res) => {
+	const users = await getFirebaseUsersByPage(parseInt(req.params.page));
 	res.render('./backoffice/dashboard.ejs', { users });
 });
 

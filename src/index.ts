@@ -17,7 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import adminRouter from './routes/adminRouter.js';
 import { apiRouter } from './routes/api.js';
-import webRouter from './routes/web.js';
+import webRouter, { NotFoundPage } from './routes/web.js';
 import { errorHandler } from './api/middlewares/errorHandler.js';
 import { verifyTokenOptional } from './api/middlewares/verifyToken.js';
 
@@ -75,12 +75,16 @@ try {
 	Pino.warn('RUNNING IN HTTP UNSAFE MODE, reason: ' + error);
 }
 
-
 app.use(verifyTokenOptional);
 
 app.use(webRouter);
 app.use('/api', apiRouter);
-app.use(adminRouter);
+app.use('/admin', adminRouter);
+
+// Not found page for unmatched routes
+app.use('*', (_req, res) => {
+	NotFoundPage(res);
+});
 
 app.use(errorHandler);
 
