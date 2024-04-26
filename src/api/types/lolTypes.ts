@@ -4,13 +4,13 @@ export interface LolHomeData {
 		summoners: {
 			summoneName: string,
 			leaguePoints: number,
+			champTAG: string,
 		}
 
 	];
 	champList: [
 		champs: {
 			champName: string,
-			champTAG: string,
 			champId: number,
 		}
 	];

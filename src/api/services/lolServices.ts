@@ -506,15 +506,29 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
 	return { resultsArray, friendsMost, teamPositionCount };
 };
 
-export function getLastChamps(): Record<string, number> {
-	const playersData: Record<string, number> = {
-		Smolder: 901,
-		Huawei: 910,
-		Briar: 233,
-		Naafiri: 950,
-		Milio: 902
-	};
-
+export function getLastChamps(): Promise<ChampionIdentifier> {
+	const playersData = [
+		{
+			champName: 'Smolder',
+			champId: 901
+		},
+		{
+			champName: 'Hwei',
+			champId: 910
+		},
+		{
+			champName: 'Briar',
+			champId: 233
+		},
+		{
+			champName: 'Naafiri',
+			champId: 950
+		},
+		{
+			champName: 'Milio',
+			champId: 902
+		}
+	];
 	return playersData;
 }
 
