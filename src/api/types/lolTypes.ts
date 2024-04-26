@@ -10,6 +10,7 @@ export interface LolHomeData {
 	champList: [
 		champs: {
 			champName: string,
+			champTAG: string,
 			champId: number,
 		}
 	];
