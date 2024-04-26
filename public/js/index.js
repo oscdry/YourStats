@@ -1,17 +1,20 @@
-import { validateEmail,
+import {
+	validateEmail,
 	validatePassword,
-	validateUsername } from './constants.js';
-import { usernameChangeListener,
+	validateUsername
+} from './constants.js';
+import {
+	usernameChangeListener,
 	emailChangeListener,
 	passwordChangeListener,
-	passwordConfirmationChangeListener } from './registerModal.js';
+	passwordConfirmationChangeListener
+} from './registerModal.js';
 
 
-export const RedirectToHome = () => window.location.href = '/';
+export const RedirectToHome = () => window.location = '/';
 export const ReloadPage = () => window.location.reload();
 
-const SetStorageItem = (key, value) => localStorage.setItem
-(key, value);
+const SetStorageItem = (key, value) => localStorage.setItem(key, value);
 const GetStorageItem = (key) => localStorage.getItem(key);
 
 // Login ---------------------------
@@ -23,14 +26,14 @@ function getCookie(cname) {
 	let name = cname + '=';
 	let decodedCookie = decodeURIComponent(document.cookie);
 	let ca = decodedCookie.split(';');
-	for(let i = 0; i <ca.length; i++) {
-	  let c = ca[i];
-	  while (c.charAt(0) == ' ') {
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) == ' ') {
 			c = c.substring(1);
-	  }
-	  if (c.indexOf(name) == 0) {
+		}
+		if (c.indexOf(name) == 0) {
 			return c.substring(name.length, c.length);
-	  }
+		}
 	}
 	return '';
 }
@@ -72,7 +75,7 @@ loginSubmit?.addEventListener('click', async (e) => {
 				return;
 			}
 
-			RedirectToHome();
+			ReloadPage();
 			return;
 
 		} catch (error) {
@@ -104,7 +107,6 @@ registerSubmit?.addEventListener('click', async (e) => {
 	const mail = registerMailInput.value.trim();
 	const password = registerPasswordInput.value.trim();
 	const password_confirmation = registerPasswordConfirmationInput.value.trim();
-
 
 	// If filled inputs
 	if (username && mail && password && password_confirmation) {
@@ -151,11 +153,12 @@ registerSubmit?.addEventListener('click', async (e) => {
 				return;
 			}
 
-			RedirectToHome();
+			ReloadPage();
 			return;
 
 		} catch (error) {
-			console.log(error);
+
+			// console.log(error);
 			registerModalErrorText.innerHTML = 'Unknown server error, try again later';
 			return;
 		}
@@ -213,6 +216,9 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 
 		switch (dataMode) {
 			case 'lol':
+				const gameTagInput = document.getElementById('game-tag-input');
+				const gameTagVal = gameTagInput.value.trim();
+
 
 				// This response either returns 400 or redirects to the stats page
 				response = await fetch('/api/riot-user/', {
@@ -220,9 +226,9 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ username: usernameVal })
+					body: JSON.stringify({ username: usernameVal, tag: gameTagVal})
 				});
-				targetUrl = '/lol/stats/' + usernameVal;
+				targetUrl = '/lol/stats/' + usernameVal + '/' + gameTagVal;
 				break;
 
 			case 'brawl':
@@ -258,7 +264,6 @@ if (cookiesModal && !GetStorageItem('cookies')) {
 	cookiesModal.classList.remove('hide');
 	const cookiesAcceptButton = document.getElementById('cookies-accept-button');
 	const cookiesRejectButton = document.getElementById('cookies-reject-button');
-	const cookiesConfigureButton = document.getElementById('cookies-configure-button');
 
 	const hideModal = () => {
 		cookiesModal.classList.add('hide');
@@ -279,7 +284,7 @@ if (cookiesModal && !GetStorageItem('cookies')) {
 
 	cookiesAcceptButton.addEventListener('click', cookiesAccept);
 	cookiesRejectButton.addEventListener('click', cookiesReject);
-}else{
+} else {
 	cookiesModal.remove();
 }
 

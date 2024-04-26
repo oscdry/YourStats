@@ -1,18 +1,29 @@
+<%# This component takes (brawlhomedata) param to display the Brawl Stars home page %>
+
 <%- include('../partials/components/banner.ejs', {mode : "brawl"}) %>
 
+<head>
+    <link rel="stylesheet" href="/css/brawl.css">
+</head>
+
 <main class="banner-main">
+    <%# Breadcrumb %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Brawl Stars</li>
+        </ol>
+    </nav>
+
     <h1 class="title">Brawl Stars</h1>
     <%- include('../partials/components/game-input-username.ejs', {mode: "brawl"}) %>
 
-    <% const server = {
-    id: 'EUW1',
-    name: 'EU West',
-    maintenances: [],
-    incidents: []
-    } %>
+    <%- include('./brawl-rankings.ejs', {ranking: brawlhomedata.rankSpain}) %>
 
-    <div class="d-flex ">
-        <%- include('../partials/server-status-card.ejs', {server}) %>
-    </div>
+    <%- include('./brawl-skins-showcase.ejs', {skinsBrawls: brawlhomedata.skinsBrawls}) %>
+
+
+
+    <% console.log('Spain:',brawlhomedata.rankSpain)%>
 
 </main>

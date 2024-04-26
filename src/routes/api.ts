@@ -15,7 +15,8 @@ import { contactFormSchema, createUserSchema, getUserSchema, passwordResetEnterF
 import { verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 import { deleteUser } from 'firebase/auth';
 import { requestPasswordResetController, renderPasswordResetView, resetPasswordSubmitController } from '../api/controllers/passwordResetController.js';
-import { createUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController } from '../api/controllers/userController.js';
+import { registerUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController } from '../api/controllers/userController.js';
+import { SendFortniteData } from '../api/controllers/fortniteController.js';
 
 const apiRouter = Router();
 
@@ -31,7 +32,7 @@ apiRouter.post('/login', LoginUser);
 apiRouter.post('/login-google', LoginGoogleUser);
 apiRouter.post('/register',
 	joiValidate(createUserSchema, 'body'),
-	createUserController);
+	registerUserController);
 
 // League of Legends API
 apiRouter.post('/riot-user/', RiotUserExists);
@@ -44,8 +45,9 @@ apiRouter.post('/brawl-user/', BrawlUserExists);
 apiRouter.get('/brawl-home', SendBrawlHomeData);
 apiRouter.get('/brawl-data/:tag', SendBrawlData);
 
-//Fortnite API
-apiRouter
+// Fortnite API
+apiRouter.get('/fortnite-data/:tag', SendFortniteData);
+// apiRouter.get('/fortnite-home', );
 
 // Rutas privadas --------------------------------------------
 apiRouter.post('/logout',

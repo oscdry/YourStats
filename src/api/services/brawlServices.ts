@@ -219,9 +219,19 @@ export const getRankingSpain = async () => {
 		}
 
 	});
+
+	if (result.status === 403) {
+		const json = await result.json();
+		Pino.trace('Brawl info result: ' + json.reason + ' | ' + result.status + ' | ' + result.statusText + ' | ' + json.message);
+		throw new ExternalServiceError();
+	} else if (result.status !== 200) {
+		Pino.error('Error fetching to Brawl API: ' + result.status + ' | ' + result.statusText);
+	}
+
 	const data = await result.json();
-	console.log(data.items);
 	const primeros5Jugadores = data.items.slice(0, 5);
+
+	Pino.trace('Fetched brawl ranking Spain');
 	return primeros5Jugadores;
 };
 
@@ -236,8 +246,11 @@ export const getRankingGlobal = async () => {
 
 	});
 	const data = await result.json();
-	console.log(data.items);
+
+	// console.log(data.items);
 	const primeros5Jugadores = data.items.slice(0, 5);
+
+	Pino.trace('Fetched brawl ranking Global');
 	return primeros5Jugadores;
 };
 interface Player {
@@ -257,6 +270,11 @@ interface Player {
 interface BrawlHomeData {
 	rankSpain: Player[];
 	rankGlobal: Player[];
+	skinsBrawls: {
+		name: string;
+		'image-url': string;
+		'release-date': string;
+	}[];
 }
 interface BrawlData {
 	resumenPartidas: {
@@ -334,9 +352,12 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | nul
 		}
 	};
 };
-export const GetHomeData = async (): Promise<BrawlHomeData> => {
-	const rankingGlobal = await getRankingGlobal();
-	const rankingSpain = await getRankingSpain();
+
+export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
+
+	const [rankingGlobal, rankingSpain] = await Promise.all(
+		[getRankingGlobal(), getRankingSpain()]
+	);
 
 	const formattedRankSpain = rankingSpain.map((player: any) => ({
 		tag: player.tag,
@@ -384,7 +405,7 @@ export const GetHomeData = async (): Promise<BrawlHomeData> => {
 			'release-date': '5 jan 2024'
 		}
 	];
-	
+
 	return {
 		rankSpain: formattedRankSpain,
 		rankGlobal: formattedRankGlobal,

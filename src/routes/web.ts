@@ -1,5 +1,5 @@
 import { NextFunction, Router, type Request, type Response } from 'express';
-import { RenderBrawlStats } from '../api/controllers/brawlController.js';
+import { renderBrawlHome, RenderBrawlStats } from '../api/controllers/brawlController.js';
 import { RenderLolIndex, renderLolStatsForPlayer } from '../api/controllers/lolController.js';
 import { brawlTestData } from '../api/types/testData/brawlTestData.js';
 import { lolTestData } from '../api/types/testData/lolTestData.js';
@@ -10,12 +10,20 @@ const webRouter = Router();
 
 // Not found page
 export const NotFoundPage = (res: Response) => {
-	res.status(404).render('404.ejs', { title: 'Page not found', user : res.locals.user});
+	res.status(404).render('404.ejs', { title: 'Page not found', user: res.locals.user });
+};
+
+export const GenericErrorPage = (res: Response,
+	headerText: string,
+	headerId: string,
+	paragraphText: string,
+	paragraphId: string) => {
+	res.status(500).render('partials/bipage-generic.ejs', { title: 'Error', user: res.locals.user, headerText, headerId, paragraphText, paragraphId });
 };
 
 // Error page
 export const RenderErrorPage = (res: Response) => {
-	res.status(500).render('500.ejs', { title: 'Error', user : res.locals.user });
+	res.status(500).render('500.ejs', { title: 'Error', user: res.locals.user });
 };
 
 // Páginas publicas
@@ -36,9 +44,7 @@ webRouter.get('/password-reset-sent', renderPasswordResetViewSent);
 webRouter.get('/password-reset-success', renderPasswordResetSuccess);
 
 // Brawl Stars ---------------------------------------------------------
-webRouter.get('/brawl', (_req: Request, res: Response) => {
-	res.render('./brawl/index.ejs', { title: 'Brawl Stars', user: res.locals.user });
-});
+webRouter.get('/brawl', renderBrawlHome);
 
 //! Testing routes Brawl Stars
 webRouter.get('/brawl/stats/asd', async (_req: Request, res: Response, next: NextFunction) => {
@@ -46,6 +52,11 @@ webRouter.get('/brawl/stats/asd', async (_req: Request, res: Response, next: Nex
 });
 
 webRouter.get('/brawl/stats/:tag', RenderBrawlStats);
+
+// Fortnite ---------------------------------------------------------
+webRouter.get('/fortnite', (_req: Request, res: Response) => {
+	res.render('./fortnite/index.ejs', { title: 'Fortnite', user: res.locals.user });
+});
 
 // League of Legends ---------------------------------------------------------
 webRouter.get('/lol', RenderLolIndex);

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import fs from 'fs';
+import Pino from '../../logger.js';
 
 interface SkinInfo {
 	name: string;
@@ -63,7 +64,7 @@ async function extractSkinInfoFromAllPages(totalPages: number) {
 	}
 
 	fs.writeFileSync('all_skins_info.json', JSON.stringify(allSkinsInfo, null, 2));
-	console.log('Información de todas las skins extraída y guardada correctamente.');
+	Pino.info('Información de todas las skins extraída y guardada correctamente.');
 }
 
 export function searchSkinByName(skinName: string) {

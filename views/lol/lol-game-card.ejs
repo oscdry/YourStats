@@ -1,4 +1,5 @@
-<%# This object receives a (lolgame) and (playername) object to display a game as a card %>
+<%# This object receives a (lolgame) and (playername) object to display a game
+as a card %>
 <%# Along with the username, and the index of the game in the array %>
 
 <head>
@@ -60,27 +61,31 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="lol-game-info-modal-team team-blue">
-                    <p lol-blue-team>Equipo Azul</p>
+                    <p id="lol-blue-team">Equipo Azul</p>
 
                     <%# Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayBlue) { %>
-                    <%- include('./lol-team-member.ejs', {champ:
-                    lolgame.arrayBlue[key], name: key, playername: playername}); %>
+
+                    <%- include('./lol-team-member.ejs', {
+                    champID: lolgame.arrayBlue[key].champID,
+                    name: key,
+                    tag: lolgame.arrayBlue[key].gameTAG,
+                    playername: playername});
+                    %>
                     <% } %>
                 </div>
 
                 <div class="lol-game-info-modal-team team-red">
                     <p id="lol-red-team">Equipo Rojo</p>
 
+                    <%# Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayRed) { %>
-                    <div class="lol-game-card team-member">
-                        <img
-                            src="/img/lol/champs/<%= lolgame.arrayRed[key] %>.webp"
-                            alt>
-                        <p class="team-member-name">
-                            <%= key %>
-                        </p>
-                    </div>
+                    <%- include('./lol-team-member.ejs', {
+                    champID: lolgame.arrayRed[key].champID,
+                    name: key,
+                    tag: lolgame.arrayRed[key].gameTAG,
+                    playername: playername});
+                    %>
                     <% } %>
                 </div>
             </div>

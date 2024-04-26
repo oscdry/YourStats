@@ -470,7 +470,7 @@ i.server-status-icon
     flex-flow: row wrap;
     align-items: center;
     justify-content: center;
-    gap: 3rem;
+    gap: 2vw;
     margin: 2rem 0;
 }
 
@@ -491,7 +491,7 @@ i.server-status-icon
     border-radius: 5px;
 
     min-height: 250px;
-    min-width: 200px;
+    min-width: 180px;
 
     width: 20vw;
 
@@ -525,12 +525,12 @@ i.server-status-icon
 
 .game-selector-item p
 {
+    text-wrap: nowrap;
     font-size: 1.1rem;
 }
 
 .game-selector-item>#game-selector-new
 {
-    content: "New!";
     position: absolute;
     top: 0;
     right: 0;
@@ -934,6 +934,12 @@ input[type="password"].invalid:not(:focus)
     outline: 2px solid var(--accent-color);
 }
 
+/* User card */
+.user-card-container {
+    padding: 0.25rem;
+    background-color: var(--gray);
+}
+
 /* News Component */
 .news-container
 {
@@ -1285,6 +1291,12 @@ input[type="password"].invalid:not(:focus)
     pointer-events: none;
 }
 
+.game-input-username-container {
+    width: 100%;
+    padding: 2rem 3vw;
+    box-sizing: border-box;
+}
+
 #game-username-form
 {
     position: relative;
@@ -1296,9 +1308,10 @@ input[type="password"].invalid:not(:focus)
     width: 100%;
 
     border-radius: 1rem;
+    background-color: transparent;
 }
 
-#game-username-form>input
+#game-username-form input
 {
     border-radius: inherit;
     height: 100%;
@@ -1306,19 +1319,30 @@ input[type="password"].invalid:not(:focus)
 
     border: none;
 
-    font-size: 18px;
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
 
     padding: 0.75rem;
+    z-index: 0;
+    min-height: 0;
+
+    background-color: transparent;
 }
 
 #game-username-form>button
 {
     position: absolute;
     border-radius: inherit;
-    right: 0;
+    right: -2px;
 
-    min-width: 150px;
+    min-width: 100px;
     width: 15%;
+
+    height: 100%;
+    min-height: 0;
+
+    margin: 0.1rem;
+    border-radius: 5px 15px 15px 5px;
+    z-index: 0;
 }
 
 #game-username-form>p.error-text
@@ -1565,14 +1589,33 @@ div.lol-game-card.draw
     background-color: rgb(255, 220, 66);
 }
 
+#confirm-delete-description {
+    text-align: center;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2%; /* Esto crea espacio entre los botones */
+    }
+
+.pagination-btn {
+    padding: 0.5em; /* Este es un buen punto de partida, ajusta según necesites */
+    flex: 0 0 auto; /* Esto asegura que los botones no crezcan o se encojan */
+    text-align: center;
+    border-radius: 4px; /* Ajusta esto a tu preferencia */
+    /* Resto de tu estilo de botón */
+}
+
 /* Responsive */
 
 @media screen and (max-width: 1024px)
 {
     main
     {
-        width: 97.5%;
-        padding: 1rem 1.5rem;
+        width: 100%;
+        padding: 1rem 0.75rem;
 
         display: flex;
         flex-flow: column nowrap;

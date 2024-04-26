@@ -1,8 +1,10 @@
 <head>
     <script src="/js/backoffice.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/backoffice.css">
 </head>
 
 <%- include('../partials/modal-back-update.ejs') %>
+<%- include('../partials/modal-confirm-delete.ejs') %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
 <main>
@@ -11,6 +13,7 @@
     <form action="get">
         <%- include('../partials/components/input-mail.ejs',
         {id:"back-search-mail-input"})%>
+        <button id="back-clear-button" type="button" class="secondary" style="display: none;">Limpiar</button>
         <button id="back-search-button" type="submit" class="primary">Buscar</button>
         <p id="error-search-back" class="error-text"></p>
     </form>
@@ -41,12 +44,12 @@
                         data-mail="<%= user.mail %>"
                         data-role="<%= user.role %>"
                         class="edit-btn" id="backoffice-edit-btn">Editar</a></td>
-                    <td><a href="/admin/users/delete/<%= user.id %>" class="backoffice-delete-btn">Eliminar</a></td>
+                    <td><a class="backoffice-delete-btn" data-id="<%= user.id %>" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar</a></td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
-    <div>
+    <div class="pagination-container">
         <button id="prevPage" class="secondary"><i class="fas fa-arrow-left"></i></button>
         <button class="secondary" id="previous-currentPage"></button>
         <button class="primary" id="currentPage"></button>

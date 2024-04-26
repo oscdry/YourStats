@@ -3,6 +3,28 @@
     --trophy-color: #ffbe20;
 }
 
+#game-username-form.brawl input {
+    padding-left: 3rem;
+}
+
+#game-username-form.brawl::after
+{
+    content: "#";
+    position: absolute;
+
+    display: block;
+
+    left: 0;
+
+    font-size: 1.25rem;
+
+    padding: 0.25rem 1.25rem;
+
+    border-radius: 15px;
+
+    z-index: 0;
+}
+
 .brawl-container
 {
     position: relative;

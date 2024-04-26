@@ -1,7 +1,7 @@
 const userId = window.location.pathname.split('/').pop();
 
-// update username in user view
-const usernameTitleDiv = document.getElementById('user-title');
+// Update username in user view
+const usernameInfoDiv = document.getElementById('user-info');
 const usernameEditForm = document.getElementById('user-title-editing');
 
 const changeUserNameBtn = document.getElementById('edit-username');
@@ -16,13 +16,13 @@ changeUserNameBtn?.addEventListener('click', () => {
 	const curUserName = currentUserName.textContent;
 
 	// Hide current username display
-	usernameTitleDiv.classList.add('hide');
+	usernameInfoDiv.classList.add('hide');
 	usernameEditForm.classList.remove('hide');
 	changeUserNameBtn.style.display = 'none';
 
 	// Add event listener for cancel button
 	cancelUsername.addEventListener('click', () => {
-		usernameTitleDiv.classList.remove('hide');
+		usernameInfoDiv.classList.remove('hide');
 		usernameEditForm.classList.add('hide');
 		changeUserNameBtn.style.display = 'block';
 	});
@@ -32,7 +32,7 @@ changeUserNameBtn?.addEventListener('click', () => {
 		e.preventDefault();
 		const newUsername = usernameInput.value;
 		if (!newUsername || newUsername === curUserName) {
-			usernameTitleDiv.classList.remove('hide');
+			usernameInfoDiv.classList.remove('hide');
 			usernameEditForm.classList.add('hide');
 			return;
 		}
@@ -64,60 +64,45 @@ changeUserNameBtn?.addEventListener('click', () => {
 });
 
 // Update user Bio in user view
-const changeUserBioBtn = document.getElementById('changeUserBioBtn');
-const currentUserBio = document.getElementById('currentUserBio');
-const userBio = document.querySelector('.bio-info');
+const changeUserBioBtn = document.getElementById('edit-bio');
+const currentUserBio = document.getElementById('user-bio');
+
+const editBioControls = document.getElementById('user-bio-editing');
+const submitBio = document.getElementById('submit-bio');
+const cancelBtn = document.getElementById('cancel-bio');
+
+const resetState = (prevBioText) => {
+	changeUserBioBtn.style.display = 'block';
+	currentUserBio.setAttribute('readonly', '');
+	currentUserBio.setAttribute('disabled', '');
+	currentUserBio.textContent = prevBioText;
+	editBioControls.classList.add('hide');
+};
 
 changeUserBioBtn?.addEventListener('click', () => {
 	const userBioText = currentUserBio.textContent;
-
-	// Create textarea field
-	const textareaChange = document.createElement('textarea');
-	textareaChange.value = userBioText;
-	userBio.insertBefore(textareaChange, changeUserBioBtn);
-
-	// Hide current bio display
-	currentUserBio.style.display = 'none';
-
-	// Hide changeUserBioBtn
 	changeUserBioBtn.style.display = 'none';
 
-	// Create save button
-	const saveBtn = document.createElement('button');
-	saveBtn.textContent = 'Guardar';
-	saveBtn.id = 'bio-saveChanges';
-	userBio.appendChild(saveBtn);
+	currentUserBio.removeAttribute('readonly');
+	currentUserBio.removeAttribute('disabled');
+	editBioControls.classList.remove('hide');
 
-	// Create cancel button
-	const cancelBtn = document.createElement('button');
-	cancelBtn.textContent = 'Cancelar';
-	cancelBtn.id = 'bio-cancelChanges';
-	userBio.appendChild(cancelBtn);
-
-	// Add event listener for cancel button
+	// On cancel
 	cancelBtn.addEventListener('click', () => {
-
-		// Remove textarea field
-		textareaChange.remove();
-
-		// Show current bio display
-		currentUserBio.style.display = 'block';
-
-		// Show changeUserBioBtn
-		changeUserBioBtn.style.display = 'inline';
-
-		// Remove save and cancel buttons
-		saveBtn.remove();
-		cancelBtn.remove();
+		resetState(userBioText);
 	});
 
-	// Add event listener for save button
-	saveBtn.addEventListener('click', async () => {
+	// On save
+	submitBio.addEventListener('click', async () => {
+		if (currentUserBio.value === userBioText) {
+			resetState(userBioText);
+			return;
+		}
 
 		// Update bio
-		const newUserBio = textareaChange.value;
-
 		try {
+			const newUserBio = currentUserBio.value.trim();
+
 			const response = await fetch(`/api/update-user-bio/${userId}`, {
 				method: 'PUT',
 				body: JSON.stringify({ bio: newUserBio }),
@@ -130,7 +115,7 @@ changeUserBioBtn?.addEventListener('click', () => {
 				throw new Error('Failed to update bio');
 			}
 
-			// Reload the view after successful update
+			// Reload the view if OK
 			window.location.reload();
 		} catch (error) {
 			console.error('Error:', error);
@@ -139,7 +124,7 @@ changeUserBioBtn?.addEventListener('click', () => {
 });
 
 // user change image
-const uploadPicBtn = document.getElementById('uploadPicBtn');
+const uploadPicBtn = document.getElementById('upload-pfp');
 const profilePicContainer = document.querySelector('.profile-pic-container');
 const profilePic = document.querySelector('.profile-pic');
 const fileInput = document.getElementById('fileInput');

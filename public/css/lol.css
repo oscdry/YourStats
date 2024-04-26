@@ -1,3 +1,48 @@
+#game-username-form {
+    gap: 4px;
+}
+
+input#game-username-input {
+    width: 100%;
+    border-radius: 15px 0 0 15px;
+}
+
+.game-tag-input-container {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+
+    width: 80%;
+    max-width: 100%;
+
+    box-sizing: border-box;
+    border-radius: 15px;
+}
+
+.game-tag-input-container::after
+{
+    content: "#";
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    padding: 0.75rem 1rem;
+    font-size: 1.25rem;
+    max-height: 99.9%;
+    min-width: 30px;
+    box-sizing: border-box;
+    background-color: var(--white);
+}
+
+input#game-tag-input {
+    width: 100%;
+    padding-left: 3rem;
+    border-radius: 0 15px 15px 0;
+}
+
+
 .header
 {
     display: flex;
@@ -12,14 +57,6 @@
     height: 25vh;
 
     box-sizing: border-box;
-}
-
-.lol-general-stats
-{
-    display: flex;
-    flex-flow: row nowrap;
-
-    gap: 1.5rem;
 }
 
 .lol-game-card
@@ -39,6 +76,10 @@
     box-shadow: var(--shadow);
 
     border-radius: 10px;
+
+    transition: filter 0.15s ease-in-out;
+
+    cursor: pointer;
     overflow: hidden;
 }
 
@@ -50,7 +91,7 @@
 
 .lol-game-card:hover
 {
-    background-color: var(--gray);
+    filter: brightness(0.95);
 }
 
 .lol-game-card.team-member
@@ -78,12 +119,11 @@
 {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 
     width: 100%;
     gap: 1rem;
-
 }
 
 .lol-champion-card
@@ -112,6 +152,8 @@
 
     width: 75%;
     height: 100%;
+
+    text-align: center;
 
     gap: 1rem;
 }
@@ -163,8 +205,6 @@
     justify-content: space-between;
     align-items: center;
 
-    width: 60%;
-    height: 100%;
 
     gap: 1rem;
 
@@ -176,7 +216,7 @@
 .lol-user img
 {
     object-fit: contain;
-    height: 100%;
+    max-height: 175px;
 }
 
 .lol-rank
@@ -451,6 +491,8 @@ div.lol-item-icon-empty
     font-size: 18px;
 
     padding: 1rem;
+
+    color: var(--black);
 
     box-shadow: var(--shadow);
 

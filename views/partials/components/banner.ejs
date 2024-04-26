@@ -13,15 +13,41 @@ const bannersbrawl = [
 "/img/banners/brawl-d.jpg"
 ]
 
-const bannerMode = typeof mode !== "undefined" ? mode : ""
-const hideContent = typeof hide !== "undefined" ? hide : false
-const text = bannerMode === "" ? "Tus estadísticas, al instante." : bannerMode === "lol" ? "League of Legends" : "Brawl Stars"
+const bannersfn = [
+"/img/banners/fn-a.jpg",
+"/img/banners/fn-b.jpg",
+"/img/banners/fn-c.jpg",
+"/img/banners/fn-d.jpg"
+]
+
+const bannerMode = typeof mode !== "undefined" ? mode : "";
+const hideContent = typeof hide !== "undefined" ? hide : false;
+let text = bannerMode === "" ? "Tus estadísticas, al instante." : "";
+
+switch (bannerMode) {
+    case "lol":{
+        text = "League of Legends";
+        break;
+    }
+    case "brawl":{
+        text = "Brawl Stars";
+        break;
+    }
+    case "fn":{
+        text = "Fortnite";
+        break;
+    }
+
+    case '':
+        break;
+}
 %>
 
 <div class="banner">
 
     <% if (!hideContent) { %>
-    <h2 id="eslogan">
+    <%# Slogan will not be translated if it has a game name %>
+    <h2 id="<%= bannerMode === "" ? 'eslogan' : "" %>">
         <%= text %>
     </h2>
 
@@ -37,6 +63,9 @@ const text = bannerMode === "" ? "Tus estadísticas, al instante." : bannerMode 
     <img
         src="<%= bannersbrawl[Math.floor(Math.random() * bannersbrawl.length)] %>"
         alt="Banner Brawl Stars">
+    <% } else if (bannerMode === "fn") { %>
+    <img src="<%= bannersfn[Math.floor(Math.random() * bannersfn.length)] %>"
+        alt="Banner Fortnite">
     <% } else { %>
     <%# If no mode, random banner %>
     <% const allbanners = bannerslol.concat(bannersbrawl) %>
