@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { brawlInfo, GetBrawlData, GetHomeData } from '../services/brawlServices.js';
+import { brawlInfo, GetBrawlData, GetBrawlHomeData } from '../services/brawlServices.js';
 import { UserNotFoundError } from '../errors/errors.js';
 
 
@@ -24,11 +24,22 @@ export const SendBrawlData = async (req: Request, res: Response, next: NextFunct
 };
 export const SendBrawlHomeData = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		return res.json(await GetHomeData());
+		return res.json(await GetBrawlHomeData());
 	} catch (error) {
 		next(error);
 	}
 };
+
+export const renderBrawlHome = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const brawlHomeData = await GetBrawlHomeData();
+
+		return res.render('./brawl/index.ejs', { title: 'Brawl Home', brawlhomedata: brawlHomeData, user: res.locals.user });
+	} catch (error) {
+		next(error);
+	}
+};
+
 export const RenderBrawlStats = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const userTag = req.params.tag;
@@ -37,7 +48,7 @@ export const RenderBrawlStats = async (req: Request, res: Response, next: NextFu
 		if (!brawlData)
 			throw new UserNotFoundError();
 
-		return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlData, user: res.locals.user});
+		return res.render('./brawl/brawl-user-stats.ejs', { title: 'Brawl Stats', brawldata: brawlData, user: res.locals.user });
 	} catch (error) {
 		next(error);
 	}

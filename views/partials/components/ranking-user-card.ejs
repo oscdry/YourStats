@@ -1,0 +1,16 @@
+<%# This component takes (name) (value) (valueName) and (position) to display a user in a ranking %>
+
+<%# It also takes an optional (link) parameter to set the link of the user %>
+
+<a class="user-card-container"
+<%= link ? `href=${link}` : '' %>
+    <div class="user-card-image">
+
+    </div>
+
+    <div class="user-card-info">
+        <p class="user-card-position"><%= position %></p>
+        <p class="user-card-name"><%= name %></p>
+        <p class="user-card-value"><%= value %></p>
+    </div>
+</a>

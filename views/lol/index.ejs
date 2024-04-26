@@ -9,7 +9,8 @@ a
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">League of Legends</li>
+            <li class="breadcrumb-item active" aria-current="page">League of
+                Legends</li>
         </ol>
     </nav>
 
@@ -17,15 +18,14 @@ a
     <%- include('../partials/components/game-input-username.ejs', {mode :
     "lol"}) %>
 
-    <div class="container-fluid my-3 d-flex flex-column gap-3">
-        <h3 id="lol-server-status">Estado de los servidores</h3>
-        <%- include('../partials/server-status-card.ejs', {server}) %>
-    </div>
-
     <%- include('./lol-global-ranking.ejs', {summonerDetails:
     homedata.summonerDetails}) %>
 
     <%- include('./lol-skins-showcase.ejs', {popularSkins:
     homedata.popularSkins}) %>
 
+    <div class="container-fluid my-3 d-flex flex-column gap-3">
+        <h3 id="lol-server-status">Estado de los servidores</h3>
+        <%- include('../partials/server-status-card.ejs', {server}) %>
+    </div>
 </main>

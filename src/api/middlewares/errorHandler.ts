@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Pino from '../../logger.js';
-import { NotFoundPage, RenderErrorPage } from '../../routes/web.js';
+import { GenericErrorPage, NotFoundPage, RenderErrorPage } from '../../routes/web.js';
 
 /**
  * @param req
@@ -71,7 +71,10 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 
 		// External service errors
 		case 'ExternalServiceError':
-			return res.status(500).json({ error: 'There was an error connecting with external services, this should be fixed soon, apologies!' });
+			if (req.url.includes('/api'))
+				return handleApiError(req, res, 'Error connecting to external services', 500);
+
+			return GenericErrorPage(res, 'Error', 'external-error-header', 'Error connecting to external services', 'external-error-paragraph');
 
 		// Internal errors
 		case 'FirebaseError':
@@ -81,6 +84,8 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 		case 'ReferenceError':
 			return RenderErrorPage(res);
 		case 'TypeError':
+			return RenderErrorPage(res);
+		case 'Error':
 			return RenderErrorPage(res);
 		default:
 			break;
