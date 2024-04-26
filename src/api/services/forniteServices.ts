@@ -1,5 +1,5 @@
 import { UserNotFoundError } from '../errors/errors.js';
-
+import * as fs from 'fs';
 const FORTNITE_API_ENDPOINT = 'https://fortnite-api.com/v2/stats/br/v2/';
 
 import { config } from 'dotenv';
@@ -174,7 +174,30 @@ export const GetFortniteData = async (playerTagEX: string): Promise<FortniteData
 	return data;
 };
 
-console.log(JSON.stringify(await GetFortniteData(accountId)));
+
+
+export function loadShop(): Promise<FortniteShop> {
+	try {
+		const jsonData = fs.readFileSync('skins.json', 'utf8');
+		const skinsInfo = JSON.parse(jsonData);
+		return skinsInfo;
+	} catch (error) {
+		console.error('Error al buscar las skins:', error);
+		return '';
+	}
+}
+
+
+
+export interface FortniteShop {
+	name:     string;
+	image:    string;
+	price:    number;
+	filePath: string;
+}
+
+//console.log(JSON.stringify(await GetFortniteData(accountId)));
+console.log(JSON.stringify(loadShop()));
 
 //console.log( JSON.stringify(await getFortniteStatsByAccountId(accountId)));   
 

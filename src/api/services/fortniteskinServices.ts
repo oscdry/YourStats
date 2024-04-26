@@ -72,6 +72,6 @@ export async function downloadImagesFromJSON(jsonFilePath, outputPath) {
 const jsonFilePath = 'skins.json'; 
 const outputPath = 'public/img/fortnite/skins/'; 
 
-//downloadImagesFromJSON(jsonFilePath, outputPath);
+downloadImagesFromJSON(jsonFilePath, outputPath);
 
-//fetchFortniteShopData();
+//console.log(await fetchFortniteShopData());
