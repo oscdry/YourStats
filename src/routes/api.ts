@@ -46,9 +46,7 @@ apiRouter.get('/brawl-home', SendBrawlHomeData);
 apiRouter.get('/brawl-data/:tag', SendBrawlData);
 
 // Fortnite API
-// apiRouter.post('/fortnite-user/', FortniteUserExists);
 apiRouter.get('/fortnite-data/:tag', SendFortniteData);
-
 // apiRouter.get('/fortnite-home', );
 
 // Rutas privadas --------------------------------------------

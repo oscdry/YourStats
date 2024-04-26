@@ -186,11 +186,11 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 	const sortByTrophies = userData.brawlers.sort(
 		(a: { trophies: number; }, b: { trophies: number; }) => b.trophies - a.trophies);
-	const topBrawlersByTrophies = sortByTrophies.slice(0, 10);
+	const topBrawlersByTrophies = sortByTrophies;
 
 	const brawlers = topBrawlersByTrophies.sort(
 		(a: { highestTrophies: number; }, b: { highestTrophies: number; }
-		) => b.highestTrophies - a.highestTrophies).slice(0, 3)
+		) => b.highestTrophies - a.highestTrophies)
 		.map((brawler: { id: any; name: any; power: any; gears: any; trophies: any; highestTrophies: any; starPowers: any; gadgets: any; }) => (
 			{
 				id: brawler.id,
@@ -396,7 +396,7 @@ export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
 		},
 		{
 			'name': 'Mariposa piper',
-			'image-url': 'https://i.redd.it/the-first-time-i-saw-mariposa-pipers-pin-i-didnt-like-it-at-v0-0fb138fvk8ma1.png',
+			'image-url': 'https://server.blix.gg/imgproxy/KyQLh3Rm99ZeABxCJxO4J48HGn74Gdoz2WiZBV_3sac/rs:fit:260:260:0/g:no/aHR0cDovL21pbmlvOjkwMDAvaW1hZ2VzLzQxNWI3MDM3MzY3MzQ5NjY5NGZlYTkyMjc1YjI2NzkyLnBuZw.webp',
 			'release-date': '8 mar 2023'
 		},
 		{
@@ -412,6 +412,7 @@ export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
 		skinsBrawls: skinsBrawls
 	};
 };
+console.log(await GetBrawlData('YCQLVQV'));
 
 //console.log(await GetHomeData());
 //console.log(await getRankingSpain());
