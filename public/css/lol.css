@@ -425,11 +425,6 @@ div.lol-item-icon-empty
     opacity: 0.9;
 }
 
-.skin-name
-{
-    font-size: clamp(1rem, 2vw, 2rem);
-}
-
 .skin-price
 {
     font-size: clamp(1rem, 1.2vw, 1.5rem);

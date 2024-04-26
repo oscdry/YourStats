@@ -87,8 +87,15 @@ POST http://localhost:8080/api/upload/asdasdasd
 GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
 
 ###
+GET https://yourstats.kxnzen.me/api/brawl-home/
+
+###
 
 GET https://yourstats.kxnzen.me/api/brawl-home
+
+###
+
+GET http://localhost/api/brawl-home
 
 ###
 
@@ -135,3 +142,7 @@ X-Riot-Token: RGAPI-0602ed17-6cfb-487d-8692-8a761a471850
 ###
 
 GET http://localhost/api/fortnite-data/Duality
+
+###
+
+GET https://yourstats.kxnzen.me/api/fortnite-data/Duality
