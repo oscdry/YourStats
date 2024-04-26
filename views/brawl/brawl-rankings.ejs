@@ -1,16 +1,21 @@
 <%# This component takes a (ranking) object parameter to display a ranking in
 'userCards' %>
 
-<div class="brawl-ranking-container">
 
-    <% for (user of ranking) { %>
-    <%- include('../partials/components/ranking-user-card.ejs', {
-    name: user.name,
-    link: `/brawl/stats/${user.tag.substring(1,9)}`,
-    position: user.rank,
-    value: user.trophies,
-    valueId: "trophies"
-    })%>
+<div class="d-flex flex-column">
+    <h4 class="my-3 text-center <%= titleId %>"><%= title %></h4>
+    <div class="brawl-ranking-container">
 
-    <% } %>
+        <% for (user of ranking) { %>
+        <%- include('../partials/components/ranking-user-card.ejs', {
+        name: user.name,
+        link: `/brawl/stats/${user.tag.substring(1,9)}`,
+        position: user.rank,
+        value: user.trophies,
+        valueId: "trophies",
+        valueName: "Trofeos"
+        }) %>
+
+        <% } %>
+    </div>
 </div>

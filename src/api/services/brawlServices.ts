@@ -30,7 +30,7 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 	if (result.status === 404) {
 		throw new UserNotFoundError();
 	} else if (result.status === 403) {
-		Pino.trace(result);
+		Pino.trace(result + ' | ' + result.status + ' | ' + result.statusText);
 		throw new ExternalServiceError();
 
 	}
@@ -359,25 +359,6 @@ export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
 		[getRankingGlobal(), getRankingSpain()]
 	);
 
-	const formattedRankSpain = rankingSpain.map((player: any) => ({
-		tag: player.tag,
-		name: player.name,
-		nameColor: '',
-		icon: { id: 0 },
-		trophies: 0,
-		rank: player.rank,
-		club: { name: '' }
-	}));
-
-	const formattedRankGlobal = rankingGlobal.map((player: any) => ({
-		tag: player.tag,
-		name: player.name,
-		nameColor: '',
-		icon: { id: 0 },
-		trophies: 0,
-		rank: player.rank,
-		club: { name: '' }
-	}));
 	const skinsBrawls = [
 		{
 			'name': 'Holiday Pam',
@@ -407,11 +388,12 @@ export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
 	];
 
 	return {
-		rankSpain: formattedRankSpain,
-		rankGlobal: formattedRankGlobal,
+		rankSpain: rankingSpain,
+		rankGlobal: rankingGlobal,
 		skinsBrawls: skinsBrawls
 	};
 };
+
 // console.log(await GetBrawlData('YCQLVQV'));
 
 //console.log(await GetHomeData());

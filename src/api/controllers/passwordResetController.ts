@@ -13,7 +13,7 @@ export async function renderPasswordResetView(req: Request, res: Response, next:
 	const { token } = req.params;
 
 	if (!token)
-		return res.render('./password-reset-form.ejs', { title: 'Password Reset', user: res.locals.user});
+		return res.render('./password-reset-form.ejs', { title: 'Password Reset', user: res.locals.user });
 
 	try {
 		const user = await getFirebaseUserByResetPasswordToken(token);
@@ -101,7 +101,7 @@ export const resetPasswordController = async (req: Request, res: Response, next:
 };
 
 export const resetPasswordSubmitController = async (req: Request, res: Response, next: NextFunction) => {
-	const {password, token} = req.body;
+	const { password, token } = req.body;
 
 	try {
 		const user = await getFirebaseUserByResetPasswordToken(token);
@@ -128,9 +128,11 @@ export const resetPasswordSubmitController = async (req: Request, res: Response,
 };
 
 export const renderPasswordResetSuccess = (_req: Request, res: Response) => {
-	res.render('./partials/bigpage-generic.ejs', { title: 'Password Reset',
-		headerText : 'Contraseña cambiada', headerId: 'password-reset-success',
+	res.render('partials/bigpage-generic.ejs', {
+		title: 'Password Reset',
+		headerText: 'Contraseña cambiada', headerId: 'password-reset-success',
 		paragraphText: 'Tu contraseña ha sido cambiada con éxito. Ya puedes iniciar sesión con tu nueva contraseña!',
 		paragraphId: 'password-reset-success-paragraph',
-	 user: res.locals.user });
+		user: res.locals.user
+	});
 };
