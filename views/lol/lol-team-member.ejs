@@ -1,16 +1,16 @@
-<%# This component gets a (champ) and (name) object to display a team member %>
+<%# This component gets (champID), (name) and (tag) params to display a team member %>
 <%# (playername) is the current user stats name %>
 
 <a
     <% if (name !== playername) { %>
-    href="./<%= name %>" class="lol-game-card team-member">
+    href="/lol/stats/<%= name + '/' + tag %>" class="lol-game-card team-member">
     <% } else { %>
     class="lol-game-card team-member player">
     <% } %>
     <img
-        src="/img/lol/champs/<%= champ %>.webp"
+        src="/img/lol/champs/<%= champID %>.webp"
         alt>
     <p class="team-member-name">
-        <%= name %>
+        <%= name + ' #' + tag %>
     </p>
 </a>

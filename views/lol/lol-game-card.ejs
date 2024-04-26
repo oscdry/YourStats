@@ -61,12 +61,16 @@ as a card %>
         <div class="modal-content">
             <div class="modal-body">
                 <div class="lol-game-info-modal-team team-blue">
-                    <p lol-blue-team>Equipo Azul</p>
+                    <p id="lol-blue-team">Equipo Azul</p>
 
                     <%# Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayBlue) { %>
-                    <%- include('./lol-team-member.ejs', {champ:
-                    lolgame.arrayBlue[key], name: key.champID + key, playername: playername});
+
+                    <%- include('./lol-team-member.ejs', {
+                    champID: lolgame.arrayBlue[key].champID,
+                    name: key,
+                    tag: lolgame.arrayBlue[key].gameTAG,
+                    playername: playername});
                     %>
                     <% } %>
                 </div>
@@ -76,8 +80,11 @@ as a card %>
 
                     <%# Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayRed) { %>
-                    <%- include('./lol-team-member.ejs', {champ:
-                    lolgame.arrayRed[key], name: key, playername: playername});
+                    <%- include('./lol-team-member.ejs', {
+                    champID: lolgame.arrayRed[key].champID,
+                    name: key,
+                    tag: lolgame.arrayRed[key].gameTAG,
+                    playername: playername});
                     %>
                     <% } %>
                 </div>

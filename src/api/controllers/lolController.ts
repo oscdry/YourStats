@@ -15,7 +15,7 @@ export const RiotUserExists = async (req: Request, res: Response, next: NextFunc
 	const userName = req.body.username;
 	const tag = req.body.tag;
 	try {
-		const user = await RiotDataByName(userName);
+		const user = await RiotDataByName(userName, tag);
 		if (user?.puuid) {
 			res.sendStatus(200);
 		}
@@ -107,8 +107,6 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 				}]
 			}
 		};
-
-		Pino.fatal(gameName);
 
 		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, playername: gameName, user: res.locals.user });
 	} catch (error) {

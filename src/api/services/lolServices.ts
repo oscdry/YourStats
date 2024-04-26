@@ -9,6 +9,7 @@ import { RiotgetPUUIDInfo } from './riotServices.js';
 import { getAccountbyId } from './riotServices.js';
 import { getNewSkins } from './lolSkinsServices.js';
 import { ExternalServiceError } from '../errors/errors.js';
+import { LolHomeData, LoLUserData } from '../types/lolTypes.js';
 
 config();
 
@@ -64,7 +65,9 @@ export const LolRankingDemo = async () => {
 	const result = await fetch(LOL_API_ENDPOINT + 'league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5', {
 		headers: { 'X-Riot-Token': RIOT_API_KEY }
 	});
-	if (result.status !== 200) { console.log('Error'); }
+	if (result.status !== 200) {
+		Pino.error('Error fetching lol rank: ' + result.statusText);
+	}
 
 	const json = await result.json();
 	const sortedData = json.entries.sort(
@@ -270,8 +273,7 @@ export const LoLChampsLast10Games = async (Puiid: string): Promise<string> => {
 };
 
 // Detalle ultimas 10 partidas con estadísticas incluidas, los items, si ganó,etc
-export const LoLGameChampWin = async (GameID: string, puuid: string):
-Promise<{
+export const LoLGameChampWin = async (GameID: string, puuid: string): Promise<{
 	championIdentifier: ChampionIdentifier,
 	isWinner: boolean,
 	arrayItems: number[],
@@ -280,9 +282,9 @@ Promise<{
 	gameMode: string,
 	teamID: string,
 	teamPosition: string,
-	arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; } },
-	arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; } },
-	arrayRed: { [nombre: string]: { champID: string; gameTAG: string; } };
+	arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; }; },
+	arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; }; },
+	arrayRed: { [nombre: string]: { champID: string; gameTAG: string; }; };
 } | null> => {
 
 	const result = await fetch(RIOT_API_ENDPOINT + '/lol/match/v5/matches/' + GameID, {
@@ -320,24 +322,24 @@ Promise<{
 		enemyteamID = 200;
 	}
 	const teamPosition = participant.teamPosition;
-	const arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; } } = {};
-	const arrayRivals: { [nombre: string]: { champID: string; gameTAG: string; } } = {};
+	const arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; }; } = {};
+	const arrayRivals: { [nombre: string]: { champID: string; gameTAG: string; }; } = {};
 
 	if (gameMode == 'ARAM') {
 		json.info.participants.forEach((p: any) => {
 			if (p.teamId === teamID) {
 				arrayTeammates[p.riotIdGameName] = {
 					champID: p.championId,
-					gameTAG: p.riotIdTagline,
-				}
+					gameTAG: p.riotIdTagline
+				};
 			}
 		});
 		json.info.participants.forEach((p: any) => {
 			if (p.teamId === enemyteamID) {
 				arrayRivals[p.riotIdGameName] = {
 					champID: p.championId,
-					gameTAG: p.riotIdTagline,
-				}
+					gameTAG: p.riotIdTagline
+				};
 			}
 		});
 	} else {
@@ -346,65 +348,65 @@ Promise<{
 				if (p.teamPosition === 'TOP') {
 					arrayTeammates[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'JUNGLE') {
 					arrayTeammates[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'MIDDLE') {
 					arrayTeammates[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'BOTTOM') {
 					arrayTeammates[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'UTILITY') {
 					arrayTeammates[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				}
-			}	
+			}
 		});
 		json.info.participants.forEach((p: any) => {
 			if (p.teamId === enemyteamID) {
 				if (p.teamPosition === 'TOP') {
 					arrayRivals[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'JUNGLE') {
 					arrayRivals[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'MIDDLE') {
 					arrayRivals[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'BOTTOM') {
 					arrayRivals[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				} else if (p.teamPosition === 'UTILITY') {
 					arrayRivals[p.riotIdGameName] = {
 						champID: p.championId,
-						gameTAG: p.riotIdTagline,
-					}
+						gameTAG: p.riotIdTagline
+					};
 				}
 			}
 		});
 
 	}
-	let arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; } } = {};
-	let arrayRed: { [nombre: string]: { champID: string; gameTAG: string; } } = {};
+	let arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; }; } = {};
+	let arrayRed: { [nombre: string]: { champID: string; gameTAG: string; }; } = {};
 	if (teamID == 100) {
 		arrayBlue = arrayTeammates;
 		arrayRed = arrayRivals;
@@ -584,9 +586,9 @@ interface LoLGameChampWinResponse {
 	teamID: string;
 
 	teamPosition: string;
-	arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; } };
-	arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; } };
-	arrayRed: { [nombre: string]: { champID: string; gameTAG: string; } };
+	arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; }; };
+	arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; }; };
+	arrayRed: { [nombre: string]: { champID: string; gameTAG: string; }; };
 }
 
 //
@@ -606,7 +608,6 @@ const puuid = 'g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0P
 //console.log(await LoLRankById(Gamename));
 //console.log(await RiotStatusServer());
 // console.log(await LolRankingDemo());
-
 //console.log(await LoLMostPlayed(Gamename));
 
 /**
@@ -623,10 +624,10 @@ export const GetLolUserData = async (gameName: string, gameTAG: string): Promise
 			+ ' en la base de datos de Riot');
 		return null;
 	}
-	const  data2 = await RiotgetPUUIDInfo(puuid);
+	const data2 = await RiotgetPUUIDInfo(puuid);
 	const preIcon = data2?.profileIconId;
 	const iconID = urlImage + preIcon + '.png';
-	
+
 
 	const summonerId = data2.id;
 	const [numGames, LoLWinrateChamp, userData, userPlayed] = await Promise.all([
@@ -656,46 +657,6 @@ export const GetLolUserData = async (gameName: string, gameTAG: string): Promise
 	return lolData;
 };
 
-interface LoLUserData {
-	iconID: string;
-	gamesLast7Days: string;
-	gameName: string;
-	gameTAG : string;
-	games: [
-		championIdentifier: {
-			championName: string,
-			championId: string;
-		},
-		isWinner: boolean,
-		stats: {
-			kills: number,
-			deaths: number,
-			assists: number,
-		},
-		gameMode: string,
-		kda: string,
-		arrayItems: number[],
-		teamID: string,
-		teamPosition: string,
-		arrayTeammates: string[],
-		arrayBlue: string[],
-		arrayRed: string[],
-		friendsMost: [string, number][],
-		teamPositionCount: { [position: string]: number; }
-
-	];
-	tier: string;
-	rank: string;
-	points: number;
-	wins: number;
-	losses: number;
-	total: number;
-	championsMasteryData: [
-		championId: number,
-		championPoints: number
-	];
-}
-
 export const GetLolHomeData = async (): Promise<LolHomeData> => {
 
 	const ranking = await LolRankingDemo();
@@ -710,49 +671,7 @@ export const GetLolHomeData = async (): Promise<LolHomeData> => {
 		newSkins: newSkins
 	};
 
-	Pino.debug(JSON.stringify(LolHomeData));
+	// Pino.debug(JSON.stringify(LolHomeData));
 	return LolHomeData;
 };
 
-interface LolHomeData {
-
-	summonerDetails: [
-		summoners: {
-			summoneName: string,
-			leaguePoints: number,
-		}
-
-	];
-	champList: [
-		champs: {
-			champName: string,
-			champId: number,
-		}
-	];
-
-	popularSkins: [
-		skins: {
-			champName: string,
-			skinURL: string,
-			skinName: string,
-			skinNombre: string,
-			price: number,
-		}
-	];
-
-	newSkins: [
-		skins: {
-			name: string,
-			releaseDate: string,
-			wishlistStatus: string,
-			popularity: string,
-			cost: number,
-			imageURL: string,
-			landscapeURL: string,
-			chromaURL: string,
-		}
-	];
-
-	//console.log(await GetLolHomeData());
-	// console.log(JSON.stringify(await GetLolUserData(Gamename, gameTAG)));
-}

@@ -1,3 +1,5 @@
+<%# This component takes (brawlhomedata) param to display the Brawl Stars home page %>
+
 <%- include('../partials/components/banner.ejs', {mode : "brawl"}) %>
 
 <head>
@@ -16,5 +18,12 @@
     <h1 class="title">Brawl Stars</h1>
     <%- include('../partials/components/game-input-username.ejs', {mode: "brawl"}) %>
 
+    <%- include('./brawl-rankings.ejs', {ranking: brawlhomedata.rankSpain}) %>
+
+    <%- include('./brawl-skins-showcase.ejs', {skinsBrawls: brawlhomedata.skinsBrawls}) %>
+
+
+
+    <% console.log('Spain:',brawlhomedata.rankSpain)%>
 
 </main>

@@ -70,9 +70,11 @@ const changeLanguage = async (lang) => {
 			for (const key in data) {
 				if (key.includes('@placeholder')) {
 					const selector = key.split('@')[0];
-					console.log(selector);
+
+					// console.log(selector);
 					const elems = document.getElementsByClassName(selector);
-					console.log(elems);
+
+					// console.log(elems);
 
 					for(const elem of elems)
 						elem.setAttribute('placeholder', data[key]);

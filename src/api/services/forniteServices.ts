@@ -1,5 +1,3 @@
-import { UserNotFoundError } from '../errors/errors.js';
-
 const FORTNITE_API_ENDPOINT = 'https://fortnite-api.com/v2/stats/br/v2/';
 
 import { config } from 'dotenv';
@@ -7,6 +5,13 @@ import Pino from '../../logger.js';
 import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
 
 config();
+
+const apiKey = process.env.FORTNITE_API_KEY!;
+
+if (!apiKey) {
+	throw new Error('No Fortnite API key found');
+}
+
 
 export const getFortniteShopData = async (language: string) => {
 	const API_ENDPOINT = 'https://fortnite-api.com/v2/shop/br';
@@ -21,52 +26,61 @@ export const getFortniteShopData = async (language: string) => {
 	}
 
 	const json = await response.json();
-    
+
 	return json;
 };
 
-export const getFortniteStatsByAccountId = async (name, accountType = 'epic', timeWindow = 'lifetime', image = 'none'): Promise<any> => {
+export const getFortniteStatsByAccountId = async (name: string, accountType = 'epic', timeWindow = 'lifetime', image = 'none'): Promise<any> => {
 
-	const apiKey = process.env.FORTNITE_API_KEY!;
-    
 	const url = `${FORTNITE_API_ENDPOINT}?name=${name}&accountType=${accountType}&timeWindow=${timeWindow}&image=${image}`;
-	console.log(url);
+	Pino.trace('Featching fn stats: ' + url);
+
 	const response = await fetch(url, {
 		headers: {
 			'Authorization': apiKey
 		}
 	});
+
 	if (response.status !== 200) {
-		console.log('Error:', response.statusText);
-		return null;
+		if (response.status === 404) {
+			Pino.warn('Fortnite User not found');
+			throw new UserNotFoundError();
+		}
+
+		Pino.error('Error fetching fn stats: ' + response.status + ' ' + response.statusText);
+		throw new ExternalServiceError();
 	}
 
 	const json = await response.json();
-    
+
 	const account = json.data.account;
 	const battlePass = json.data.battlePass;
 	const stats = json.data.stats;
 	const allStats = stats.all;
-	return {account, battlePass, allStats};
+	return { account, battlePass, allStats };
 };
 
 
-export const getFortniteBanner = async (randNumber): Promise<any> => {
+export const getFortniteBanner = async (randNumber: number): Promise<any> => {
 
-	const apiKey = process.env.FORTNITE_API_KEY!;
-    
 	const url = 'https://fortnite-api.com/v1/banners';
-	console.log(url);
+	Pino.trace('Featching fn banner: ' + url);
+
 	const response = await fetch(url, {
 		headers: {
 			'Authorization': apiKey
 		}
 	});
 	if (response.status !== 200) {
-		console.log('Error:', response.statusText);
-		return null;
+		if (response.status === 404) {
+			Pino.warn('Fortnite banner for User not found');
+			throw new UserNotFoundError();
+		}
+
+		Pino.error('Error fetching fn banner:' + response.statusText);
+		throw new ExternalServiceError();
 	}
-	
+
 	const json = await response.json();
 	const image = json.data[randNumber];
 	return image;
@@ -123,9 +137,9 @@ interface Stats {
 	winRate: number;
 	minutesPlayed: number;
 	playersOutlived: number;
-	lastModified: string; 
+	lastModified: string;
 }
-  
+
 interface AllStats {
 	overall: Stats;
 	solo: Stats;
@@ -139,17 +153,16 @@ interface FortniteData {
 	account: Account;
 	battlePass: BattlePass;
 	allStats: AllStats;
-	banner: FortniteBanner
+	banner: FortniteBanner;
 }
 
 
 export const GetFortniteData = async (playerTagEX: string): Promise<FortniteData> => {
 	const fakerandomNumber = playerTagEX.length;
-	const banner = await getFortniteBanner(fakerandomNumber);
-	const infoJugador = await getFortniteStatsByAccountId(playerTagEX);
+	const [banner, infoJugador] = await Promise.all([getFortniteBanner(fakerandomNumber), getFortniteStatsByAccountId(playerTagEX)]);
 
-	Pino.trace(JSON.stringify(banner));
-	Pino.trace(JSON.stringify(infoJugador));
+	// Pino.trace(JSON.stringify(banner));
+	// Pino.trace(JSON.stringify(infoJugador));
 
 	const data: FortniteData = {
 		account: {
@@ -174,8 +187,8 @@ export const GetFortniteData = async (playerTagEX: string): Promise<FortniteData
 	return data;
 };
 
-console.log(JSON.stringify(await GetFortniteData(accountId)));
+// console.log(JSON.stringify(await GetFortniteData(accountId)));
 
-//console.log( JSON.stringify(await getFortniteStatsByAccountId(accountId)));   
+//console.log( JSON.stringify(await getFortniteStatsByAccountId(accountId)));
 
 //console.log(await getFortniteBanner(number));
