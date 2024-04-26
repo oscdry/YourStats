@@ -16,7 +16,7 @@ import { verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 import { deleteUser } from 'firebase/auth';
 import { requestPasswordResetController, renderPasswordResetView, resetPasswordSubmitController } from '../api/controllers/passwordResetController.js';
 import { registerUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController } from '../api/controllers/userController.js';
-import { SendFortniteData } from '../api/controllers/fortniteController.js';
+import { SendFortniteData, SendFortniteHomeData } from '../api/controllers/fortniteController.js';
 
 const apiRouter = Router();
 
@@ -47,7 +47,7 @@ apiRouter.get('/brawl-data/:tag', SendBrawlData);
 
 // Fortnite API
 apiRouter.get('/fortnite-data/:tag', SendFortniteData);
-// apiRouter.get('/fortnite-home', );
+apiRouter.get('/fortnite-home', SendFortniteHomeData);
 
 // Rutas privadas --------------------------------------------
 apiRouter.post('/logout',
