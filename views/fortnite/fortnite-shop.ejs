@@ -1,0 +1,20 @@
+<head>
+    <script type="module" src="/js/fortnite.js" defer></script>
+</head>
+<div class="fortnite-card-shop">
+    <% if (shop && shop.length) { %>
+        <div class="container">
+            <% shop.forEach(item => { %>
+                <div class="card">
+                    <img src="<%= item.image %>" alt="Imagen de <%= item.name %>" class="card-image">
+                    <div class="card-info">
+                        <h3><%= item.name %></h3>
+                        <p>Precio: <%= item.price %> V-Bucks</p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <p>No hay artículos disponibles en este momento.</p>
+    <% } %>
+</div>

@@ -412,7 +412,7 @@ export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
 		skinsBrawls: skinsBrawls
 	};
 };
-console.log(await GetBrawlData('YCQLVQV'));
+// console.log(await GetBrawlData('YCQLVQV'));
 
 //console.log(await GetHomeData());
 //console.log(await getRankingSpain());
