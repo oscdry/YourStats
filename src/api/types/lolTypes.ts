@@ -79,3 +79,31 @@ export interface LoLUserData {
 		championPoints: number
 	];
 }
+
+
+export interface ChampionStats {
+	kills: number;
+	deaths: number;
+	assists: number;
+}
+
+export interface ChampionIdentifier {
+	championName: string;
+	championId: number;
+}
+
+export interface LoLGameChampWinResponse {
+	championIdentifier: ChampionIdentifier;
+	isWinner: boolean;
+	arrayItems: number[];
+	stats: ChampionStats;
+	kda: string;
+	gameMode: string;
+
+	teamID: string;
+
+	teamPosition: string;
+	arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; }; };
+	arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; }; };
+	arrayRed: { [nombre: string]: { champID: string; gameTAG: string; }; };
+}

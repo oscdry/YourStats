@@ -18,7 +18,7 @@ export const GenericErrorPage = (res: Response,
 	headerId: string,
 	paragraphText: string,
 	paragraphId: string) => {
-	res.status(500).render('partials/bipage-generic.ejs', { title: 'Error', user: res.locals.user, headerText, headerId, paragraphText, paragraphId });
+	res.status(500).render('partials/bigpage-generic.ejs', { title: 'Error', user: res.locals.user, headerText, headerId, paragraphText, paragraphId });
 };
 
 // Error page
