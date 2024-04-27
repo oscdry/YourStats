@@ -79,7 +79,19 @@ export const RiotgetPUUIDInfo = async (puuid: string) => {
 	const json = await result.json();
 	return json;
 };
+export const RiotPUUID = async (puuid: string): Promise<{
+	puuid:    string;
+	gameName: string;
+	tagLine:  string;
+}> => {
+	const result = await fetch(RIOT_API_ENDPOINT + '/riot/account/v1/accounts/by-puuid/' + puuid, {
+		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
+	});
+	if (result.status != 200) { throw new UserNotFoundError(); }
 
+	const json = await result.json();
+	return json;
+};
 export const RiotPUUIDbySum = async (puuid: string): Promise<String | null> => {
 	const result = await fetch(RIOT_API_ENDPOINT + '/riot/account/v1/accounts/by-puuid/' + puuid, {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
@@ -91,4 +103,5 @@ export const RiotPUUIDbySum = async (puuid: string): Promise<String | null> => {
 };
 const sumID = 'wBhJMT4Ej_VbawTcrmYBI5cVxSxbL9fp5A2MFozj6gq6V6Y';
 const puuid = 'g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0Pykk_oUd4ne9aw';
+
 //console.log(await RiotgetPUUIDInfo(puuid));

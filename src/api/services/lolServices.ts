@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { RiotDataByName } from './riotServices.js';
 import { RiotPUUIDbySum } from './riotServices.js';
+import { RiotPUUID } from './riotServices.js';
 import { RiotgetPUUIDInfo } from './riotServices.js';
 import { getAccountbyId } from './riotServices.js';
 import { getNewSkins } from './lolSkinsServices.js';
@@ -73,12 +74,13 @@ export const LolRankingDemo = async () => {
 			b: { leaguePoints: number; }) => b.leaguePoints - a.leaguePoints);
 
 	const topUsers = sortedData.slice(0, 5);
-
 	const summonerData = topUsers.map((player: {
 		summonerId: string,
+		summonerTAG: string,
 		leaguePoints: number;
 	}) => ({
 		summonerId: player.summonerId,
+		summonnerTAG: player.summonerTAG,
 		leaguePoints: player.leaguePoints
 	}));
 
@@ -89,15 +91,14 @@ export const LolRankingDemo = async () => {
 		const puuid = await getAccountbyId(summonerId);
 
 		//console.log(puuid);
-		const summonerName = await RiotPUUIDbySum(puuid);
-
-		//console.log(summonerName);
-		player.summonerName = summonerName;
+		const summonerNameing = await RiotPUUID(puuid);
+		player.summonerName = summonerNameing.gameName;
+		player.summonerTag = summonerNameing.tagLine;
 	}
 
 	//console.log(topUsers);
 	const summonerDetails = summonerData.map(
-		({ summonerName, leaguePoints }: { summonerName: string, leaguePoints: number; }) => ({ summonerName, leaguePoints }));
+		({ summonerName, summonerTag, leaguePoints }: { summonerName: string, summonerTag: string, leaguePoints: number; }) => ({ summonerName, summonerTag, leaguePoints }));
 	return summonerDetails;
 };
 
@@ -503,15 +504,29 @@ export const LoLWinrateChamps = async (Puiid: string, gameName: string) => {
 	return { resultsArray, friendsMost, teamPositionCount };
 };
 
-export function getLastChamps(): Record<string, number> {
-	const playersData: Record<string, number> = {
-		Smolder: 901,
-		Huawei: 910,
-		Briar: 233,
-		Naafiri: 950,
-		Milio: 902
-	};
-
+export function getLastChamps(): Promise<ChampionIdentifier> {
+	const playersData = [
+		{
+			champName: 'Smolder',
+			champId: 901
+		},
+		{
+			champName: 'Hwei',
+			champId: 910
+		},
+		{
+			champName: 'Briar',
+			champId: 233
+		},
+		{
+			champName: 'Naafiri',
+			champId: 950
+		},
+		{
+			champName: 'Milio',
+			champId: 902
+		}
+	];
 	return playersData;
 }
 
@@ -646,3 +661,4 @@ export const GetLolHomeData = async (): Promise<LolHomeData> => {
 	return LolHomeData;
 };
 
+console.log(await GetLolHomeData());
