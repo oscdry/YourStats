@@ -248,7 +248,7 @@
 }
 
 .ranking-editing {
-    position: absolute;
+    position: relative;
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -257,4 +257,8 @@
     width: 100%;
 
     z-index: 3;
+}
+
+.ranking-editing.hide {
+    display: none;
 }
