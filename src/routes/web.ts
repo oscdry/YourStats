@@ -6,6 +6,7 @@ import { lolTestData } from '../api/types/testData/lolTestData.js';
 import { renderPasswordResetView, renderPasswordResetViewSent, renderPasswordResetSuccess } from '../api/controllers/passwordResetController.js';
 import { renderUserView } from '../api/controllers/userController.js';
 import { getBest5UsersService } from '../api/services/userGameNameService.js';
+import { renderFortniteHome } from '../api/controllers/fortniteController.js';
 
 const webRouter = Router();
 
@@ -56,9 +57,7 @@ webRouter.get('/brawl/stats/asd', async (_req: Request, res: Response, next: Nex
 webRouter.get('/brawl/stats/:tag', RenderBrawlStats);
 
 // Fortnite ---------------------------------------------------------
-webRouter.get('/fortnite', (_req: Request, res: Response) => {
-	res.render('./fortnite/index.ejs', { title: 'Fortnite', user: res.locals.user });
-});
+webRouter.get('/fortnite', renderFortniteHome);
 
 // League of Legends ---------------------------------------------------------
 webRouter.get('/lol', RenderLolIndex);
