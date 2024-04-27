@@ -552,7 +552,7 @@ i.server-status-icon
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    gap: 3rem;
+    gap: 2vw;
 }
 
 .chart
@@ -1207,6 +1207,25 @@ input[type="password"].invalid:not(:focus)
     background-position: center;
 }
 
+.hoverable-color {
+    transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+
+.hoverable-color:hover {
+    background-color: var(--accent-color);
+    transform: scale(1.025);
+}
+
+.home-ranking-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    min-width: 350px;
+
+    max-width: 60vw;
+}
+
 /* Cookies popup */
 .cookies-container
 {
@@ -1351,7 +1370,7 @@ input[type="password"].invalid:not(:focus)
 
 .game-input-username-container {
     width: 100%;
-    padding: 2rem 3vw;
+    padding: 2rem 2vw;
     box-sizing: border-box;
 }
 

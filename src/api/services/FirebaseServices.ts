@@ -217,6 +217,7 @@ export const updateFirebaseUserBio = async (id: string, updates: { bio?: string;
 	}
 	await firestore.collection('users').doc(id).update(updates);
 };
+
 export const searchByEmailBackoffice = async (mail: string): Promise<FirebaseUser[]> => {
 	const usersRef = await firestore
 		.collection('users')

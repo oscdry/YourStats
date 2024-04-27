@@ -11,11 +11,11 @@ import { BrawlUserExists, SendBrawlData, SendBrawlHomeData } from '../api/contro
 import { HandleContactForm } from '../api/controllers/contactFormController.js';
 import { RiotUserExists, SendLolData, SendLolHomeData, sendLolSkin } from '../api/controllers/lolController.js';
 import { upload } from '../api/middlewares/multer.js';
-import { contactFormSchema, createUserSchema, getUserSchema, passwordResetEnterFormSchema, passwordResetTokenSchema } from '../api/middlewares/schemas.js';
+import { contactFormSchema, createUserSchema, gameNameUpdateSchema, getUserSchema, passwordResetEnterFormSchema, passwordResetTokenSchema } from '../api/middlewares/schemas.js';
 import { verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 import { deleteUser } from 'firebase/auth';
 import { requestPasswordResetController, renderPasswordResetView, resetPasswordSubmitController } from '../api/controllers/passwordResetController.js';
-import { registerUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController } from '../api/controllers/userController.js';
+import { registerUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController, calculateUserPointsController, updateGameNameController } from '../api/controllers/userController.js';
 import { SendFortniteData, SendFortniteHomeData } from '../api/controllers/fortniteController.js';
 
 const apiRouter = Router();
@@ -49,6 +49,7 @@ apiRouter.get('/brawl-data/:tag', SendBrawlData);
 apiRouter.get('/fortnite-data/:tag', SendFortniteData);
 apiRouter.get('/fortnite-home', SendFortniteHomeData);
 
+
 // Rutas privadas --------------------------------------------
 apiRouter.post('/logout',
 	verifyTokenRequired,
@@ -74,6 +75,14 @@ apiRouter.get('/users/search/:identifier',
 		const user = getUserByIdentifier(req.params.identifier, 'email');
 		return user;
 	});
+
+// User Points
+apiRouter.post('/users/game-name', verifyTokenRequired,
+	joiValidate(gameNameUpdateSchema, 'body'),
+	updateGameNameController);
+
+apiRouter.get('/users/points', verifyTokenRequired,
+	calculateUserPointsController);
 
 /**
  * @deprecated

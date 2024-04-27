@@ -4,7 +4,7 @@
 }
 
 #game-username-form.brawl input {
-    padding-left: 3rem;
+    padding-left: 4vw;
 }
 
 #game-username-form.brawl::after
@@ -18,7 +18,7 @@
 
     font-size: 1.25rem;
 
-    padding: 0.25rem 1.25rem;
+    padding: 0.25rem 1vw;
 
     border-radius: 15px;
 
@@ -117,7 +117,8 @@
 
     padding: 1rem;
     min-height: 100px;
-    min-width: 400px;
+    min-width: 350px;
+    width: 27.5vw;
     max-width: 450px;
 
     border-radius: 10px;
@@ -131,6 +132,14 @@
 {
     object-fit: contain;
     align-self: flex-start;
+
+    height: 100%;
+    max-height: 125px;
+}
+
+.brawl-brawler.hide
+{
+    display: none;
 }
 
 .brawler-info
@@ -141,6 +150,7 @@
     align-items: center;
 
     gap: 1rem;
+    width: 100%;
 }
 
 .brawler-trophies

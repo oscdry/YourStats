@@ -2,13 +2,15 @@
 user in a ranking %>
 <%# (valueId) is used to set the class of the value (for i18n) %>
 <%# It also takes an optional (link) parameter to set the link of the user %>
+<%# An (img) parameter can be added to set the image of the user %>
 
 <a class="user-card-container"
     <%=link ? `href=${link} ` : '' %>>
     <div class="user-card-content">
 
         <div class="user-card-image">
-            <img src="/img/storage/users/default-card.png"
+            <img
+                src="<%= typeof img === 'undefined' ? "/img/storage/users/default-card.png" : img %>"
                 alt>
         </div>
 
