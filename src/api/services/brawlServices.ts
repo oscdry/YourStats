@@ -4,6 +4,7 @@ const playerTagEX2 = 'LR2PV2J2';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
+import { BrawlData, BrawlHomeData } from '../types/brawlTypes.js';
 
 config();
 
@@ -147,7 +148,15 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 
 
 export const brawlInfo = async (battletag: string): Promise<{
-	user: object;
+	user: {
+		tag: string;
+		name: string;
+		trophies: number;
+		highestTrophies: number;
+		trioVictories: number;
+		soloVictories: number;
+		duoVictories: number;
+	};
 	imgID: string;
 	brawlers: any[];
 } | null> => {
@@ -160,7 +169,6 @@ export const brawlInfo = async (battletag: string): Promise<{
 	});
 
 	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag);
-
 
 	if (result.status === 403) {
 		const json = await result.json();
@@ -211,7 +219,6 @@ export const brawlInfo = async (battletag: string): Promise<{
 };
 
 export const getRankingSpain = async () => {
-
 	const result = await fetch(BRAWL_API_ENDPOINT + 'rankings/es/players', {
 		headers: {
 			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
@@ -235,9 +242,7 @@ export const getRankingSpain = async () => {
 	return primeros5Jugadores;
 };
 
-
 export const getRankingGlobal = async () => {
-
 	const result = await fetch(BRAWL_API_ENDPOINT + 'rankings/global/players', {
 		headers: {
 			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
@@ -253,72 +258,6 @@ export const getRankingGlobal = async () => {
 	Pino.trace('Fetched brawl ranking Global');
 	return primeros5Jugadores;
 };
-interface Player {
-	tag: string;
-	name: string;
-	nameColor: string;
-	icon: {
-		id: number;
-	};
-	trophies: number;
-	rank: number;
-	club: {
-		name: string;
-	};
-}
-
-interface BrawlHomeData {
-	rankSpain: Player[];
-	rankGlobal: Player[];
-	skinsBrawls: {
-		name: string;
-		'image-url': string;
-		'release-date': string;
-	}[];
-}
-interface BrawlData {
-	resumenPartidas: {
-		equipos: {
-			Nombrejugador: string;
-			tag: string;
-			nombreBrawler: string | null;
-			idBrawler: number | null;
-			isStarPlayer: boolean;
-		}[][];
-		datosPartida: {
-			idBrawlerPasadoPorTag: number | null;
-			nombreBrawlerPasadoPorTag: string | null;
-			modo: string;
-			mapa: string;
-			tipo: string;
-			duracion: number;
-		};
-	}[];
-	modosJuegoMasJugados: [string, number][];
-	nombresJugadoresMasRepetidos: [string, number][];
-	usuarioBrawlInfo: {
-		user: {
-			tag: string;
-			name: string;
-			trophies: number;
-			highestTrophies: number;
-			trioVictories: number;
-			soloVictories: number;
-			duoVictories: number;
-		};
-		imgID: string;
-		brawlers: {
-			id: number;
-			name: string;
-			power: number;
-			gears: number;
-			trophies: number;
-			highestTrophies: number;
-			starPowers: string[];
-			gadgets: string[];
-		}[];
-	};
-}
 
 export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | null> => {
 	const partidas = await brawlRecentBattle(playerTagEX);
@@ -334,9 +273,8 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | nul
 		return null;
 	}
 
-
-	Pino.trace(JSON.stringify(partidas));
-	Pino.trace(JSON.stringify(infoJugador));
+	// Pino.trace(JSON.stringify(partidas));
+	// Pino.trace(JSON.stringify(infoJugador));
 
 	return {
 		resumenPartidas: partidas.resumeMatch.map((partida: any) => ({
@@ -354,7 +292,6 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | nul
 };
 
 export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
-
 	const [rankingGlobal, rankingSpain] = await Promise.all(
 		[getRankingGlobal(), getRankingSpain()]
 	);

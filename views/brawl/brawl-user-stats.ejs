@@ -62,23 +62,26 @@
 
     <h3 class="container" id="brawl-best-brawlers">Mejores brawlers:</h3>
     <div class="container brawl-container flex-row">
-        <% brawldata.usuarioBrawlInfo.brawlers.forEach((brawler) => { %>
-        <div class="brawl-brawler">
+        <%
+        let index = 1;
+        brawldata.usuarioBrawlInfo.brawlers.forEach((brawler) => { %>
+        <div class="brawl-brawler <%= index > 5 ? "hide" : '' %>">
             <img src="/img/brawl/brawler_images/<%= brawler.name %>.png"
                 alt="Imagen de <%= brawler.name %>">
             <div class="brawler-info">
                 <h3><%= brawler.name %></h3>
                 <div class="brawler-trophies">
 
-                    <div class="d-flex flex-row">
+                    <div class="d-flex flex-row text-center align-items-center gap-3">
                         <i class="trophy-icon small"></i>
                         <p>
                             <%= brawler.trophies %>
                         </p>
                     </div>
 
-                    <div class="d-flex flex-row">
-                        <b id="brawl-max-brawler-trophies">
+                    <div
+                        class="d-flex flex-row text-center align-items-center gap-3">
+                        <b class="brawl-max-brawler-trophies">
                             Máximo:
                         </b>
                         <p>
@@ -91,7 +94,8 @@
         <% }) %>
     </div>
 
-    <h3 class="container" id="brawl-last-matches">Últimas <%= brawldata.resumenPartidas.length %> partidas:</h3>
+    <h3 class="container" id="brawl-last-matches">Últimas <%=
+        brawldata.resumenPartidas.length %> partidas:</h3>
     <div class="container brawl-games-container">
         <% brawldata.resumenPartidas.forEach((game) => { %>
         <%- include('./brawl-game-card.ejs', {game}) %>

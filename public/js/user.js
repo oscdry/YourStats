@@ -75,6 +75,7 @@ const resetState = (prevBioText) => {
 	changeUserBioBtn.style.display = 'block';
 	currentUserBio.setAttribute('readonly', '');
 	currentUserBio.setAttribute('disabled', '');
+	currentUserBio.parentElement.style.marginBottom = '0';
 	currentUserBio.textContent = prevBioText;
 	editBioControls.classList.add('hide');
 };
@@ -85,6 +86,7 @@ changeUserBioBtn?.addEventListener('click', () => {
 
 	currentUserBio.removeAttribute('readonly');
 	currentUserBio.removeAttribute('disabled');
+	currentUserBio.parentElement.style.marginBottom = '12vh';
 	editBioControls.classList.remove('hide');
 
 	// On cancel
@@ -146,7 +148,7 @@ uploadPicBtn.addEventListener('click', () => {
 
 // Manejar la selección de archivo y enviar la imagen al servidor
 fileInput.addEventListener('change', async  () => {
-	const file = this.files[0];
+	const file = this.files[0]; // TODO: FIX PLS
 	if (file) {
 		const formData = new FormData();
 		formData.append('image', file);
@@ -171,3 +173,9 @@ fileInput.addEventListener('change', async  () => {
 		}
 	}
 });
+
+// GameNames Rankings
+const editGameNamesBtn = document.getElementById('edit-game-names');
+const brawlGameNameInput = document.getElementById('brawl-game-name');
+const lolGameNameInput = document.getElementById('lol-game-name');
+const fortniteGameNameInput = document.getElementById('fortnite-game-name');
