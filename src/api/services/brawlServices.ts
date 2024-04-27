@@ -394,7 +394,11 @@ export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
 	};
 };
 
+
 // console.log(await GetBrawlData('YCQLVQV'));
+
+
+
 
 //console.log(await GetHomeData());
 //console.log(await getRankingSpain());

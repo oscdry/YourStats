@@ -25,7 +25,7 @@ async function fetchFortniteShopData() {
 			const imageUrl = image;
 			const idMatch = imageUrl.match(/\/items\/(\d+)/);
 			const id = idMatch ? idMatch[1] : null;
-			const filePath = 'public/img/fortnite/skins/' + id + '.jpg';
+			const filePath = 'public/img/fortnite/skins/' + id + '.jpg'; 
 			skins.push({ name, image, price, filePath });
 		});
 
@@ -82,4 +82,4 @@ const outputPath = 'public/img/fortnite/skins/';
 
 //downloadImagesFromJSON(jsonFilePath, outputPath);
 
-//fetchFortniteShopData();
+//console.log(await fetchFortniteShopData());
