@@ -48,7 +48,7 @@ export const passwordResetEnterFormSchema = Joi.object({
 }).label('PasswordResetEnterForm');
 
 export const gameNameUpdateSchema = Joi.object({
-	lol: Joi.string().optional(),
+	lol: Joi.string().regex(/#/).optional(),
 	brawl: Joi.string().optional(),
 	fortnite: Joi.string().optional()
 }).label('GameNames');

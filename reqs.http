@@ -160,4 +160,3 @@ Content-Type: application/json
 ###
 
 GET http://localhost/api/users/points
-Content-Type: application/json
