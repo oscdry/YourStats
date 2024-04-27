@@ -101,9 +101,14 @@
         <div class="ranking-input-row input-row-labeled">
             <i></i>
             <label for="brawl-username">Brawl Stars</label>
-            <input type="text" id="valorant-game-name"
+            <input type="text" id="brawl-game-name"
                 placeholder="Username Brawl Stars"
                 value="<%= points.brawl %>" disabled>
+
+
+            <p class="my-3">
+                <%= points.brawl_points %>
+            </p>
         </div>
 
         <div class="ranking-input-row input-row-labeled">
@@ -112,6 +117,9 @@
             <input type="text" id="lol-game-name"
                 placeholder="Username League of Legends"
                 value="<%= points.lol %>" disabled>
+            <p class="my-3">
+                <%= points.lol_points %>
+            </p>
         </div>
 
         <%# Fortnite %>
@@ -121,23 +129,39 @@
             <input type="text" id="fortnite-game-name"
                 placeholder="Username Fortnite"
                 value="<%= points.fortnite %>" disabled>
+            <p class="my-3">
+                <%= points.fortnite_points %>
+            </p>
         </div>
     </div>
 
     <% if (owner) { %>
-        <p class="my-4" id="gamename-disclaimer">Nota: Asegúrate de que has escrito bien tus nombres de usuario, de lo contrario no te podremos asignar puntos!</p>
+    <p class="my-4" id="gamename-disclaimer">Nota: Asegúrate de que has escrito
+        bien tus nombres de usuario, de lo contrario no te podremos asignar
+        puntos!</p>
 
-    <button id="edit-rankings" class="primary"><i
-            class="fa-solid fa-pencil"></i>
-    </button>
+    <div
+        class="d-flex flex-row w-100 justify-content-center align-items-center ">
+        <button id="edit-game-names" class="primary"><i
+                class="fa-solid fa-pencil"></i>
+        </button>
+    </div>
 
-    <div class="ranking-editing">
-        <button id="submit-rankings" class="primary hide"><i
+    <div id="ranking-editing" class="ranking-editing hide">
+        <button id="submit-rankings" class="primary"><i
                 class="fa-solid fa-check"></i>
         </button>
-        <button id="cancel-rankings" class="secondary hide"><i
+        <button id="cancel-rankings" class="secondary"><i
                 class="fa-solid fa-times"></i>
         </button>
+    </div>
+
+    <div
+        class="d-flex w-100 flex-row justify-content-center align-content-center">
+        <button id="calculate-points" class="primary">
+            Calcular puntos
+        </button>
+        <p id="calculate-points-text"></p>
     </div>
     <% } %>
 </main>

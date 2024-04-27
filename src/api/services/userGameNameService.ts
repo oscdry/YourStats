@@ -142,25 +142,31 @@ export const calculateAndSaveUserPointsService = async (userId: string): Promise
 	// Add points from lol
 	// 1 game = 35 points
 	// +win = 70 points
+
+	// 1 Mastery point = 0.1 points
 	if (lolData) {
 		lolPoints += calculateLolRankPoints(lolData.rank);
 		lolPoints += lolData.total * 35;
 		lolPoints += lolData.wins * 70;
+
+		let champPoints = lolData.championsMasteryData.reduce((sum, champion) => sum + champion.championPoints, 0);
+
+		lolPoints += champPoints * 0.1;
 	}
 
 	Pino.trace('Total points from lol for ' + userRow.lol + ': ' + totalPoints);
 	totalPoints += lolPoints;
 
 	// Add points from brawl
-	// 1 trophy = 1 points
-	// 1 soloVictory = 10 points
-	// 1 duoVictory = 10 points
-	// 1 trioVictory = 10 points
+	// 1 trophy = 0.2 points
+	// 1 soloVictory = 3 points
+	// 1 duoVictory = 5 points
+	// 1 trioVictory = 5 points
 	if (brawlData) {
-		brawlPoints += brawlData.usuarioBrawlInfo.user.trophies;
-		brawlPoints += brawlData.usuarioBrawlInfo.user.soloVictories * 10;
-		brawlPoints += brawlData.usuarioBrawlInfo.user.duoVictories * 10;
-		brawlPoints += brawlData.usuarioBrawlInfo.user.trioVictories * 10;
+		brawlPoints += brawlData.usuarioBrawlInfo.user.trophies * 0.2;
+		brawlPoints += brawlData.usuarioBrawlInfo.user.soloVictories * 3;
+		brawlPoints += brawlData.usuarioBrawlInfo.user.duoVictories * 5;
+		brawlPoints += brawlData.usuarioBrawlInfo.user.trioVictories * 5;
 	}
 
 	Pino.trace('Total points from brawl for ' + userRow.brawl + ': ' + totalPoints);
