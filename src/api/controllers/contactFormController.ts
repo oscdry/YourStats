@@ -11,16 +11,10 @@ import prismaClient from '../db/dbConnections.js';
 export const HandleContactForm = async (req: Request, res: Response, next: NextFunction) => {
 	const { email, username, content } = req.body;
 
-	Pino.info('Contact Form' + JSON.stringify(req.body));
-
-	Pino.trace(JSON.stringify(req.body));
-
 	try {
 		await prismaClient.contactEntry.create({
 			data: {
-
-				// user_id can be null
-				user_id: res.locals.user ? res.locals.user.id : null,
+				user_id: res.locals.user ? res.locals.user.id : '',
 				username,
 				email,
 				content

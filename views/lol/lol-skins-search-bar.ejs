@@ -10,8 +10,8 @@ const localeParam = typeof locale !== "undefined" ? locale : "es"
 
     <%# Skin input form %>
         <form id="skin-name-form"
-            class=" lol game-skin-name-form"> 
-            <input type="text" name="skin" class="skin-name-input"
+            class=" lol game-skin-name-form">
+            <input type="text" name="skin" class="skin-name-input" id="skin-name-input"
                 class="game-input-skin-lol" required
                 placeholder="Introduce la skin" data-mode="<%= mode %>">
             <button class="primary" type="submit" id="btn-search-skin">
