@@ -22,6 +22,8 @@
     "campo-password": "Contrasenya",
     "campo-roleUser": "Rol d'usuari",
     "campo-username": "Nom d'usuari",
+    "confirm-contact-delete-description": "Aquesta acció no es pot desfer. El missatge serà suprimit permanentment.",
+    "confirm-contact-delete-title": "Estàs segur de suprimir el missatge?",
     "confirm-delete-description": "Aquesta acció no es pot desfer. L'usuari serà suprimit permanentment.",
     "contact": "Contacte",
     "contact-btn": "Contactar",

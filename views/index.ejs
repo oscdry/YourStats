@@ -1,7 +1,7 @@
 <%- include('./partials/components/banner.ejs') %>
 <main class="banner-main">
 
-  <!-- <div id="carouselBanner" class="carousel slide">
+  <%# UNUSED CAROUSEL <div id="carouselBanner" class="carousel slide">
         <div class="carousel-inner">
           <div class="carousel-item active">
             <h1>
@@ -24,7 +24,7 @@
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
-      </div> -->
+      </div> %>
 
   <%- include('./partials/components/game-selector.ejs') %>
 
@@ -41,7 +41,7 @@
       value: rankUser.points,
       valueId: "points",
       valueName: "Puntos",
-      curUsername: user.username
+      curUsername: typeof user !== 'undefined' ? user.username : ''
       }) %>
 
       <% } %>
