@@ -251,7 +251,7 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 				targetUrl = '/brawl/stats/' + usernameVal;
 				break;
 
-			case 'fn':
+			case 'fortnite':
 				
 				// This response either returns 400 or redirects to the stats page
 				response = await fetch(`/fortnite/${usernameVal}`);
