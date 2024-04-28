@@ -3,8 +3,9 @@ user in a ranking %>
 <%# (valueId) is used to set the class of the value (for i18n) %>
 <%# It also takes an optional (link) parameter to set the link of the user %>
 <%# An (img) parameter can be added to set the image of the user %>
+<%# Also takes a (curUsername) parameter to set the active class %>
 
-<a class="user-card-container"
+<a class="user-card-container <%= typeof curUsername !== 'undefined' && curUsername === name ? 'active' : '' %>"
     <%=link ? `href=${link} ` : '' %>>
     <div class="user-card-content">
 

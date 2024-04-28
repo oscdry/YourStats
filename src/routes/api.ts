@@ -15,7 +15,7 @@ import { contactFormSchema, createUserSchema, gameNameUpdateSchema, getUserSchem
 import { verifyTokenRequired } from '../api/middlewares/verifyToken.js';
 import { deleteUser } from 'firebase/auth';
 import { requestPasswordResetController, renderPasswordResetView, resetPasswordSubmitController } from '../api/controllers/passwordResetController.js';
-import { registerUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController, calculateUserPointsController, updateGameNameController } from '../api/controllers/userController.js';
+import { registerUserController, LogoutUser, getUserByIdentifier, updateUser, updateUserBioController, updateUserName, uploadUserImageController, calculateUserPointsController, updateGameNameController, sendUserPointsController } from '../api/controllers/userController.js';
 import { SendFortniteData, SendFortniteHomeData } from '../api/controllers/fortniteController.js';
 
 const apiRouter = Router();
@@ -33,6 +33,9 @@ apiRouter.post('/login-google', LoginGoogleUser);
 apiRouter.post('/register',
 	joiValidate(createUserSchema, 'body'),
 	registerUserController);
+
+// Ranking
+apiRouter.get('/ranking', sendUserPointsController);
 
 // League of Legends API
 apiRouter.post('/riot-user/', RiotUserExists);

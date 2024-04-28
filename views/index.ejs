@@ -32,15 +32,16 @@
   <div class="container-fluid my-3 d-flex justify-content-center align-items-center ">
     <div class="home-ranking-container">
 
-      <% for (user of ranking) { %>
+      <% for (rankUser of ranking) { %>
       <%- include('./partials/components/ranking-user-card.ejs', {
-      name: user.username,
-      link: `/user/${user.id}`,
-      img: `/img/storage/users/${user.id}.jpg`,
-      position: user.position,
-      value: user.points,
+      name: rankUser.username,
+      link: `/user/${rankUser.id}`,
+      img: `/img/storage/users/${rankUser.id}.jpg`,
+      position: rankUser.position,
+      value: rankUser.points,
       valueId: "points",
-      valueName: "Puntos"
+      valueName: "Puntos",
+      curUsername: user.username
       }) %>
 
       <% } %>
