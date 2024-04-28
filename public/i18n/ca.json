@@ -109,6 +109,12 @@
     "username-saveChanges": "Guardar",
     "who-are-we": "Qui som?",
     "work-with-us": "Treballa amb nosaltres",
+    "new-champions": "Nous Campions",
+    "btn-skins-search": "Cercador Skins",
+    "lol-played-with" : "Companys de joc recents",
+    "btn-search-skin" : "Cercar",
+    "skin-name-input@placeholder" : "Introdueix l' skin",
+    "lol-new-skins": "Noves Skins",
     "fn-shop-items": "Objectes de la botiga",
     "fn-user-level": "Nivell:",
     "fn-user-progress": "Progrés:",
@@ -119,5 +125,4 @@
     "squad": "Estadístiques en escuadró",
     "ltm": "Estadístiques de LTM",
     "yourstats-ranking": "Ranking de YourStats"
-
 }

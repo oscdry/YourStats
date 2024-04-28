@@ -182,6 +182,18 @@ input#game-tag-input {
     gap: 1rem;
 }
 
+.lol-champ-container{
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: space-around; 
+    align-items: center; 
+    width: 100%;
+    gap: 1rem;
+}
+
+
+
 .lol-champion-card
 {
     display: flex;
@@ -297,6 +309,16 @@ input#game-tag-input {
     box-sizing: border-box;
 
 }
+
+.lol-played-with
+{
+    align-items: center;
+    display: flex;
+    box-sizing: border-box;
+    height: 200px;
+    width: 935px;
+}
+
 
 .lol-rank>p
 {

@@ -1,6 +1,6 @@
 import { NextFunction, Router, type Request, type Response } from 'express';
 import { renderBrawlHome, RenderBrawlStats } from '../api/controllers/brawlController.js';
-import { RenderLolIndex, renderLolStatsForPlayer } from '../api/controllers/lolController.js';
+import { RenderLolIndex, renderLolSkins, renderLolStatsForPlayer,renderLolSearchSkins } from '../api/controllers/lolController.js';
 import { brawlTestData } from '../api/types/testData/brawlTestData.js';
 import { lolTestData } from '../api/types/testData/lolTestData.js';
 import { renderPasswordResetView, renderPasswordResetViewSent, renderPasswordResetSuccess } from '../api/controllers/passwordResetController.js';
@@ -171,5 +171,8 @@ webRouter.get('/lol/stats/asd', async (_req: Request, res: Response, next: NextF
 // });
 
 webRouter.get('/lol/stats/:gamename/:gameTAG', renderLolStatsForPlayer);
+webRouter.get('/lol/skins', renderLolSkins);
+webRouter.get('/lol/skins/:skinName', renderLolSearchSkins);
+
 
 export default webRouter;

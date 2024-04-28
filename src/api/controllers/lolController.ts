@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { RiotDataByName } from '../services/riotServices.js';
 import { GetLolHomeData, GetLolUserData, RiotStatusServer } from '../services/lolServices.js';
 import Pino from '../../logger.js';
-import { UserNotFoundError } from '../errors/errors.js';
+import { SkinNotFoundError, UserNotFoundError } from '../errors/errors.js';
 import { searchSkinByName } from '../services/lolSkinsServices.js';
 
 /**
@@ -111,8 +111,7 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 				maintainAspectRatio: false // this allows you to set a custom size
 			}
 		};
-
-		const lolKdaLastMatchesChartData = {
+const lolKdaLastMatchesChartData = {
 			type: 'line',
 			data: {
 				labels: Object.keys(loldata.games.resultsArray.map((game) => game.championIdentifier.championName)),
@@ -130,7 +129,60 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 			}
 		};
 
-		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, playername: gameName, user: res.locals.user, lolKdaLastMatchesChartData });
+
+		const lolCompChartData = {
+			type: 'bar',
+			data: {
+				labels: loldata.games.friendsMost.map(item => item[0]),
+				datasets: [{
+					label: 'Games Played',
+					data: loldata.games.friendsMost.map(item => item[1]),
+					backgroundColor: [
+						'rgb(255, 99, 132)',
+						'rgb(54, 162, 235)',
+						'rgb(255, 205, 86)'
+					],
+					hoverOffset: 4
+				}]
+			}
+		};
+
+		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, lolCompChartData, playername: gameName, user: res.locals.user, lolKdaLastMatchesChartData });
+	} catch (error) {
+		const message = (error as Error).message;
+		const name = (error as Error).name;
+		Pino.error('Error getting stats' + name + message);
+
+		next(error);
+	}
+};
+
+export const renderLolSearchSkins = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const skinName: string = req.params.gamename;
+		const loldata = await searchSkinByName(skinName);
+		if (!loldata) throw new SkinNotFoundError();
+
+
+		return res.render('./lol/lol-skins-index.ejs', { title: 'LoL Skins', loldata, user: res.locals.user });
+	} catch (error) {
+		const message = (error as Error).message;
+		const name = (error as Error).name;
+		Pino.error('Error getting stats' + name + message);
+
+		next(error);
+	}
+};
+
+export const renderLolSkins = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const data = await GetLolHomeData();
+		if (!data) throw new SkinNotFoundError();
+
+
+		return res.render('./lol/lol-skins-index.ejs', { title: 'LoL Skins', homedata: data, user: res.locals.user });
+
+		
 	} catch (error) {
 		const message = (error as Error).message;
 		const name = (error as Error).name;

@@ -19,6 +19,13 @@ export class UserNotFoundError extends Error {
 	}
 }
 
+export class SkinNotFoundError extends Error {
+	constructor() {
+		super('Skin Not Found.');
+		this.name = 'SkinNotFoundError';
+	}
+}
+
 export class ExternalServiceError extends Error {
 	constructor() {
 		super('Error with external service. Check that any keys are valid.');
