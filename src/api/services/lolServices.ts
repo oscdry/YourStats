@@ -660,5 +660,3 @@ export const GetLolHomeData = async (): Promise<LolHomeData> => {
 	// Pino.debug(JSON.stringify(LolHomeData));
 	return LolHomeData;
 };
-
-console.log(await GetLolHomeData());
