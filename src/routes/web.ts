@@ -5,7 +5,9 @@ import { brawlTestData } from '../api/types/testData/brawlTestData.js';
 import { lolTestData } from '../api/types/testData/lolTestData.js';
 import { renderPasswordResetView, renderPasswordResetViewSent, renderPasswordResetSuccess } from '../api/controllers/passwordResetController.js';
 import { renderUserView } from '../api/controllers/userController.js';
-import { renderFortniteHome } from '../api/controllers/fortniteController.js';
+import { renderFortniteHome, renderFortniteUserStats } from '../api/controllers/fortniteController.js';
+import { send } from 'process';
+import { SendFortniteData } from '../api/controllers/fortniteController.js';
 
 const webRouter = Router();
 
@@ -56,6 +58,8 @@ webRouter.get('/brawl/stats/:tag', RenderBrawlStats);
 
 // Fortnite ---------------------------------------------------------
 webRouter.get('/fortnite', renderFortniteHome);
+webRouter.get('/fortnite/:tag', SendFortniteData);
+webRouter.get('/fortnite/stats/:tag', renderFortniteUserStats);
 
 // League of Legends ---------------------------------------------------------
 webRouter.get('/lol', RenderLolIndex);

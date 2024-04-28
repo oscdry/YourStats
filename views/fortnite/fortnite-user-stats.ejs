@@ -1,0 +1,84 @@
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" type="module"></script>
+    <link rel="stylesheet" href="/css/fortniteUser.css">
+</head>
+
+<%- include('../partials/components/banner.ejs', {mode: "fn", hide : true})
+%>
+
+<%
+    const modeTitles = {
+        'overall': 'Estadísticas Generales',
+        'solo': 'Estadísticas en Solitario',
+        'duo': 'Estadísticas en Dúo',
+        'trio': 'Estadísticas en Trío',
+        'squad': 'Estadísticas de Escuadrón',
+        'ltm': 'Estadísticas de LTM'
+    };
+%>
+
+<main>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/fortnite">Fortnite</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <%= fortnitedata.account.name %>
+            </li>
+        </ol>
+    </nav>
+    <div class="user-container">
+        <div class="user-info">
+            <img src="<%= fortnitedata.banner.images.smallIcon %>" alt="User Icon">
+            <h2><%= fortnitedata.account.name %></h2>
+        </div>
+        <div class="battlePass-info">
+            <img id="battlePassImage" src="/img/fortnite/forView/fn-battlePass.jpg" alt="Battle Pass">
+            <div>
+                <div class="level-container">
+                    <p id="fn-user-level">Nivel:</p><p><%= fortnitedata.battlePass.level %></p>
+                </div>
+                <div class="progress-container">
+                    <p id="fn-user-progress">progreso: </p>
+                    <div class="progress-bar-container" id="progress-bar-battlePass">
+                        <div class="progress-bar" style="width: <%= Math.min(fortnitedata.battlePass.progress, 100) %>%;">
+                            <span class="progress-percent"><%= fortnitedata.battlePass.progress %>%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <% ['overall', 'solo', 'duo', 'trio', 'squad', 'ltm'].forEach(mode => { %>
+            <% if (fortnitedata.allStats[mode]) { %>
+                <div class="card-<%= mode %>">
+                    <h2 class="<%= mode %>"><%= modeTitles[mode] %></h2>
+                    <div class="stats-row">
+                        <% 
+                        const statsEntries = Object.entries(fortnitedata.allStats[mode]);
+                        for(let i = 0; i < statsEntries.length; i += 3) {
+                            const rowEntries = statsEntries.slice(i, i + 3);
+                        %>
+                            <div class="stats">
+                                <% rowEntries.forEach(([key, value]) => { %>
+                                    <% if(key !== 'lastModified') { %>
+                                        <div class="stat-block">
+                                            <div class="stat-title"><%= key.replace(/([A-Z])/g, ' $1') %>:</div>
+                                            <div class="progress-bar-container">
+                                                <div class="progress-bar" style="width: <%= Math.min(value, 100) /* This is a placeholder and should be calculated based on actual stat percentage */%>%"></div>
+                                            </div>
+                                            <span class="stat-value"><%= value %></span>
+                                        </div>
+                                    <% } %>
+                                <% }); %>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        <% }) %>
+    </div>
+
+</main>

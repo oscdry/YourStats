@@ -102,5 +102,14 @@
     "username-cancelChanges": "Cancel",
     "username-saveChanges": "Save",
     "who-are-we": "Who are we?",
-    "work-with-us": "Work with us"
+    "work-with-us": "Work with us",
+    "fn-shop-items": "Shop Items",
+    "fn-user-level": "Level:",
+    "fn-user-progress": "Progress:",
+    "overall": "Overall Stats",
+    "solo": "Solo Stats",
+    "duo": "Duo Stats",
+    "trio": "Trio Stats",
+    "squad": "Squad Stats",
+    "ltm": "Ltm Stats"
 }

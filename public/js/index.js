@@ -250,6 +250,13 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 				});
 				targetUrl = '/brawl/stats/' + usernameVal;
 				break;
+
+			case 'fn':
+				
+				// This response either returns 400 or redirects to the stats page
+				response = await fetch(`/fortnite/${usernameVal}`);
+				targetUrl = '/fortnite/stats/' + usernameVal;
+				break;
 		}
 
 		if (!response.ok) {
@@ -257,6 +264,7 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 			errorText.innerHTML = json.error;
 			gameUsernameFormButton.classList.remove('loading');
 			gameUsernameFormButton.textContent = prevBtnText;
+			console.log(usernameVal);
 			return;
 
 		}
