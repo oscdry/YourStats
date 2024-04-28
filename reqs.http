@@ -1,5 +1,4 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlvUkc1dFY3cE5ZTk5pTlBlUTRDIiwidXNlcm5hbWUiOiJwcnVlYmFtYWlsIiwicm9sZSI6MCwiaWF0IjoxNzEzNTQyODg5LCJleHAiOjE3MTM2MjkyODl9.tpIIoacaqNFzuVWyVRLLPoQbxxHH-ipl1rBqD6vATOo
-
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IndaMnVmQkF4ckxybEJGVzhjYm1JIiwidXNlcm5hbWUiOiJQb2xlIiwibWFpbCI6InBvbGNvbmRhbGdhcmNpYUBnbWFpbC5jb20iLCJyb2xlIjoxLCJpYXQiOjE3MTQyMjEyMTYsImV4cCI6MTcxNDMwNzYxNn0.hjcGKMBRUX1Fo9d9yftKBlPLvUCrBGE00y9_ohkn38w
 GET http://localhost:80/
 
 ###
@@ -29,7 +28,7 @@ POST http://localhost:80/api/login
 Content-Type: application/json
 
 {
-    "username": "pruebamail",
+    "username": "Pole",
     "password": "Abc.1234"
 }
 
@@ -54,8 +53,20 @@ POST http://localhost:80/api/brawl-user
 Content-Type: application/json
 
 {
-    "tag": "YCQLVQV"
+    "tag": "LRUR2VOG"
 }
+
+###
+
+GET http://localhost:80/api/ranking
+
+###
+
+GET https://yourstats.kxnzen.me/api/ranking
+
+###
+
+GET http://localhost:80/api/brawl-data/LRUR2VOG
 
 ###
 
@@ -87,8 +98,15 @@ POST http://localhost:8080/api/upload/asdasdasd
 GET https://yourstats.kxnzen.me/api/brawl-data/YCQLVQV
 
 ###
+GET https://yourstats.kxnzen.me/api/brawl-home/
+
+###
 
 GET https://yourstats.kxnzen.me/api/brawl-home
+
+###
+
+GET http://localhost/api/brawl-home
 
 ###
 
@@ -135,3 +153,22 @@ X-Riot-Token: RGAPI-0602ed17-6cfb-487d-8692-8a761a471850
 ###
 
 GET http://localhost/api/fortnite-data/Duality
+
+###
+
+GET https://yourstats.kxnzen.me/api/fortnite-data/Duality
+
+###
+
+POST http://localhost/api/users/game-name
+Content-Type: application/json
+
+{
+    "lol": "OSCDRY#FNC",
+    "brawl": "YCQLVQV",
+    "fortnite": "Duality"
+}
+
+###
+
+GET http://localhost/api/users/points

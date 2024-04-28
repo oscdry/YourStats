@@ -10,7 +10,7 @@ import { RiotgetPUUIDInfo } from './riotServices.js';
 import { getAccountbyId } from './riotServices.js';
 import { getNewSkins } from './lolSkinsServices.js';
 import { ExternalServiceError } from '../errors/errors.js';
-import { LolHomeData, LoLUserData } from '../types/lolTypes.js';
+import { ChampionIdentifier, ChampionStats, LolHomeData, LoLUserData } from '../types/lolTypes.js';
 
 config();
 
@@ -20,8 +20,6 @@ if (!RIOT_API_KEY) {
 	Pino.error('RIOT API key not found');
 	process.exit(1);
 }
-
-
 
 // Status de la plataforma del League of Legends
 export const RiotStatusServer = async (): Promise<{
@@ -577,33 +575,6 @@ export function getPopularSkins(): {
 		}
 	];
 	return popularSkins;
-}
-
-interface ChampionStats {
-	kills: number;
-	deaths: number;
-	assists: number;
-}
-
-interface ChampionIdentifier {
-	championName: string;
-	championId: number;
-}
-
-interface LoLGameChampWinResponse {
-	championIdentifier: ChampionIdentifier;
-	isWinner: boolean;
-	arrayItems: number[];
-	stats: ChampionStats;
-	kda: string;
-	gameMode: string;
-
-	teamID: string;
-
-	teamPosition: string;
-	arrayTeammates: { [nombre: string]: { champID: string; gameTAG: string; }; };
-	arrayBlue: { [nombre: string]: { champID: string; gameTAG: string; }; };
-	arrayRed: { [nombre: string]: { champID: string; gameTAG: string; }; };
 }
 
 //

@@ -1,17 +1,17 @@
 <%# This component takes a (skinsBrawls) object parameter to display the
 popular skins %>
 
-<h3 class="container-fluid my-3" id="lol-popular-skins">Skins populares</h3>
-<div class="lol-skins-showcase">
-    <div class="lol-skins-container">
+<h3 class="container-fluid my-4" id="lol-popular-skins">Skins populares</h3>
+<div class="brawl-skins-showcase my-4">
+    <div class="brawl-skins-container">
         <% skinsBrawls.forEach(skin => { %>
-        <div class="lol-skin-card">
+        <div class="brawl-skin-card">
             <img src="<%= skin['image-url'] %>" alt="<%= skin.name %>">
             <div class="skin-info">
                 <p class="skin-name"><%= skin.name %></p>
-                <div class="skin-price d-flex flex-row gap-1 ">
+                <div class="skin-price d-flex flex-row gap-1 justify-content-around">
                     <p class="release-date">
-                        Fecha de lanzamiento
+                        Fecha de lanzamiento:
                     </p>
                     <p><%= skin['release-date'] %></p>
                 </div>

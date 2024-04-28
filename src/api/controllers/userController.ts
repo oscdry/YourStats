@@ -6,14 +6,31 @@ import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUsernameError }
 import { FirebaseUser } from '../types/FirebaseUser.js';
 import Pino from '../../logger.js';
 import { NotFoundPage } from '../../routes/web.js';
+import { calculateAndSaveUserPointsService, getBest5UsersService, getUserPointsService, updateUserGameUsernamesService } from '../services/userGameNameService.js';
 
 //! TODO: Hay un problema aquí, ha de ser función declarada con function para que funcione
 // Si no, se utiliza antes de ser declarada, y peta todo, ????
-export async function renderUserView(_req: Request, res: Response) {
-	const user = await getFirebaseUserById(_req.params.id);
-	if (!user) return NotFoundPage(res);
+export async function renderUserView(req: Request, res: Response, next: NextFunction) {
+	try {
+		const [user, userPoints] = await Promise.all([
+			getFirebaseUserById(req.params.id),
+			getUserPointsService(req.params.id)
+		]);
+		if (!user) return NotFoundPage(res);
 
-	res.render('./user.ejs', { title: 'User', user: res.locals.user, userView: user });
+		res.render('./user.ejs', {
+			title: 'User',
+			user: res.locals.user, // This is the logged in user
+			userView: user, // This is the user we are viewing
+
+			// If the user is the owner of the profile
+			owner: res.locals.user ?
+				res.locals.user.id === user.id : false,
+			points: userPoints
+		});
+	} catch (error) {
+		next(error);
+	}
 }
 
 export const registerUserController = async (req: Request, res: Response, next: NextFunction) => {
@@ -206,3 +223,38 @@ export const uploadUserImageController = async (req: Request, res: Response) => 
 	}
 };
 
+export const updateGameNameController = async (req: Request, res: Response, next: NextFunction) => {
+	const { lol, brawl, fortnite } = req.body;
+	const userId = res.locals.user.id;
+
+	Pino.info('Updating game names for user: ' + userId);
+
+	try {
+		await updateUserGameUsernamesService(userId, {
+			lol,
+			brawl,
+			fortnite
+		});
+		res.json({ message: 'Game names updated successfully' });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const calculateUserPointsController = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const points = await calculateAndSaveUserPointsService(res.locals.user.id);
+		return res.json({ points });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const sendUserPointsController = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const ranking = await getBest5UsersService();
+		return res.json({ ranking });
+	} catch (error) {
+		next(error);
+	}
+};

@@ -63,9 +63,7 @@ function updatePageNumbers() {
 
 document.addEventListener('DOMContentLoaded', function () {
 	const deleteButtons = document.querySelectorAll('.backoffice-delete-btn');
-	const deleteModal = document.getElementById('deleteModal');
 	const deleteButton2 = document.getElementById('deleteButton2');
-	const cancelbtn = document.getElementById('modal-conf-delete-cancelBtn');
 
 	deleteButtons.forEach(button => {
 		button.addEventListener('click', function (event) {
@@ -93,7 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
 				throw new Error('Something went wrong');
 			})
 			.then(data => {
-				console.log('User deleted:', data);
+
+				// console.log('User deleted:', data);
 
 				// Remove the row from the table
 				document.querySelector(`a[data-id="${userId}"]`).closest('tr').remove();
@@ -112,7 +111,6 @@ const backUpdatePasswordInput = document.getElementById('back-update-password-in
 const backUpdatePasswordConfirmationInput = document.getElementById('back-update-password-confirmation-input');
 
 let currentUserId = null;
-
 
 // Seleccionar todos los botones de editar
 const editButtons = document.querySelectorAll('.edit-btn');

@@ -50,3 +50,14 @@ model ContactEntry {
   email String @db.VarChar(100)
   content String @db.Text
 }
+
+model UserGameName {
+  id String @id
+  lol String @db.VarChar(100)
+  brawl String @db.VarChar(100)
+  fortnite String @db.VarChar(100)
+  points Int @db.Int
+  lol_points Int @db.Int
+  brawl_points Int @db.Int
+  fortnite_points Int @db.Int
+}

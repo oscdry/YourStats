@@ -8,9 +8,14 @@ async function fetchFortniteShopData() {
 
 		const $ = cheerio.load(html);
 
-		const skins = [];
+		const skins: {
+			name: string,
+			image: string,
+			price: number,
+			filePath: string;
+		}[] = [];
 
-		$('.fn-item').each(function() {
+		$('.fn-item').each(function () {
 			const name = $(this).find('.fn-item-name').text().trim();
 			const imageRelative = $(this).find('.img').attr('src');
 			const priceElement = $(this).find('.fn-item-price');
@@ -20,7 +25,7 @@ async function fetchFortniteShopData() {
 			const imageUrl = image;
 			const idMatch = imageUrl.match(/\/items\/(\d+)/);
 			const id = idMatch ? idMatch[1] : null;
-			const filePath = '/img/fortnite/skins/' + id + '.jpg'; 
+			const filePath = 'public/img/fortnite/skins/' + id + '.jpg'; 
 			skins.push({ name, image, price, filePath });
 		});
 
@@ -34,7 +39,7 @@ async function fetchFortniteShopData() {
 }
 
 
-export async function downloadImagesFromJSON(jsonFilePath, outputPath) {
+export async function downloadImagesFromJSON(jsonFilePath: string, outputPath: string) {
 	try {
 		const jsonData = fs.readFileSync(jsonFilePath, 'utf8');
 		const skins = JSON.parse(jsonData);
@@ -43,14 +48,17 @@ export async function downloadImagesFromJSON(jsonFilePath, outputPath) {
 			fs.mkdirSync(outputPath, { recursive: true });
 		}
 
-		await Promise.all(skins.map(async (skin, index) => {
+		await Promise.all(skins.map(async (skin: {
+			name: string;
+			image: string;
+		}, index: number) => {
 			try {
 				const response = await fetch(skin.image);
 				const buffer = await response.arrayBuffer();
 				const imageUrl = skin.image;
 				const idMatch = imageUrl.match(/\/items\/(\d+)/);
 				const id = idMatch ? idMatch[1] : null;
-				const fileName = `${id}.jpg`; 
+				const fileName = `${id}.jpg`;
 				const filePath = `${outputPath}${fileName}`;
 				console.log(filePath);
 				fs.writeFileSync(filePath, Buffer.from(buffer));
@@ -69,8 +77,8 @@ export async function downloadImagesFromJSON(jsonFilePath, outputPath) {
 	}
 }
 
-const jsonFilePath = 'skins.json'; 
-const outputPath = 'public/img/fortnite/skins/'; 
+const jsonFilePath = 'skins.json';
+const outputPath = 'public/img/fortnite/skins/';
 
 //downloadImagesFromJSON(jsonFilePath, outputPath);
 

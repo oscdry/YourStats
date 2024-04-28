@@ -7,6 +7,12 @@
     <a href="/" class="navbar-brand"></a>
     <div class="navbar-collapse collapse" id="navbar">
 
+        <% if (typeof user !== 'undefined' && user.role === 1) { %>
+        <li class="nav-item">
+            <a href="/admin" class="nav-link">Backoffice</a>
+        </li>
+        <% } %>
+
         <ul class="navbar-nav">
             <li class="nav-item"><a id="navbar-about" class="nav-link"
                     href="/about">Sobre

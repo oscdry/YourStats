@@ -199,6 +199,7 @@ logoutButton?.addEventListener('click', async (e) => {
 // Game input handling
 const gameUsernameForm = document.getElementById('game-username-form');
 const gameUsernameInput = document.getElementById('game-username-input');
+const gameUsernameFormButton = document.getElementById('game-input-username-btn');
 
 const dataMode = gameUsernameInput?.getAttribute('data-mode');
 
@@ -207,6 +208,12 @@ const dataMode = gameUsernameInput?.getAttribute('data-mode');
 // Universal for all games, the mode is set in the data-mode attribute of the input
 gameUsernameForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
+
+	gameUsernameFormButton.classList.add('loading');
+	const prevBtnText = gameUsernameFormButton.textContent;
+	gameUsernameFormButton.textContent = '';
+
+	console.log(e.target);
 	const errorText = e.target.querySelector('.error-text');
 	const usernameVal = gameUsernameInput.value.trim();
 
@@ -243,14 +250,26 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 				});
 				targetUrl = '/brawl/stats/' + usernameVal;
 				break;
+
+			case 'fortnite':
+				
+				// This response either returns 400 or redirects to the stats page
+				response = await fetch(`/fortnite/${usernameVal}`);
+				targetUrl = '/fortnite/stats/' + usernameVal;
+				break;
 		}
 
 		if (!response.ok) {
 			const json = await response.json();
 			errorText.innerHTML = json.error;
+			gameUsernameFormButton.classList.remove('loading');
+			gameUsernameFormButton.textContent = prevBtnText;
+			console.log(usernameVal);
 			return;
-		}
 
+		}
+		gameUsernameFormButton.classList.remove('loading');
+		gameUsernameFormButton.textContent = prevBtnText;
 		window.location = targetUrl;
 	}
 });

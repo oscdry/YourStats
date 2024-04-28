@@ -1,8 +1,10 @@
-<div class="d-flex flex-row game-stats-header mb-3 ">
+<div class="d-flex flex-row game-stats-header mb-3">
     <%- include('../../partials/components/back-button.ejs', {href}) %>
-    <div class="w-100 gap-3 d-flex flex-row">
+    <div class="w-100 mx-0 gap-3 d-flex flex-row flex-wrap">
         <h3><%= name %></h3>
-        <h3 class="game-stats-user"> - Estadísticas de </h3>
-        <h3><%= username %></h3>
+        <div class="d-flex flex-nowrap flex-row gap-2">
+            <h3 class="game-stats-user text-nowrap"> - Estadísticas de </h3>
+            <h3 class=""><%= username %></h3>
+        </div>
     </div>
 </div>

@@ -105,8 +105,30 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 					],
 					hoverOffset: 4
 				}]
+			},
+			options: {
+				responsive: true, // this will make the chart responsive
+				maintainAspectRatio: false // this allows you to set a custom size
 			}
 		};
+const lolKdaLastMatchesChartData = {
+			type: 'line',
+			data: {
+				labels: Object.keys(loldata.games.resultsArray.map((game) => game.championIdentifier.championName)),
+				datasets: [{
+					label: 'KDA',
+					data: Object.values(loldata.games.resultsArray).map((game) => game.kda).reverse(),
+					fill: false,
+					borderColor: 'rgb(75, 192, 192)',
+					tension: 0.1
+				}]
+			},
+			options: {
+				responsive: true, // this will make the chart responsive
+				maintainAspectRatio: false // this allows you to set a custom size
+			}
+		};
+
 
 		const lolCompChartData = {
 			type: 'bar',
@@ -125,7 +147,7 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 			}
 		};
 
-		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, lolCompChartData, playername: gameName, user: res.locals.user });
+		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, lolCompChartData, playername: gameName, user: res.locals.user, lolKdaLastMatchesChartData });
 	} catch (error) {
 		const message = (error as Error).message;
 		const name = (error as Error).name;
@@ -159,6 +181,8 @@ export const renderLolSkins = async (req: Request, res: Response, next: NextFunc
 
 
 		return res.render('./lol/lol-skins-index.ejs', { title: 'LoL Skins', homedata: data, user: res.locals.user });
+
+		
 	} catch (error) {
 		const message = (error as Error).message;
 		const name = (error as Error).name;
