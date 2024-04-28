@@ -27,9 +27,7 @@
 
     margin-left: 0;
 
-
     min-height: 150px;
-    min-width: 300px;
     width: 30vw;
     max-width: 70vw;
 }
@@ -235,7 +233,6 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-
 }
 
 .ranking-input-row {
@@ -261,4 +258,11 @@
 
 .ranking-editing.hide {
     display: none;
+}
+
+@media screen and (max-width: 1024px) {
+    .ranking-inputs-container {
+        justify-content: center;
+        gap: 3vw;
+    }
 }

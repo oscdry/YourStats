@@ -981,8 +981,20 @@ input[type="password"].invalid:not(:focus)
 .user-card-info {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
+
+    gap: 0.5vw;
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+.user-card-name {
+    min-width: 110px;
+}
+
+.user-card-info p {
     width: 100%;
 }
 
@@ -1223,6 +1235,7 @@ input[type="password"].invalid:not(:focus)
     justify-content: center;
     min-width: 350px;
 
+    gap: 1vw;
     max-width: 60vw;
 }
 
