@@ -45,7 +45,7 @@ model Genre {
 
 model ContactEntry {
   id Int @id @default(autoincrement())
-  user_id Int?
+  user_id String @db.VarChar(100)
   username String @db.VarChar(100)
   email String @db.VarChar(100)
   content String @db.Text

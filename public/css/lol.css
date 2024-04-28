@@ -184,10 +184,10 @@ input#game-tag-input {
 
 .lol-champ-container{
     display: flex;
-    flex-direction: row; 
-    flex-wrap: wrap; 
-    justify-content: space-around; 
-    align-items: center; 
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
     width: 100%;
     gap: 1rem;
 }
@@ -238,6 +238,11 @@ input#game-tag-input {
 {
 
     padding: 0.5rem;
+}
+
+.lol-champ-card {
+    color: var(--black);
+    font-weight: bold;
 }
 
 .lol-games-container

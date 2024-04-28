@@ -30,7 +30,8 @@
                 alt="Imagen de perfil de <%= loldata.gameName %>">
             <div class="w-100 d-flex flex-column gap-2">
                 <h2><%= loldata.gameName %></h2>
-                <div class="d-flex flex-wrap flex-row justify-content-around fs-5">
+                <div
+                    class="d-flex flex-wrap flex-row justify-content-around fs-5">
                     <div
                         class="d-flex justify-content-center text-center flex-column gap-2">
                         <p id="lol-win-matches">Victorias</p>
@@ -63,7 +64,8 @@
     </div>
 
     <%# Top 3 Champions %>
-    <h3 id="lol-top-champions" class="container-fluid my-3">Top 3 Campeones:</h3>
+    <h3 id="lol-top-champions" class="container-fluid my-3">Top 3
+        Campeones:</h3>
     <div class="container">
         <div class="lol-user-champions-top">
             <% loldata.championsMasteryData.forEach(champion => { %>
@@ -78,32 +80,37 @@
         </div>
     </div>
 
-    <h1 class="container-fluid my-3 title" id="lol-last-7days">Últimos 7 días:</h1>
+    <h1 class="container-fluid my-3 title" id="lol-last-7days">Últimos 7
+        días:</h1>
 
-    <%# Positions Chart %>
-    <h3 class="container-fluid my-3" id="lol-played-positions">Posiciones jugadas: </h3>
-    <div class="container chart my-3">
-        <canvas id="position-chart"></canvas>
-        <script type="module">
+    <div class="d-flex flex-row justify-content-around align-items-center ">
+        <%# Positions Chart %>
+        <h3 class="container-fluid my-3" id="lol-played-positions">Posiciones
+            jugadas: </h3>
+        <div class="container chart my-3">
+            <canvas id="position-chart"></canvas>
+            <script type="module">
             var ctx = document.getElementById('position-chart').getContext('2d');
             var chartData = <%- JSON.stringify(lolPositionsChartData) %>;
             var myChart = new Chart(ctx, chartData);
         </script>
-    </div>
+        </div>
 
-
-    <%# Friends Chart %>
-    <h3 class="container" id="lol-played-with">Compañeros de juego recientes: </h3>
-    <div class="container comp chart">
-        <canvas id="companionChart"></canvas>
-        <script type="module">
+        <%# Friends Chart %>
+        <h3 class="container" id="lol-played-with">Compañeros de juego
+            recientes: </h3>
+        <div class="container comp chart">
+            <canvas id="companionChart"></canvas>
+            <script type="module">
             var ctx = document.getElementById('companionChart').getContext('2d');
             var chartData = <%- JSON.stringify(lolCompChartData) %>;
             var myChart = new Chart(ctx, chartData);
-        </script>
+            </script>
+        </div>
     </div>
 
-    <h3 class="container-fluid my-3" id="lol-last-matches">Últimas <%= loldata.games.length
+    <h3 class="container-fluid my-3" id="lol-last-matches">Últimas <%=
+        loldata.games.length
 
         %> partidas:</h3>
     <div class="container-fluid lol-games-container my-3">
@@ -118,9 +125,11 @@
     </div>
 
     <%# KDA Chart %>
-    <h3 class="container my-3" id="kda-graph">Evolución del KDA en las últimas partidas: </h3>
+    <h3 class="container my-3" id="kda-graph">Evolución del KDA en las últimas
+        partidas: </h3>
     <p>(De más antigua a más nueva)</p>
-    <div class="container chart w-100 d-flex flex-row justify-content-center align-items-center">
+    <div
+        class="container chart w-100 d-flex flex-row justify-content-center align-items-center">
         <canvas id="kda-chart"></canvas>
         <script type="module">
             var ctx = document.getElementById('kda-chart').getContext('2d');

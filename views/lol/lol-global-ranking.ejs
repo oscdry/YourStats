@@ -8,10 +8,10 @@ global ranking %>
     <div class="lol-ranking-container">
         <% let index = 1
         summonerDetails.forEach(summoner => { %>
-        <a class="lol-summoner-card game-selector-item">
+        <a class="lol-summoner-card game-selector-item" href="/lol/stats/<%= summoner.summonerName + '/' + summoner.summonerTag %>">
             <div class="d-flex flex-row">
                 <p class="summoner-position"><%= index++ %>.&nbsp;</p>
-                
+
                 <p class="summoner-name"><%= summoner.summonerName %>&nbsp;</p>
 
                 <p class="summoner-tag"><%= "#" + summoner.summonerTag %></p>
