@@ -1,0 +1,31 @@
+<%# This component takes a (champList) object parameter to display the
+global ranking %>
+
+<h3 class="container-fluid my-3" id="new-champions">New Champs</h3>
+<% if (champList) { %>
+
+<div class="lol-champ container-fluid ">
+    <div class="lol-champ-container">
+        <% console.log(champList) %>
+        <% let index = 1
+        champList.forEach(champ => { %>
+        <a class="lol-champ-card game-selector-item">
+            <div class="d-flex flex-row">
+                <p class="champ-position"><%= index++ %>.&nbsp;</p>
+                
+                <p class="champ-name"><%= champ.champName %>&nbsp;</p>
+            </div>
+            
+            <img
+             src="/img/lol/champs/<%= champ.champId %>.webp"
+             alt>
+        </a>
+
+        <% }) %>
+    </div>
+</div>
+<% } else { %>
+<div class="lol-last-champ container-fluid">
+    <p>No se ha podido cargar los últimos campeones</p>
+</div>
+<% } %>

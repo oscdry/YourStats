@@ -11,7 +11,10 @@ global ranking %>
         <a class="lol-summoner-card game-selector-item">
             <div class="d-flex flex-row">
                 <p class="summoner-position"><%= index++ %>.&nbsp;</p>
-                <p class="summoner-name"><%= summoner.summonerName %></p>
+                
+                <p class="summoner-name"><%= summoner.summonerName %>&nbsp;</p>
+
+                <p class="summoner-tag"><%= "#" + summoner.summonerTag %></p>
             </div>
             <p class="summoner-points"><%= summoner.leaguePoints %></p>
 

@@ -6,9 +6,9 @@
         <div class="container">
             <% shop.forEach(item => { %>
                 <div class="card">
-                    <img src="<%= item.image %>" alt="Imagen de <%= item.name %>" class="card-image">
+                    <img src="<%= item.filePath %>" alt="Imagen de <%= item.name %>" class="card-image">
                     <div class="card-info">
-                        <h3><%= item.name %></h3>
+                        <h3 id="name-items-shop"><%= item.name %></h3>
                         <p>Precio: <%= item.price %> V-Bucks</p>
                     </div>
                 </div>
