@@ -7,16 +7,20 @@ import { updateUsernameSchema } from './schemas.js';
 export async function validateNameUserUpdate(req: Request, res: Response, next: NextFunction) {
 	const { username } = req.body;
 
-	if (username) {
-		const user = await getUserByIdentifier(username, 'username');
-		if (user) {
-			next(new UsernameUsedError());
+	try {
+		if (username) {
+			const user = await getUserByIdentifier(username, 'username');
+			if (user) {
+				throw new UsernameUsedError();
+			}
 		}
-	}
 
-	// Execute check
-	const { error } = updateUsernameSchema.validate(req.body);
-	if (error)
-		next(Error(error.details[0].message));
-	next();
+		// Execute check
+		const { error } = updateUsernameSchema.validate(req.body);
+		if (error)
+			next(error);
+		next();
+	} catch (error) {
+		next(error);
+	}
 }

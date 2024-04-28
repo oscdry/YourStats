@@ -1,65 +1,104 @@
-//user list with pagination
+import { emailRegex, passwordRegex, usernameRegex } from './constants.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-	let before = document.getElementById('previous-currentPage');
-	let current = document.getElementById('currentPage');
-	let after = document.getElementById('after-currentPage');
-	let prevButton = document.getElementById('prevPage');
-	let nextButton = document.getElementById('nextPage');
-	let count = document.getElementById('countUsers').textContent; // Obtener el count de usuarios desde el backend
-	let usersPerPage = 10; // Número de usuarios por página
-	let totalPages = Math.ceil(count / usersPerPage); // Calcular el número total de páginas
-	let currentPage = getPageNumberFromUrl(); // Obtener el número de página de la URL
+// User list with pagination
+const before = document.getElementById('previous-currentPage');
+const current = document.getElementById('currentPage');
+const after = document.getElementById('after-currentPage');
+const prevButton = document.getElementById('prevPage');
+const nextButton = document.getElementById('nextPage');
+const count = document.getElementById('countUsers').textContent; // Obtener el count de usuarios desde el backend
+let usersPerPage = 10; // Número de usuarios por página
+let totalPages = Math.ceil(count / usersPerPage); // Calcular el número total de páginas
+let currentPage = getPageNumberFromUrl(); // Obtener el número de página de la URL
 
+updatePageNumbers();
+
+document.getElementById('nextPage').addEventListener('click', () => {
+	currentPage++;
+	window.location.href = `/admin?page=${currentPage}`;
+
+	// Llamamos a updatePageNumbers después de cambiar la página
 	updatePageNumbers();
+});
 
-	document.getElementById('nextPage').addEventListener('click', () => {
-		currentPage++;
-		window.location.href = `/admin?page=${currentPage}`;
+document.getElementById('prevPage').addEventListener('click', () => {
+	currentPage = Math.max(1, currentPage - 1);
+	window.location.href = `/admin?page=${currentPage}`;
 
-		// Llamamos a updatePageNumbers después de cambiar la página
-		updatePageNumbers();
-	});
+	// Llamamos a updatePageNumbers después de cambiar la página
+	updatePageNumbers();
+});
 
-	document.getElementById('prevPage').addEventListener('click', () => {
-		currentPage = Math.max(1, currentPage - 1);
-		window.location.href = `/admin?page=${currentPage}`;
+function getPageNumberFromUrl() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const page = parseInt(urlParams.get('page'));
+	return isNaN(page) ? 1 : page; // Si no se encuentra 'page' en la URL, devuelve 1
+}
 
-		// Llamamos a updatePageNumbers después de cambiar la página
-		updatePageNumbers();
-	});
+function updatePageNumbers() {
+	current.textContent = currentPage;
 
-	function getPageNumberFromUrl() {
-		const urlParams = new URLSearchParams(window.location.search);
-		const page = parseInt(urlParams.get('page'));
-		return isNaN(page) ? 1 : page; // Si no se encuentra 'page' en la URL, devuelve 1
+	// Establecer el texto de 'before' como el número de página actual menos 1
+	before.textContent = Math.max(1, currentPage - 1);
+
+	if (currentPage <= 1) {
+		prevButton.disabled = true;
+		before.style.display = 'none'; // Ocultar el botón 'before'
+	} else {
+		prevButton.disabled = false;
 	}
 
-	function updatePageNumbers() {
-		current.textContent = currentPage;
-
-		// Establecer el texto de 'before' como el número de página actual menos 1
-		before.textContent = Math.max(1, currentPage - 1);
-
-		if (currentPage <= 1) {
-			prevButton.disabled = true;
-			before.style.display = 'none'; // Ocultar el botón 'before'
-		} else {
-			prevButton.disabled = false;
-			before.style.display = 'inline'; // Mostrar el botón 'before'
-		}
-
-		// Si currentPage es igual al número total de páginas, deshabilitar el botón "next" y ocultar el botón "after"
-		if (currentPage >= totalPages) {
-			nextButton.disabled = true;
-			after.style.display = 'none'; // Ocultar el botón 'after'
-		} else {
-			nextButton.disabled = false;
-			after.style.display = 'inline'; // Mostrar el botón 'after'
-		}
-
-		after.textContent = currentPage + 1;
+	// Si currentPage es igual al número total de páginas, deshabilitar el botón "next" y ocultar el botón "after"
+	if (currentPage >= totalPages) {
+		nextButton.disabled = true;
+		after.style.display = 'none'; // Ocultar el botón 'after'
+	} else {
+		nextButton.disabled = false;
 	}
+
+	after.textContent = currentPage + 1;
+}
+
+// backoffice delete
+
+document.addEventListener('DOMContentLoaded', function () {
+	const deleteButtons = document.querySelectorAll('.backoffice-delete-btn');
+	const deleteButton2 = document.getElementById('deleteButton2');
+
+	deleteButtons.forEach(button => {
+		button.addEventListener('click', function (event) {
+
+			// Prevent default link behavior
+			event.preventDefault();
+
+			// Pass the user ID to the delete button in the modal
+			const userId = this.getAttribute('data-id');
+			deleteButton2.setAttribute('data-id', userId);
+		});
+	});
+
+	deleteButton2.addEventListener('click', function () {
+		const userId = this.getAttribute('data-id');
+		fetch(`/admin/users/delete/${userId}`, {
+			method: 'DELETE'
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('User deleted:', response);
+					window.location.reload();
+					return response.json();
+				}
+				throw new Error('Something went wrong');
+			})
+			.then(data => {
+
+				// console.log('User deleted:', data);
+
+				// Remove the row from the table
+				document.querySelector(`a[data-id="${userId}"]`).closest('tr').remove();
+			})
+			.catch(error => console.error('Error:', error));
+	});
 });
 
 // backoffice update
@@ -73,33 +112,28 @@ const backUpdatePasswordConfirmationInput = document.getElementById('back-update
 
 let currentUserId = null;
 
-document.addEventListener('DOMContentLoaded', function () {
+// Seleccionar todos los botones de editar
+const editButtons = document.querySelectorAll('.edit-btn');
 
-	// Seleccionar todos los botones de editar
-	const editButtons = document.querySelectorAll('.edit-btn');
+// Añadir un listener a cada botón de editar
+editButtons?.forEach(button => {
+	button.addEventListener('click', function () {
 
-	// Añadir un listener a cada botón de editar
-	editButtons?.forEach(button => {
-		button.addEventListener('click', function () {
+		// Obtener los datos del usuario desde los atributos data-*
+		const username = this.getAttribute('data-username');
+		const mail = this.getAttribute('data-mail');
+		const role = this.getAttribute('data-role');
+		const userId = this.getAttribute('data-id');
 
-			// Obtener los datos del usuario desde los atributos data-*
-			const username = this.getAttribute('data-username');
-			const mail = this.getAttribute('data-mail');
-			const role = this.getAttribute('data-role');
-			const userId = this.getAttribute('data-id');
+		// Establecer los valores en el formulario del modal
+		backUpdateUsernameInput.value = username;
+		backUpdateMailInput.value = mail;
+		backUpdateRoleInput.value = role;
+		currentUserId = userId;
 
-			// Establecer los valores en el formulario del modal
-			backUpdateUsernameInput.value = username;
-			backUpdateMailInput.value = mail;
-			backUpdateRoleInput.value = role;
-			currentUserId = userId;
-
-			// Limpiar los mensajes de error
-			const errorText = this.closest('.modal-content').querySelector('.error-text');
-			errorText.textContent = ''; // Limpiar los mensajes de error al abrir el modal
-		});
 	});
 });
+
 backUpdateSubmit?.addEventListener('click', async (e) => {
 	e.preventDefault();
 
@@ -115,19 +149,19 @@ backUpdateSubmit?.addEventListener('click', async (e) => {
 
 		// Check regex
 		// Username
-		if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
+		if (!usernameRegex.test(username)) {
 			errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
 			return;
 		}
 
 		// Mail
-		if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(mail)) {
+		if (!emailRegex.test(mail)) {
 			errorText.innerHTML = 'Invalid mail';
 			return;
 		}
 
 		// Password
-		if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password)) {
+		if (!passwordRegex.test(password)) {
 			errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
 			return;
 		}
@@ -216,54 +250,37 @@ backUpdateSubmit?.addEventListener('click', async (e) => {
 // backoffice search user by mail
 
 document.addEventListener('DOMContentLoaded', async () => {
-
 	const searchBtn = document.getElementById('back-search-button');
+	const clearBtn = document.getElementById('back-clear-button');
 	const searchInput = document.getElementById('back-search-mail-input');
 	const errorSearch = document.getElementById('error-search-back');
 	const tbody = document.querySelector('tbody');
-	const beforeBtn = document.getElementById('prevPage');
-	const afterBtn = document.getElementById('nextPage');
-	const numBeforePage = document.getElementById('previous-currentPage');
-	const numCurrentPage = document.getElementById('currentPage');
-	const numAfterPage = document.getElementById('after-currentPage');
 
 	searchBtn.addEventListener('click', async (e) => {
 		e.preventDefault();
-
 		const email = searchInput.value.trim();
-
 		if (!email) {
 			errorSearch.textContent = 'El campo de correo electrónico es obligatorio';
-
-			// Recargar la página /admin
-			window.location.href = '/admin';
 			return;
 		}
-
 		errorSearch.textContent = '';
-
+		clearBtn.style.display = 'inline';
 		try {
 			const response = await fetch('/api/search-by-email', {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email })
 			});
-
 			if (!response.ok) {
 				throw new Error('Error al buscar usuarios por correo electrónico');
 			}
-
 			const users = await response.json();
-
 			const existingRows = document.querySelectorAll('.user-row');
 			existingRows.forEach(row => {
 				if (!users.find(user => user.id === parseInt(row.children[0].textContent))) {
 					row.remove();
 				}
 			});
-
 			users.forEach(user => {
 				if (!document.querySelector(`.user-row[data-id="${user.id}"]`)) {
 					const tr = document.createElement('tr');
@@ -283,36 +300,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <td><a href="/admin/users/delete/${user.id}">Delete</a></td>
                     `;
 					tbody.appendChild(tr);
-
 					const editButton = tr.querySelector('.edit-btn');
 					editButton.addEventListener('click', function () {
 						const username = this.getAttribute('data-username');
 						const mail = this.getAttribute('data-mail');
 						const role = this.getAttribute('data-role');
 						const userId = this.getAttribute('data-id');
-
 						backUpdateUsernameInput.value = username;
 						backUpdateMailInput.value = mail;
 						backUpdateRoleInput.value = role;
 						currentUserId = userId;
-
-						const errorText = this.closest('.modal-content').querySelector('.error-text');
-						errorText.textContent = '';
 					});
 				}
 			});
-
-			// Ocultar los botones de paginación
-			beforeBtn.style.display = 'none';
-			afterBtn.style.display = 'none';
-			numBeforePage.style.display = 'none';
-			numCurrentPage.style.display = 'none';
-			numAfterPage.style.display = 'none';
-
 		} catch (error) {
 			console.error('Error al buscar usuarios por correo electrónico:', error);
 			errorSearch.textContent = 'Error interno del servidor';
 		}
 	});
-});
 
+	clearBtn.addEventListener('click', () => {
+		searchInput.value = '';
+		errorSearch.textContent = '';
+		clearBtn.style.display = 'none';
+		window.location.href = '/admin?page=1';
+	});
+});

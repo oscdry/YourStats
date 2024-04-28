@@ -1,0 +1,88 @@
+#prevPage, #previous-currentPage, #currentPage, #after-currentPage, #nextPage {
+    display: flex;
+    margin-top: 1% !important;
+    margin: -0.5%;
+    width: 4%;
+    height: 0;
+    padding: 2% 0;
+    border-radius: 5px;
+    text-align: center;
+    line-height: normal;
+    align-items: center;
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+#currentPage { 
+    color: white;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    gap: 1%;
+}
+
+input, button {
+    height: 5%;
+    padding: 0 1%;
+}
+
+#back-clear-button, #back-search-button {
+    margin-top: 3.5% !important;
+}
+
+table {
+    margin-top: 1%;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.8%;
+    text-align: left;
+    border-bottom: 0.1% solid #ccc;
+    font-size: 100%;
+}
+
+#back-office-totalUsers {
+    display: flex;
+    align-items: center;
+}
+
+#countUsers {
+    margin-left: 0.5%;
+}
+
+@media (max-width: 768px) {
+    input, button {
+        height: 6%;
+        padding: 0 1.5%; 
+    }
+    form {
+        gap: 1.5%;
+    }
+    th, td {
+        padding: 0.6%;
+        font-size: 90%;
+    }
+}
+
+
+@media (max-width: 480px) {
+    input, button {
+        height: 7%;
+        padding: 0 2%;
+    }
+    form {
+        gap: 2%;
+    }
+    th, td {
+        padding: 0.4%;
+        font-size: 80%;
+    }
+    #prevPage, #previous-currentPage, #currentPage, #after-currentPage, #nextPage {
+        margin: -1%;
+        padding: 3% 0;
+    }
+}

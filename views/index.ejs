@@ -1,7 +1,7 @@
 <%- include('./partials/components/banner.ejs') %>
 <main class="banner-main">
 
-    <!-- <div id="carouselBanner" class="carousel slide">
+  <%# UNUSED CAROUSEL <div id="carouselBanner" class="carousel slide">
         <div class="carousel-inner">
           <div class="carousel-item active">
             <h1>
@@ -24,8 +24,113 @@
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
-      </div> -->
+      </div> %>
 
-    <%- include('./partials/components/game-selector.ejs') %>
+  <%- include('./partials/components/game-selector.ejs') %>
+
+  <h1 class="title my-3" id="yourstats-ranking">Ranking de YourStats</h1>
+  <div class="container-fluid my-3 d-flex justify-content-center align-items-center ">
+    <div class="home-ranking-container">
+
+      <% for (rankUser of ranking) { %>
+      <%- include('./partials/components/ranking-user-card.ejs', {
+      name: rankUser.username,
+      link: `/user/${rankUser.id}`,
+      img: `/img/storage/users/${rankUser.id}.jpg`,
+      position: rankUser.position,
+      value: rankUser.points,
+      valueId: "points",
+      valueName: "Puntos",
+      curUsername: typeof user !== 'undefined' ? user.username : ''
+      }) %>
+
+      <% } %>
+    </div>
+  </div>
+
+  <h2 class="container-fluid mb-5" id="latest-news-of">Últimas noticias de:</h2>
+  <div class="news-container container-fluid" id="news-container">
+    <script src="/js/newsComponent.js" async></script>
+    <div class="news-container-header">
+      <a class="news-header-item" data-news-index="1">
+        <h4>League of Legends</h4>
+      </a>
+      <a class="news-header-item" data-news-index="2">
+        <h4>Rocket League</h4>
+      </a>
+      <a class="news-header-item" data-news-index="2">
+        <h4>Brawl Stars</h4>
+      </a>
+    </div>
+
+    <div class="news-container-body">
+      <div class="news-body-item" data-news-index="1">
+        <div class="news-title">
+          <h2>Notas de parche 14.8</h2>
+          <p>16-04-2024</p>
+        </div>
+        <img
+          src="https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/bltccdc2c17c7c18731/645c26df6d595a1e68fa300a/2022-Key-Art.jpg?quality=80"
+          alt>
+        <div class="news-info">
+          <p>
+            Cambios de balance en campeones, novedades sobre Vanguard, un nuevo
+            lote de aspectos de Luna sangrienta, una rotación de la tienda
+            mítica y unos cuantos cambios de equilibrio para ARAM.
+          </p>
+          <a target="_blank"
+            href="https://www.leagueoflegends.com/es-es/news/game-updates/patch-14-8-notes/"
+            class="primary">Ver Más
+            <i
+              class="external-link"></i>
+          </a>
+        </div>
+      </div>
+      <div class="news-body-item">
+        <div class="news-title">
+          <h2>Notas de parche v2.38</h2>
+          <p>16-04-2024</p>
+        </div>
+        <img
+          src="https://www.rocketleague.com/_next/image?url=https%3A%2F%2Fmedia.graphassets.com%2Fresize%3Dfit%3Aclip%2Cheight%3A1080%2Cwidth%3A1920%2Foutput%3Dformat%3Awebp%2FgxVAwsv8SzaRVrUEhLu5&w=1920&q=75"
+          alt>
+        <div class="news-info">
+          <p>
+            Indicadores de turbo de tus compañeros de equipo, mejoras de la
+            interfaz de usuario y más.
+          </p>
+          <a target="_blank"
+            href="https://www.rocketleague.com/en/news/patch-notes-v2-38"
+            class="primary">Ver Más
+            <i
+              class="external-link"></i>
+          </a>
+        </div>
+      </div>
+      <div class="news-body-item">
+        <div class="news-title">
+          <h2>Cambios en Competitivo</h2>
+          <p>25-03-2024</p>
+        </div>
+
+        <img
+          src="https://brawlstars.inbox.supercell.com/xdjcscmv3zo3/2a3CHkfJap0zGv1afoOieF/a8504c83ac42538bd109b2a484255331/0226_Ranked_Patch_notes_3000x600.png"
+          alt>
+        <div class="news-info">
+          <p>
+            Balance de brawlers, cambios en el sistema de rangos, bug fixes y
+            más.
+          </p>
+          <a target="_blank"
+            href="https://supercell.com/en/games/brawlstars/blog/release-notes/patch-notes-ranked-update/"
+            class="primary">Ver Más
+            <i
+              class="external-link"></i>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
 </main>

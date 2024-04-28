@@ -4,8 +4,14 @@ const playerTagEX2 = 'LR2PV2J2';
 import { config } from 'dotenv';
 import Pino from '../../logger.js';
 import { ExternalServiceError, UserNotFoundError } from '../errors/errors.js';
+import { BrawlData, BrawlHomeData } from '../types/brawlTypes.js';
 
 config();
+
+const apiKey = process.env.BRAWL_API_KEY;
+if (!apiKey)
+	throw new Error('No Brawl API Key in env');
+
 
 export const brawlRecentBattle = async (battletag: string): Promise<{
 	resumeMatch: any[];
@@ -14,7 +20,7 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 } | null> => {
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag + '/battlelog', {
 		headers: {
-			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Authorization': 'Bearer ' + apiKey,
 			'Content-Type': 'application/json'
 		}
 	});
@@ -25,7 +31,7 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 	if (result.status === 404) {
 		throw new UserNotFoundError();
 	} else if (result.status === 403) {
-		Pino.trace(result);
+		Pino.trace(result + ' | ' + result.status + ' | ' + result.statusText);
 		throw new ExternalServiceError();
 
 	}
@@ -142,32 +148,38 @@ export const brawlRecentBattle = async (battletag: string): Promise<{
 
 
 export const brawlInfo = async (battletag: string): Promise<{
-	user: object;
+	user: {
+		tag: string;
+		name: string;
+		trophies: number;
+		highestTrophies: number;
+		trioVictories: number;
+		soloVictories: number;
+		duoVictories: number;
+	};
 	imgID: string;
 	brawlers: any[];
 } | null> => {
 
 	const result = await fetch(BRAWL_API_ENDPOINT + 'players/%23' + battletag, {
 		headers: {
-			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Authorization': 'Bearer ' + apiKey,
 			'Content-Type': 'application/json'
 		}
 	});
 
 	Pino.trace('Fetching to ' + BRAWL_API_ENDPOINT + 'players/%23' + battletag);
 
-	// If 403, some key might be invalid
 	if (result.status === 403) {
-		Pino.trace('result:' + JSON.stringify(result));
+		const json = await result.json();
+		Pino.trace('Brawl info result: ' + json.reason + ' | ' + result.status + ' | ' + result.statusText + ' | ' + json.message);
 		throw new ExternalServiceError();
 	} else if (result.status !== 200) {
-		Pino.error(result.status);
-		return null;
+		Pino.error('Error fetching to Brawl API: ' + result.status + ' | ' + result.statusText);
+		throw new UserNotFoundError();
 	}
 
 	const userData = await result.json();
-	if (!userData) { return null; }
-
 	const user = {
 		tag: userData.tag,
 		name: userData.name,
@@ -182,11 +194,11 @@ export const brawlInfo = async (battletag: string): Promise<{
 
 	const sortByTrophies = userData.brawlers.sort(
 		(a: { trophies: number; }, b: { trophies: number; }) => b.trophies - a.trophies);
-	const topBrawlersByTrophies = sortByTrophies.slice(0, 10);
+	const topBrawlersByTrophies = sortByTrophies;
 
 	const brawlers = topBrawlersByTrophies.sort(
 		(a: { highestTrophies: number; }, b: { highestTrophies: number; }
-		) => b.highestTrophies - a.highestTrophies).slice(0, 3)
+		) => b.highestTrophies - a.highestTrophies)
 		.map((brawler: { id: any; name: any; power: any; gears: any; trophies: any; highestTrophies: any; starPowers: any; gadgets: any; }) => (
 			{
 				id: brawler.id,
@@ -206,56 +218,52 @@ export const brawlInfo = async (battletag: string): Promise<{
 	return { user, imgID, brawlers };
 };
 
+export const getRankingSpain = async () => {
+	const result = await fetch(BRAWL_API_ENDPOINT + 'rankings/es/players', {
+		headers: {
+			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Content-Type': 'application/json'
+		}
 
-interface BrawlData {
-	resumenPartidas: {
-		equipos: {
-			Nombrejugador: string;
-			tag: string;
-			nombreBrawler: string | null;
-			idBrawler: number | null;
-			isStarPlayer: boolean;
-		}[][];
-		datosPartida: {
-			idBrawlerPasadoPorTag: number | null;
-			nombreBrawlerPasadoPorTag: string | null;
-			modo: string;
-			mapa: string;
-			tipo: string;
-			duracion: number;
-		};
-	}[];
-	modosJuegoMasJugados: [string, number][];
-	nombresJugadoresMasRepetidos: [string, number][];
-	usuarioBrawlInfo: {
-		user: {
-			tag: string;
-			name: string;
-			trophies: number;
-			highestTrophies: number;
-			trioVictories: number;
-			soloVictories: number;
-			duoVictories: number;
-		};
-		imgID: string;
-		brawlers: {
-			id: number;
-			name: string;
-			power: number;
-			gears: number;
-			trophies: number;
-			highestTrophies: number;
-			starPowers: string[];
-			gadgets: string[];
-		}[];
-	};
-}
+	});
+
+	if (result.status === 403) {
+		const json = await result.json();
+		Pino.trace('Brawl info result: ' + json.reason + ' | ' + result.status + ' | ' + result.statusText + ' | ' + json.message);
+		throw new ExternalServiceError();
+	} else if (result.status !== 200) {
+		Pino.error('Error fetching to Brawl API: ' + result.status + ' | ' + result.statusText);
+	}
+
+	const data = await result.json();
+	const primeros5Jugadores = data.items.slice(0, 5);
+
+	Pino.trace('Fetched brawl ranking Spain');
+	return primeros5Jugadores;
+};
+
+export const getRankingGlobal = async () => {
+	const result = await fetch(BRAWL_API_ENDPOINT + 'rankings/global/players', {
+		headers: {
+			'Authorization': 'Bearer ' + process.env.BRAWL_API_KEY,
+			'Content-Type': 'application/json'
+		}
+
+	});
+	const data = await result.json();
+
+	// console.log(data.items);
+	const primeros5Jugadores = data.items.slice(0, 5);
+
+	Pino.trace('Fetched brawl ranking Global');
+	return primeros5Jugadores;
+};
 
 export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | null> => {
 	const partidas = await brawlRecentBattle(playerTagEX);
 	const infoJugador = await brawlInfo(playerTagEX);
 
-	if(!partidas) {
+	if (!partidas) {
 		Pino.warn('El usuario: ' + playerTagEX + ' no tiene partidas de brawl');
 		return null;
 	}
@@ -265,9 +273,8 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | nul
 		return null;
 	}
 
-
-	Pino.trace(JSON.stringify(partidas));
-	Pino.trace(JSON.stringify(infoJugador));
+	// Pino.trace(JSON.stringify(partidas));
+	// Pino.trace(JSON.stringify(infoJugador));
 
 	return {
 		resumenPartidas: partidas.resumeMatch.map((partida: any) => ({
@@ -284,5 +291,53 @@ export const GetBrawlData = async (playerTagEX: string): Promise<BrawlData | nul
 	};
 };
 
+export const GetBrawlHomeData = async (): Promise<BrawlHomeData> => {
+	const [rankingGlobal, rankingSpain] = await Promise.all(
+		[getRankingGlobal(), getRankingSpain()]
+	);
+
+	const skinsBrawls = [
+		{
+			'name': 'Holiday Pam',
+			'image-url': 'https://imagenesparapeques.com/wp-content/uploads/2020/12/Brawl-Stars-pam-veraniega.png',
+			'release-date': '25 june 2020'
+		},
+		{
+			'name': 'Chester Loki',
+			'image-url': 'https://www.brawlstarsdicas.com.br/wp-content/uploads/2022/12/chester-brawl-stars-skin-cetro-de-loki.png',
+			'release-date': '4 apr 2024'
+		},
+		{
+			'name': 'Dynasty Mike',
+			'image-url': 'https://static.wikia.nocookie.net/brawlstars/images/4/40/Dynamike_Skin-Dynasty_Mike.png',
+			'release-date': '5 mar 2024'
+		},
+		{
+			'name': 'Mariposa piper',
+			'image-url': 'https://server.blix.gg/imgproxy/KyQLh3Rm99ZeABxCJxO4J48HGn74Gdoz2WiZBV_3sac/rs:fit:260:260:0/g:no/aHR0cDovL21pbmlvOjkwMDAvaW1hZ2VzLzQxNWI3MDM3MzY3MzQ5NjY5NGZlYTkyMjc1YjI2NzkyLnBuZw.webp',
+			'release-date': '8 mar 2023'
+		},
+		{
+			'name': 'Final Boss Rico',
+			'image-url': 'https://static.wikia.nocookie.net/brawlstars/images/b/bf/Rico_Skin-Final_Boss.png',
+			'release-date': '5 jan 2024'
+		}
+	];
+
+	return {
+		rankSpain: rankingSpain,
+		rankGlobal: rankingGlobal,
+		skinsBrawls: skinsBrawls
+	};
+};
+
+
+// console.log(await GetBrawlData('YCQLVQV'));
+
+
+
+
+//console.log(await GetHomeData());
+//console.log(await getRankingSpain());
 // console.log(JSON.stringify(await GetBrawlData(playerTagEX)));
 //console.log(await brawlInfo(playerTagEX));

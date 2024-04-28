@@ -1,0 +1,28 @@
+<%# This component takes (name) (value)(valueName) and (position) to display a
+user in a ranking %>
+<%# (valueId) is used to set the class of the value (for i18n) %>
+<%# It also takes an optional (link) parameter to set the link of the user %>
+<%# An (img) parameter can be added to set the image of the user %>
+<%# Also takes a (curUsername) parameter to set the active class %>
+
+<a class="user-card-container <%= typeof curUsername !== 'undefined' && curUsername === name ? 'active' : '' %>"
+    <%=link ? `href=${link} ` : '' %>>
+    <div class="user-card-content">
+
+        <div class="user-card-image">
+            <img onerror="this.src='/img/storage/users/default-card.png'"
+                src="<%= typeof img === 'undefined' ? "/img/storage/users/default-card.png" : img %>"
+                alt>
+        </div>
+
+        <div class="user-card-info">
+            <p class="user-card-position"><%= position %></p>
+            <p class="user-card-name"><%= name %></p>
+            <div class="d-flex flex-row gap-2">
+                <p class="user-card-value"><%= value === 1 ? "+100000" : value
+                    %></p>
+                <p class="<%= valueId %>"> <%= valueName %> </p>
+            </div>
+        </div>
+    </div>
+</a>

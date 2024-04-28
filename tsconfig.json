@@ -13,6 +13,11 @@
         "inlineSourceMap": false,
         "inlineSources": false,
         "noEmitOnError": false,
+        "paths": {
+            "@/*": [
+                "/"
+            ]
+        }
     },
     "include": [
         "src/**/*.ts"

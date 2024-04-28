@@ -16,14 +16,14 @@
                 <%- include('./components/input-mail.ejs',
                 {id:"contact-mail-input"}) %>
 
-                <%- include('./components/input-generic.ejs',
-                {label:"text", labelText:"Asunto", id:"contact-content-input"})
+                <%- include('./components/textarea-generic.ejs',
+                {label:"text", name:"Asunto", id:"contact-content-input"})
                 %>
             </div>
             <p class="error-text" id="contact-error-text"></p>
             <div class="modal-footer">
                 <button type="button" class="primary"
-                    id="contact-submit">Enviar</button>
+                    id="contact-submit" data-bs-dismiss="modal">Enviar</button>
             </div>
         </div>
     </div>
@@ -40,11 +40,11 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Gracias por contactar con nosotros. Te responderemos lo antes posible.</p>
+                <p id="modal-contact-responseMessage">Gracias por contactar con nosotros. Te responderemos lo antes posible.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="primary"
-                    id="contact-success-submit">Gracias!</button>
+                    id="contact-success-submit" data-bs-dismiss="modal">Gracias!</button>
             </div>
         </div>
     </div>

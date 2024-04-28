@@ -1,4 +1,5 @@
-<%# This object receives a (lolgame) object to display a game as a card %>
+<%# This object receives a (lolgame) and (playername) object to display a game
+as a card %>
 <%# Along with the username, and the index of the game in the array %>
 
 <head>
@@ -11,40 +12,42 @@
         <img
             src="/img/lol/champs/<%= lolgame.championIdentifier.championId + ".webp"
             %>"
-        alt>
-    </div>
-
-    <div class="lol-game-card-champ">
-        <p>
+        alt="Campeón jugado">
+        <p class="lol-game-card-champ">
             <%= lolgame.championIdentifier.championName %>
         </p>
     </div>
 
-    <div class="lol-game-kd-ratio">
-        <p>
-            <%= lolgame.kda %>
+    <div class="lol-game-column">
+        <p class="lol-position fw-bold ">
+            Posición:
         </p>
-    </div>
-
-    <div class="lol-game-position">
         <p>
             <%= lolgame.teamPosition %>
         </p>
     </div>
 
-    <div class="lol-game-card-kda">
-        <p>
+    <div class="lol-game-column text-center">
+        <p class="w-100 fw-bold">
             K / D / A
         </p>
-        <p>
-            <%= lolgame.stats.kills %>/<%= lolgame.stats.deaths %>/<%=
+        <p class="w-100">
+            <%= lolgame.stats.kills %> / <%= lolgame.stats.deaths %> / <%=
             lolgame.stats.assists %>
+        </p>
+        <p>
+            Ratio: <%= lolgame.kda %>
         </p>
     </div>
 
-    <p class="lol-game-card-gamemode">
-        <%= lolgame.gameMode %>
-    </p>
+    <div class="lol-game-column">
+        <p class="fw-bold">
+           Modo:
+        </p>
+        <p class="lol-game-card-gamemode">
+            <%= lolgame.gameMode %>
+        </p>
+    </div>
 
     <div class="lol-game-items">
         <% lolgame.arrayItems.forEach(id => { %>
@@ -58,35 +61,38 @@
     tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title modal-game-title fs-5" >Estadísticas de partida</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <div class="lol-game-info-modal-team team-blue">
-                    <p>Equipo Azul</p>
+                    <p id="lol-blue-team">Equipo Azul</p>
 
-                    <% // Generate a card for each user in the game %>
+                    <%# Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayBlue) { %>
-                    <div class="lol-game-card team-member">
-                        <img
-                            src="/img/lol/champs/<%= lolgame.arrayBlue[key] %>.webp"
-                            alt>
-                        <p class="team-member-name">
-                            <%= key %>
-                        </p>
-                    </div>
+
+                    <%- include('./lol-team-member.ejs', {
+                    champID: lolgame.arrayBlue[key].champID,
+                    name: key,
+                    tag: lolgame.arrayBlue[key].gameTAG,
+                    playername: playername});
+                    %>
                     <% } %>
                 </div>
 
                 <div class="lol-game-info-modal-team team-red">
-                    <p>Equipo Rojo</p>
+                    <p id="lol-red-team">Equipo Rojo</p>
 
+                    <%# Generate a card for each user in the game %>
                     <% for (const key in lolgame.arrayRed) { %>
-                    <div class="lol-game-card team-member">
-                        <img
-                            src="/img/lol/champs/<%= lolgame.arrayRed[key] %>.webp"
-                            alt>
-                        <p class="team-member-name">
-                            <%= key %>
-                        </p>
-                    </div>
+                    <%- include('./lol-team-member.ejs', {
+                    champID: lolgame.arrayRed[key].champID,
+                    name: key,
+                    tag: lolgame.arrayRed[key].gameTAG,
+                    playername: playername});
+                    %>
                     <% } %>
                 </div>
             </div>

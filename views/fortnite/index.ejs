@@ -1,0 +1,24 @@
+<%# %>
+<head>
+    <link rel="stylesheet" href="/css/fortnite.css">
+</head>
+
+<%- include('../partials/components/banner.ejs', {mode: "fn"}) %>
+
+<main class="banner-main">
+    <%# Breadcrumb %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Fortnite</li>
+        </ol>
+    </nav>
+
+    <h1 class="title">Fortnite</h1>
+
+    <%- include('../partials/components/game-input-username.ejs', {mode: "fortnite"}) %>
+
+    <h2 id="fn-shop-items">Ítems de la tienda</h2>
+    <%- include('./fortnite-shop.ejs', {shop})%>
+
+</main>

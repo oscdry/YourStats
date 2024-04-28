@@ -1,19 +1,42 @@
-// Auth
-export const SaveToken = (token) => document.cookie = `token=${token};`;
-export const ClearToken = () => document.cookie = '';
+import {
+	validateEmail,
+	validatePassword,
+	validateUsername
+} from './constants.js';
+import {
+	usernameChangeListener,
+	emailChangeListener,
+	passwordChangeListener,
+	passwordConfirmationChangeListener
+} from './registerModal.js';
 
-export const RedirectToHome = () => window.location.href = '/';
+
+export const RedirectToHome = () => window.location = '/';
 export const ReloadPage = () => window.location.reload();
 
-// Regex
-const validateUsername = (username) => /^[a-zA-Z0-9_]{3,16}$/.test(username);
-const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-const validatePassword = (password) => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
+const SetStorageItem = (key, value) => localStorage.setItem(key, value);
+const GetStorageItem = (key) => localStorage.getItem(key);
 
 // Login ---------------------------
 const loginSubmit = document.getElementById('login-submit');
 const loginUsernameInput = document.getElementById('login-username-input');
 const loginPasswordInput = document.getElementById('login-password-input');
+
+function getCookie(cname) {
+	let name = cname + '=';
+	let decodedCookie = decodeURIComponent(document.cookie);
+	let ca = decodedCookie.split(';');
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return '';
+}
 
 loginSubmit?.addEventListener('click', async (e) => {
 	e.preventDefault();
@@ -26,7 +49,6 @@ loginSubmit?.addEventListener('click', async (e) => {
 	if (username && password) {
 
 		//TODO: Check regex
-
 		try {
 
 			// Send request to server
@@ -44,18 +66,16 @@ loginSubmit?.addEventListener('click', async (e) => {
 				return;
 			}
 
-			const json = await response.json();
 
 			// API returns 400 if the user is not found
 			// Which is not an error
 			if (response.status === 400) {
+				const json = await response.json();
 				errorText.innerHTML = json.error;
 				return;
 			}
 
-			const token = json.token;
-			SaveToken(token);
-			RedirectToHome();
+			ReloadPage();
 			return;
 
 		} catch (error) {
@@ -73,10 +93,16 @@ const registerMailInput = document.getElementById('register-mail-input');
 const registerPasswordInput = document.getElementById('register-password-input');
 const registerPasswordConfirmationInput = document.getElementById('register-password-confirmation-input');
 
+const registerModalErrorText = document.getElementById('register-error-text');
+
+registerUsernameInput?.addEventListener('input', usernameChangeListener);
+registerMailInput?.addEventListener('input', emailChangeListener);
+registerPasswordInput?.addEventListener('input', passwordChangeListener);
+registerPasswordConfirmationInput?.addEventListener('input', passwordConfirmationChangeListener);
+
 registerSubmit?.addEventListener('click', async (e) => {
 	e.preventDefault();
 
-	const errorText = e.target.parentElement.closest('.modal-content').querySelector('.error-text');
 	const username = registerUsernameInput.value.trim();
 	const mail = registerMailInput.value.trim();
 	const password = registerPasswordInput.value.trim();
@@ -88,25 +114,25 @@ registerSubmit?.addEventListener('click', async (e) => {
 		// Check regex
 		// Username
 		if (!validateUsername(username)) {
-			errorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
+			registerModalErrorText.innerHTML = 'Username must be 3-16 characters long and contain only letters, numbers and underscores';
 			return;
 		}
 
 		// Mail
 		if (!validateEmail(mail)) {
-			errorText.innerHTML = 'Invalid mail';
+			registerModalErrorText.innerHTML = 'Invalid mail';
 			return;
 		}
 
 		// Password
 		if (!validatePassword(password)) {
-			errorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
+			registerModalErrorText.innerHTML = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter and one number';
 			return;
 		}
 
 		// Password confirmation
 		if (password !== password_confirmation) {
-			errorText.innerHTML = 'Passwords do not match';
+			registerModalErrorText.innerHTML = 'Passwords do not match';
 			return;
 		}
 
@@ -122,25 +148,25 @@ registerSubmit?.addEventListener('click', async (e) => {
 			});
 
 			if (!response.ok) {
-				errorText.innerHTML = json.error;
+				const json = await response.json();
+				registerModalErrorText.innerHTML = json.error;
 				return;
 			}
 
-			const json = await response.json();
-			const token = json.token;
-			SaveToken(token);
-			RedirectToHome();
+			ReloadPage();
 			return;
 
 		} catch (error) {
-			errorText.innerHTML = 'Server error, try again later';
+
+			// console.log(error);
+			registerModalErrorText.innerHTML = 'Unknown server error, try again later';
 			return;
 		}
 	}
 });
 
 // Logout ---------------------------
-const logoutButton = document.getElementById('logout-button');
+const logoutButton = document.getElementById('navbar-logout');
 
 logoutButton?.addEventListener('click', async (e) => {
 	e.preventDefault();
@@ -155,18 +181,14 @@ logoutButton?.addEventListener('click', async (e) => {
 			}
 		});
 
-		if (!response.ok) {
+		if (!response.ok)
 			console.error(response.status + ' ' + response.statusText);
-			return;
-		}
 
-		// Delete token
-		ClearToken();
 		ReloadPage();
 		return;
 
 	} catch (error) {
-		console.error('Server error, try again later');
+		console.error(response.status + ' ' + response.statusText);
 		return;
 	}
 });
@@ -175,27 +197,23 @@ logoutButton?.addEventListener('click', async (e) => {
 // ---------------------------
 
 // Game input handling
-
 const gameUsernameForm = document.getElementById('game-username-form');
 const gameUsernameInput = document.getElementById('game-username-input');
+const gameUsernameFormButton = document.getElementById('game-input-username-btn');
 
 const dataMode = gameUsernameInput?.getAttribute('data-mode');
-
-switch (dataMode) {
-	case 'lol':
-		gameUsernameInput.placeholder = 'Enter your League of Legends username';
-		break;
-
-	case 'brawl':
-		gameUsernameInput.placeholder = 'Enter your Brawl Stars tag';
-		break;
-}
 
 
 // On submit of the game username form
 // Universal for all games, the mode is set in the data-mode attribute of the input
 gameUsernameForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
+
+	gameUsernameFormButton.classList.add('loading');
+	const prevBtnText = gameUsernameFormButton.textContent;
+	gameUsernameFormButton.textContent = '';
+
+	console.log(e.target);
 	const errorText = e.target.querySelector('.error-text');
 	const usernameVal = gameUsernameInput.value.trim();
 
@@ -205,6 +223,9 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 
 		switch (dataMode) {
 			case 'lol':
+				const gameTagInput = document.getElementById('game-tag-input');
+				const gameTagVal = gameTagInput.value.trim();
+
 
 				// This response either returns 400 or redirects to the stats page
 				response = await fetch('/api/riot-user/', {
@@ -212,9 +233,9 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ username: usernameVal })
+					body: JSON.stringify({ username: usernameVal, tag: gameTagVal})
 				});
-				targetUrl = '/lol/stats/' + usernameVal;
+				targetUrl = '/lol/stats/' + usernameVal + '/' + gameTagVal;
 				break;
 
 			case 'brawl':
@@ -229,15 +250,74 @@ gameUsernameForm?.addEventListener('submit', async (e) => {
 				});
 				targetUrl = '/brawl/stats/' + usernameVal;
 				break;
+
+			case 'fortnite':
+				
+				// This response either returns 400 or redirects to the stats page
+				response = await fetch(`/fortnite/${usernameVal}`);
+				targetUrl = '/fortnite/stats/' + usernameVal;
+				break;
 		}
 
 		if (!response.ok) {
 			const json = await response.json();
 			errorText.innerHTML = json.error;
+			gameUsernameFormButton.classList.remove('loading');
+			gameUsernameFormButton.textContent = prevBtnText;
+			console.log(usernameVal);
 			return;
-		}
 
+		}
+		gameUsernameFormButton.classList.remove('loading');
+		gameUsernameFormButton.textContent = prevBtnText;
 		window.location = targetUrl;
 	}
 });
 
+// ---------------------------
+
+// Cookies handling
+const cookiesModal = document.getElementById('cookies-modal');
+
+if (cookiesModal && !GetStorageItem('cookies')) {
+	cookiesModal.classList.remove('hide');
+	const cookiesAcceptButton = document.getElementById('cookies-accept-button');
+	const cookiesRejectButton = document.getElementById('cookies-reject-button');
+
+	const hideModal = () => {
+		cookiesModal.classList.add('hide');
+		setTimeout(() => {
+			cookiesModal.remove();
+		}, 1500);
+	};
+
+	const cookiesAccept = () => {
+		SetStorageItem('cookies', '1');
+		hideModal();
+	};
+
+	const cookiesReject = () => {
+		SetStorageItem('cookies', '0');
+		hideModal();
+	};
+
+	cookiesAcceptButton.addEventListener('click', cookiesAccept);
+	cookiesRejectButton.addEventListener('click', cookiesReject);
+} else {
+	cookiesModal.remove();
+}
+
+const toggleEventListener = (e) => {
+	e.preventDefault();
+	e.target.classList.toggle('active');
+};
+
+const toggles = document.querySelectorAll('.toggle');
+
+toggles.forEach(toggle => {
+	toggle.addEventListener('click', toggleEventListener);
+});
+
+// setInterval(() => {
+// 	console.log(getCookie('token'));
+// }, 500);

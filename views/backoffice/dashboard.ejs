@@ -1,57 +1,105 @@
+<%# This component takes a (users) param to show the users %>
+<%# It also takes a (contactEntries) param to show the contact form submissions
+%>
+
 <head>
-    <script src="/js/backoffice.js" type="module"></script>
+    <script src="/js/backoffice.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/backoffice.css">
 </head>
 
 <%- include('../partials/modal-back-update.ejs') %>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<%- include('../partials/modal-confirm-delete.ejs') %>
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
 <main>
-    <h1 class="title">Users</h1>
+    <h1 class="title" id="backoffice-pageTitle">Usuarios</h1>
     <!--search by username-->
     <form action="get">
         <%- include('../partials/components/input-mail.ejs',
         {id:"back-search-mail-input"})%>
-        <button id="back-search-button" type="submit" class="primary">Search</button>
-        <button id="clear-search-button" style="display: none;">Clear</button>
+        <button id="back-clear-button" type="button" class="secondary"
+            style="display: none;">Limpiar</button>
+        <button id="back-search-button" type="submit"
+            class="primary">Buscar</button>
         <p id="error-search-back" class="error-text"></p>
     </form>
     <div>
-        <p>Total users: <p id="countUsers"><%= count %></p></p>
+        <p id="back-office-totalUsers">Total de usuarios: <span
+                id="countUsers"><%= count %></span></p>
     </div>
-    <table>
+    <table id="backoffice-table">
 
         <tbody>
 
             <thead>
-                <td>ID</td>
-                <td>Username</td>
-                <td>Mail</td>
-                <td>Role</td>
+                <td id="backoffice-ID">ID</td>
+                <td id="backoffice-username">Nombre de usuario</td>
+                <td id="backoffice-mail">Correo</td>
+                <td id="backoffice-role">Rol</td>
                 <td></td>
                 <td></td>
             </thead>
             <% users.forEach(user => { %>
-                <tr class="user-row">
-                    <td><%= user.id %></td>
-                    <td><%= user.username %></td>
-                    <td><%= user.mail %></td>
-                    <td><%= user.role %></td>
-                    <td><a data-bs-toggle="modal" data-bs-target="#modal-back-update"
+            <tr class="user-row">
+                <td><%= user.id %></td>
+                <td><%= user.username %></td>
+                <td><%= user.mail %></td>
+                <td><%= user.role %></td>
+                <td><a data-bs-toggle="modal"
+                        data-bs-target="#modal-back-update"
                         data-id="<%= user.id %>"
                         data-username="<%= user.username %>"
                         data-mail="<%= user.mail %>"
                         data-role="<%= user.role %>"
-                        class="edit-btn">Edit</a></td>
-                    <td><a href="/admin/users/delete/<%= user.id %>">Delete</a></td>
-                </tr>
+                        class="edit-btn"
+                        id="backoffice-edit-btn">Editar</a></td>
+                <td><a class="backoffice-delete-btn" data-id="<%= user.id %>"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal">Eliminar</a></td>
+            </tr>
             <% }); %>
         </tbody>
     </table>
-    <div>
-        <button id="prevPage" class="secondary"><i class="fas fa-arrow-left"></i></button>
+    <div class="pagination-container">
+        <button id="prevPage" class="secondary"><i
+                class="fas fa-arrow-left"></i></button>
         <button class="secondary" id="previous-currentPage"></button>
         <button class="primary" id="currentPage"></button>
         <button class="secondary" id="after-currentPage"></button>
-        <button id="nextPage" class="secondary"><i class="fas fa-arrow-right"></i></button>
+        <button id="nextPage" class="secondary"><i
+                class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <h1 class="title my-3" id>Peticiones de Contacto</h1>
+    <div class="container-fluid my-3">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Usuario (opcional)</th>
+                    <th scope="col">Asunto</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contenido</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% contactEntries.forEach(entry => { %>
+                <tr>
+                    <td><%= entry.id %></td>
+                    <td><%= entry.user_id ? entry.user_id : '-----------' %></td>
+                    <td><%= entry.username %></td>
+                    <td><%= entry.email %></td>
+                    <td><%= entry.content %></td>
+                    <td>
+                        <a href="/admin/contact/delete/<%= entry.id %>">
+                            <button class="btn btn-danger" ">Eliminar</button>
+                        </a>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
     </div>
 </main>

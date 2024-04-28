@@ -1,0 +1,29 @@
+<%# This component takes a (skins) object parameter to display the
+popular skins %>
+
+
+<div class="lol-skins-showcase">
+    <div class="lol-skins-container"id="lol-skins-search-list">
+        <h3 class="container-fluid my-3" id="lol-new-skins">Skins Nuevas</h3>
+        <% lolData.forEach(skin => { %>
+        <div class="lol-skin-card">
+            <img src="<%= skin.imageURL %>" alt="<%= skin.name %>">
+            <div class="skin-info">
+                <p class="skin-name"><%= skin.name %></p>
+                <div class="skin-price d-flex flex-row gap-1 ">
+                    <p class="price">
+                        Precio:
+                    </p>
+                    <p><%= skin.cost %></p>
+                </div>
+                <div class="skin-release d-flex flex-row gap-1 ">
+                    <p class="release">
+                        Fecha:
+                    </p>
+                    <p><%= skin.releaseDate.split(":")[0].slice(0, -1); %></p>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>

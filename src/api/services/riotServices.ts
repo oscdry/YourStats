@@ -1,7 +1,11 @@
+import Pino from '../../logger.js';
 import { UserNotFoundError } from '../errors/errors.js';
+import { config } from 'dotenv';
 
 const LOL_API_ENDPOINT = 'https://euw1.api.riotgames.com/lol/';
 const RIOT_API_ENDPOINT = 'https://europe.api.riotgames.com';
+
+config();
 
 interface RiotData {
 	id: string,
@@ -23,13 +27,51 @@ export const RiotPUUIDByTagName = async (gameName: string, tagLine: string): Pro
 	const json = await result.json();
 
 	return json['puuid'];
-
-
 };
 
 
+
+
+export const getAccountbyId = async (id: string): Promise<string> => {
+	const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/' + id, {
+		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
+	});
+	if (result.status != 200) { console.log('Error'); return ''; }
+
+	const json = await result.json();
+
+	return json['puuid'];
+
+
+};
+export const RiotDataByName = async (gameName: string, gameTAG: string): Promise<RiotData | null> => {
+	const result = await fetch(RIOT_API_ENDPOINT + '/riot/account/v1/accounts/by-riot-id/' + gameName+ '/' + gameTAG, {
+		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
+	});
+	console.log(result);
+	if (result.status != 200) { throw new UserNotFoundError(); }
+
+	const json = await result.json();
+	return json;
+};
+
+/* OLD FUNCTION
+* @deprecated
 export const RiotDataByName = async (gameName: string): Promise<RiotData | null> => {
 	const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/by-name/' + gameName, {
+		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
+	});
+	if (result.status != 200) {
+		Pino.error(result.status + ' ' + result.statusText);
+		throw new UserNotFoundError();
+	}
+	const json = await result.json();
+	return json;
+};
+*/
+
+export const RiotgetPUUIDInfo = async (puuid: string) => {
+	const result = await fetch(LOL_API_ENDPOINT + 'summoner/v4/summoners/by-puuid/' + puuid, {
 		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
 	});
 	if (result.status != 200) { throw new UserNotFoundError(); }
@@ -37,3 +79,29 @@ export const RiotDataByName = async (gameName: string): Promise<RiotData | null>
 	const json = await result.json();
 	return json;
 };
+export const RiotPUUID = async (puuid: string): Promise<{
+	puuid:    string;
+	gameName: string;
+	tagLine:  string;
+}> => {
+	const result = await fetch(RIOT_API_ENDPOINT + '/riot/account/v1/accounts/by-puuid/' + puuid, {
+		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
+	});
+	if (result.status != 200) { throw new UserNotFoundError(); }
+
+	const json = await result.json();
+	return json;
+};
+export const RiotPUUIDbySum = async (puuid: string): Promise<String | null> => {
+	const result = await fetch(RIOT_API_ENDPOINT + '/riot/account/v1/accounts/by-puuid/' + puuid, {
+		headers: { 'X-Riot-Token': process.env.RIOT_API_KEY! }
+	});
+	if (result.status != 200) { throw new UserNotFoundError(); }
+
+	const json = await result.json();
+	return json['gameName'];
+};
+const sumID = 'wBhJMT4Ej_VbawTcrmYBI5cVxSxbL9fp5A2MFozj6gq6V6Y';
+const puuid = 'g8CgWhodK_EZCY1Zc6PzcRMbk-ePqtOkMQguiKxUPTESGJq3Wnmbh9SgkUKD1l_0Pykk_oUd4ne9aw';
+
+//console.log(await RiotgetPUUIDInfo(puuid));

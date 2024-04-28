@@ -10,14 +10,16 @@
         (<%= server.name %>)
     </p>
 
-    <p>Estado: </p>
+    <p id="status">Estado:</p>
     <i class="server-status-icon
-        <%=server.incidents.length === 0 ? 'win' : 'loss' %>">
+        <%=server.incidents.length === 0 ? 'win' : 'draw' %>">
     </i>
 
     <p>
-        <%= server.maintenances.length === 0 ? 'Operativo' : 'En mantenimiento'
-        %>
+        <%= server.maintenances.length === 0 ? 'Operativo' : 'En mantenimiento' %>
+    </p>
+    <p>
+        <%= server.incidents.length === 0 ? 'Sin incidentes' : 'Incidentes detectados recientemente' %>
     </p>
 
 </div>

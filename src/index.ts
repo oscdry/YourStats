@@ -15,16 +15,15 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// import { Client, LegacyClient, Auth } from 'osu-web.js';
-// Client for the current API (API v2)
-// const client = new Client('eUPnOYKsnu4dBD6BJzjtsrtFpf91r7LFK7MTkbAa');
-
 import adminRouter from './routes/adminRouter.js';
-import apiRouter from './routes/api.js';
-import webRouter from './routes/web.js';
+import { apiRouter } from './routes/api.js';
+import webRouter, { NotFoundPage } from './routes/web.js';
 import { errorHandler } from './api/middlewares/errorHandler.js';
+import { verifyTokenOptional } from './api/middlewares/verifyToken.js';
 
 const app = express();
+
+app.disable('x-powered-by');
 
 // Logging of requests
 app.use((req, _res, next) => {
@@ -65,8 +64,7 @@ try {
 	server = https.createServer(
 		{
 			key: key,
-			cert: cert,
-			passphrase: process.env.HTTPS_PASSPHRASE
+			cert: cert
 		},
 		app);
 
@@ -77,9 +75,16 @@ try {
 	Pino.warn('RUNNING IN HTTP UNSAFE MODE, reason: ' + error);
 }
 
-app.use('/api', apiRouter);
+app.use(verifyTokenOptional);
+
 app.use(webRouter);
+app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
+
+// Not found page for unmatched routes
+app.use('*', (_req, res) => {
+	NotFoundPage(res);
+});
 
 app.use(errorHandler);
 

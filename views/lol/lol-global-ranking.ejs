@@ -1,20 +1,31 @@
-<%# This component takes a (summonerDetails) object parameter to display the global ranking %>
+<%# This component takes a (summonerDetails) object parameter to display the
+global ranking %>
 
-<div class="lol-ranking">
-    <h3>Ranking global</h3>
+<h3 class="container-fluid my-3" id="global-ranking">Ranking global</h3>
+<% if (summonerDetails) { %>
 
+<div class="lol-ranking container-fluid ">
     <div class="lol-ranking-container">
-
         <% let index = 1
         summonerDetails.forEach(summoner => { %>
-        <div class="lol-summoner-card">
+        <a class="lol-summoner-card game-selector-item" href="/lol/stats/<%= summoner.summonerName + '/' + summoner.summonerTag %>">
             <div class="d-flex flex-row">
                 <p class="summoner-position"><%= index++ %>.&nbsp;</p>
-                <p class="summoner-name"><%= summoner.summonerName %></p>
+
+                <p class="summoner-name"><%= summoner.summonerName %>&nbsp;</p>
+
+                <p class="summoner-tag"><%= "#" + summoner.summonerTag %></p>
             </div>
             <p class="summoner-points"><%= summoner.leaguePoints %></p>
-            <p>League Points</p>
-            </div>
+
+            <p id="lol-league-points">League Points</p>
+        </a>
+
         <% }) %>
     </div>
 </div>
+<% } else { %>
+<div class="lol-ranking container-fluid">
+    <p>No se ha podido cargar el ranking global</p>
+</div>
+<% } %>

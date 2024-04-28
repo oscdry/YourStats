@@ -3,38 +3,69 @@
 <%- include('./modal-register.ejs') %>
 <% } %>
 
-<nav>
-    <a href="/" id="logo-nav"></a>
-    <ul class="navbar-list">
-        <li><a href="/games">Juegos</a></li>
-        <li><a href="/about">Sobre Nosotros</a></li>
-    </ul>
+<nav class="navbar navbar-expand-lg">
+    <a href="/" class="navbar-brand"></a>
+    <div class="navbar-collapse collapse" id="navbar">
 
-    <% // Logged in Check %>
-    <% if (typeof user === 'undefined') { %>
-    <ul id="nav-controls">
-        <li>
-            <button type="button" class="secondary" data-bs-toggle="modal"
-                data-bs-target="#modal-login">Inicia
-                sesión</button>
+        <% if (typeof user !== 'undefined' && user.role === 1) { %>
+        <li class="nav-item">
+            <a href="/admin" class="nav-link">Backoffice</a>
         </li>
-        <li>
-            <button type="button" class="secondary" data-bs-toggle="modal"
-                data-bs-target="#modal-register">Regístrate</button>
-        </li>
-    </ul>
-    <% } else { %>
-    <ul>
-        <li>
-            <a href="/user/<%= user.id %>">
-                <%= user.username %>
-            </a>
-        </li>
-        <li>
-            <button id="logout-button" type="button" class="secondary">Cerrar
-                sesión</button>
-        </li>
-    </ul>
-    <% } %>
+        <% } %>
 
+        <ul class="navbar-nav">
+            <li class="nav-item"><a id="navbar-about" class="nav-link"
+                    href="/about">Sobre
+                    Nosotros</a></li>
+
+            <li class="nav-item dropdown" id="lang-toggle">
+                <p id="lang-text">ES</p>
+                <i class="fa-solid fa-chevron-down"></i>
+                <div id="dropdown-content" class="dropdown-content hide">
+                    <a id="ca">Català</a>
+                    <a id="es">Español</a>
+                    <a id="en">English</a>
+                </div>
+            </li>
+            <%# Logged in Check %>
+            <% if (typeof user === 'undefined') { %>
+
+            <li class="nav-item">
+                <button type="button" class="nav-link secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-login" id="navbar-login">Inicia
+                    sesión</button>
+            </li>
+            <li class="nav-item">
+                <button type="button" class="nav-link secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-register"
+                    id="navbar-signUp">Regístrate</button>
+            </li>
+
+            <% } else { %>
+            <li class="nav-item">
+                <a href="/user/<%= user.id %>" class="nav-user secondary">
+                    <img src="/img/storage/users/<%= user.id %>.jpg"
+                        alt="Avatar <%= user.username %>"
+                        onerror="this.onerror=null; this.src='/img/storage/users/default.jpg'">
+                    <span><%= user.username %></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <button id="navbar-logout" type="button"
+                    class="secondary">Cerrar
+                    sesión</button>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+
+    <button class="navbar-toggler collapsed" type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar"
+        aria-controls="navbar" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 </nav>
