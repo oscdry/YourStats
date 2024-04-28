@@ -27,6 +27,7 @@
             </li>
         </ol>
     </nav>
+    <%- include('../partials/components/game-stats-header', {username: fortnitedata.account.name, name: "Fortnite", href: "/fortnite"}) %>
     <div class="user-container">
         <div class="user-info">
             <img src="<%= fortnitedata.banner.images.smallIcon %>" alt="User Icon">
