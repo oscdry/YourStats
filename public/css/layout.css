@@ -719,6 +719,7 @@ footer
 
     width: 100%;
     min-height: 3vh;
+    color: var(--white);
 
     padding: 3rem 2rem;
     box-sizing: border-box;
