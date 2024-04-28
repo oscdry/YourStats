@@ -53,8 +53,16 @@ POST http://localhost:80/api/brawl-user
 Content-Type: application/json
 
 {
-    "tag": "YCQLVQV"
+    "tag": "LRUR2VOG"
 }
+
+###
+
+GET http://localhost:80/api/ranking
+
+###
+
+GET http://localhost:80/api/brawl-data/LRUR2VOG
 
 ###
 

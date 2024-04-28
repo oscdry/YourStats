@@ -149,7 +149,8 @@ export const calculateAndSaveUserPointsService = async (userId: string): Promise
 		lolPoints += lolData.total * 35;
 		lolPoints += lolData.wins * 70;
 
-		let champPoints = lolData.championsMasteryData.reduce((sum, champion) => sum + champion.championPoints, 0);
+		let champPoints = lolData.championsMasteryData.reduce(
+			(sum, champion) => sum + champion.championPoints, 0);
 
 		lolPoints += champPoints * 0.1;
 	}
@@ -272,5 +273,6 @@ export const getBest5UsersService = async (): Promise<Array<{
 			position: position + 1
 		};
 	}));
+
 	return result;
 };

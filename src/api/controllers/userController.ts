@@ -249,3 +249,12 @@ export const calculateUserPointsController = async (req: Request, res: Response,
 		next(error);
 	}
 };
+
+export const sendUserPointsController = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const points = await getUserPointsService(res.locals.user.id);
+		return res.json({ points });
+	} catch (error) {
+		next(error);
+	}
+};

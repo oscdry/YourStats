@@ -257,6 +257,10 @@ editGameNamesBtn?.addEventListener('click', async () => {
 				window.location.reload();
 			} else {
 				const json = await response.json();
+
+				if(response.status === 401)
+					window.location.reload();
+
 				console.error('Error:', json.error);
 			}
 		} catch (error) {
