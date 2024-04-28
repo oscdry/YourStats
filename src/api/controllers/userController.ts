@@ -6,7 +6,7 @@ import { EmailUsedError, RegisterError, UsernameUsedError, UpdateUsernameError }
 import { FirebaseUser } from '../types/FirebaseUser.js';
 import Pino from '../../logger.js';
 import { NotFoundPage } from '../../routes/web.js';
-import { calculateAndSaveUserPointsService, getUserPointsService, updateUserGameUsernamesService } from '../services/userGameNameService.js';
+import { calculateAndSaveUserPointsService, getBest5UsersService, getUserPointsService, updateUserGameUsernamesService } from '../services/userGameNameService.js';
 
 //! TODO: Hay un problema aquí, ha de ser función declarada con function para que funcione
 // Si no, se utiliza antes de ser declarada, y peta todo, ????
@@ -252,7 +252,7 @@ export const calculateUserPointsController = async (req: Request, res: Response,
 
 export const sendUserPointsController = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const points = await getUserPointsService(res.locals.user.id);
+		const points = await getBest5UsersService();
 		return res.json({ points });
 	} catch (error) {
 		next(error);
