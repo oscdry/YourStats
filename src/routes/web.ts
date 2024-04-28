@@ -11,8 +11,6 @@ import { send } from 'process';
 import { SendFortniteData } from '../api/controllers/fortniteController.js';
 
 import { getBest5UsersService } from '../api/services/userGameNameService.js';
-import { renderFortniteHome } from '../api/controllers/fortniteController.js';
-
 
 const webRouter = Router();
 
