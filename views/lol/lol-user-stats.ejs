@@ -93,6 +93,17 @@
         </script>
     </div>
 
+    <%# Friends Chart %>
+    <h3 class="container" id="lol-played-with">Compañeros de juego recientes: </h3>
+    <div class="container comp chart">
+        <canvas id="companionChart"></canvas>
+        <script type="module">
+            var ctx = document.getElementById('companionChart').getContext('2d');
+            var chartData = <%- JSON.stringify(lolCompChartData) %>;
+            var myChart = new Chart(ctx, chartData);
+        </script>
+    </div>
+
     <h3 class="container" id="lol-last-matches">Últimas <%= loldata.games.length
         %> partidas:</h3>
     <div class="container lol-games-container">

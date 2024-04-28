@@ -1,0 +1,22 @@
+<%# This component takes a (locale) mode parameter to determine the placeholder
+text and the form class %>
+
+<% const gameMode = typeof mode !== "undefined" ? mode : ""
+"Introduce tu tag de jugador"
+const localeParam = typeof locale !== "undefined" ? locale : "es"
+%>
+
+<div class="game-input-username-container justify-content-center input-row">
+
+    <%# Skin input form %>
+        <form id="skin-name-form"
+            class=" lol game-skin-name-form"> 
+            <input type="text" name="skin" class="skin-name-input"
+                class="game-input-skin-lol" required
+                placeholder="Introduce la skin" data-mode="<%= mode %>">
+            <button class="primary" type="submit" id="btn-search-skin">
+                Buscar
+            </button>
+            <p class="error-text"></p>
+        </form>
+</div>

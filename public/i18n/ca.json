@@ -97,5 +97,11 @@
     "username-cancelChanges": "Cancel·lar",
     "username-saveChanges": "Guardar",
     "who-are-we": "Qui som?",
-    "work-with-us": "Treballa amb nosaltres"
+    "work-with-us": "Treballa amb nosaltres",
+    "new-champions": "Nous Campions",
+    "btn-skins-search": "Cercador Skins",
+    "lol-played-with" : "Companys de joc recents",
+    "btn-search-skin" : "Cercar",
+    "skin-name-input@placeholder" : "Introdueix l' skin",
+    "lol-new-skins": "Noves Skins"
 }

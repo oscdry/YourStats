@@ -1,0 +1,27 @@
+<%# This view takes a (server) object parameter to display the server status and
+a
+(homedata) object parameter to display the home data %>
+<head>
+    <script defer type="module" src="/js/lol-skins.js" ></script>
+    <link rel="stylesheet" href="/css/lol.css">
+</head>
+<%- include('../partials/components/banner.ejs', {mode: "lol"}) %>
+
+<main class="banner-main">
+    <%# Breadcrumb %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item "><a href="/lol">League of Legends</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Skins</li>
+        </ol>
+    </nav>
+
+    <h1 class="title">League of Legends</h1>
+    <%- include('./lol-skins-search-bar.ejs', {mode :
+    "lol"})   %>
+
+<%- include('./lol-skins-home.ejs', {lolData:
+    homedata.newSkins}) %>
+    </a>
+</main>

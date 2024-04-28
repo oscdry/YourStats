@@ -99,5 +99,11 @@
     "username-cancelChanges": "Cancel",
     "username-saveChanges": "Save",
     "who-are-we": "Who are we?",
-    "work-with-us": "Work with us"
+    "work-with-us": "Work with us",
+    "new-champions": "New  Champions",
+    "btn-skins-search": "Skin Searcher",
+    "lol-played-with" : "Recent Teammates",
+    "btn-search-skin" : "Search",
+    "skin-name-input@placeholder" : "Enter skin name",
+    "lol-new-skins": "New Skins"
 }
