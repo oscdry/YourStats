@@ -62,6 +62,10 @@ GET http://localhost:80/api/ranking
 
 ###
 
+GET https://yourstats.kxnzen.me/api/ranking
+
+###
+
 GET http://localhost:80/api/brawl-data/LRUR2VOG
 
 ###
