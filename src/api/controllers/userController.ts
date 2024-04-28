@@ -252,8 +252,8 @@ export const calculateUserPointsController = async (req: Request, res: Response,
 
 export const sendUserPointsController = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const points = await getBest5UsersService();
-		return res.json({ points });
+		const ranking = await getBest5UsersService();
+		return res.json({ ranking });
 	} catch (error) {
 		next(error);
 	}
