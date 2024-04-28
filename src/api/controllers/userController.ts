@@ -134,6 +134,7 @@ export async function updateUserName(req: Request, res: Response, next: NextFunc
 		};
 
 		const token = generateTokenForUserId(payload);
+		setTokenToCookie(res, token);
 
 		return res.json({ token });
 

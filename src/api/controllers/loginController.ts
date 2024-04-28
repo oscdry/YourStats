@@ -92,7 +92,7 @@ export const LoginGoogleUser = async (req: Request, res: Response, next: NextFun
 		const payload: TokenPayload = {
 			id: userId ? userId : existingUser!.id,
 			mail: result.user.email ? result.user.email : '',
-			username: result.user.displayName ? result.user.displayName : 'Unnamed User',
+			username: existingUser ? existingUser.username : result.user.displayName ? result.user.displayName : 'Unnamed User',
 			role: existingUser ? existingUser.role : 0
 		};
 
