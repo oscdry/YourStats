@@ -53,7 +53,7 @@ model ContactEntry {
 
 model UserGameName {
   id String @id
-  lol String @db.VarChar(100)
+  lol String @db.VarChar(100) @default("")
   brawl String @db.VarChar(100)
   fortnite String @db.VarChar(100)
   points Int @db.Int
