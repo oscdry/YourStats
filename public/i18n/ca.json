@@ -107,5 +107,15 @@
     "username-saveChanges": "Guardar",
     "who-are-we": "Qui som?",
     "work-with-us": "Treballa amb nosaltres",
+    "fn-shop-items": "Objectes de la botiga",
+    "fn-user-level": "Nivell:",
+    "fn-user-progress": "Progrés:",
+    "overall": "Estadístiques generals",
+    "solo": "Estadístiques en solitari",
+    "duo": "Estadístiques en duo",
+    "trio": "Estadístiques en trio",
+    "squad": "Estadístiques en escuadró",
+    "ltm": "Estadístiques de LTM",
     "yourstats-ranking": "Ranking de YourStats"
+
 }
