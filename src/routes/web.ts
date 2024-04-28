@@ -5,9 +5,14 @@ import { brawlTestData } from '../api/types/testData/brawlTestData.js';
 import { lolTestData } from '../api/types/testData/lolTestData.js';
 import { renderPasswordResetView, renderPasswordResetViewSent, renderPasswordResetSuccess } from '../api/controllers/passwordResetController.js';
 import { renderUserView } from '../api/controllers/userController.js';
+
 import { renderFortniteHome, renderFortniteUserStats } from '../api/controllers/fortniteController.js';
 import { send } from 'process';
 import { SendFortniteData } from '../api/controllers/fortniteController.js';
+
+import { getBest5UsersService } from '../api/services/userGameNameService.js';
+import { renderFortniteHome } from '../api/controllers/fortniteController.js';
+
 
 const webRouter = Router();
 
@@ -30,8 +35,9 @@ export const RenderErrorPage = (res: Response) => {
 };
 
 // Páginas publicas
-webRouter.get('/', (_req: Request, res: Response) => {
-	res.render('index', { title: 'Inicio', user: res.locals.user });
+webRouter.get('/', async (_req: Request, res: Response) => {
+	const ranking = await getBest5UsersService();
+	res.render('index', { title: 'Inicio', ranking, user: res.locals.user });
 });
 
 webRouter.get('/user/:id', renderUserView);

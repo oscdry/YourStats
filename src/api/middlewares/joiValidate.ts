@@ -8,7 +8,7 @@ export const joiValidate = (schema: ObjectSchema, target: 'body' | 'headers' | '
 		if (error)
 			throw error;
 
-		Pino.trace('middleware of' + schema._flags.name + ' JoiValidate success');
+		Pino.trace('middleware of' + schema.describe() + ' JoiValidate success');
 
 		next();
 	} catch (error) {

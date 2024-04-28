@@ -46,29 +46,34 @@ export interface LoLUserData {
 	gamesLast7Days: string;
 	gameName: string;
 	gameTAG: string;
-	games: [
-		championIdentifier: {
-			championName: string,
-			championId: string;
-		},
-		isWinner: boolean,
-		stats: {
-			kills: number,
-			deaths: number,
-			assists: number,
-		},
-		gameMode: string,
-		kda: string,
-		arrayItems: number[],
-		teamID: string,
-		teamPosition: string,
-		arrayTeammates: string[],
-		arrayBlue: string[],
-		arrayRed: string[],
-		friendsMost: [string, number][],
-		teamPositionCount: { [position: string]: number; }
+	games:
+	{
+		resultsArray: [
+			championIdentifier: {
+				championName: string,
+				championId: string;
+			},
+			isWinner: boolean,
+			stats: {
+				kills: number,
+				deaths: number,
+				assists: number,
+			},
+			gameMode: string,
+			kda: string,
+			arrayItems: number[],
+			teamID: string,
+			teamPosition: string,
+			arrayTeammates: string[],
+			arrayBlue: string[],
+			arrayRed: string[],
+			friendsMost: [string, number][],
+			teamPositionCount: { [position: string]: number; }
 
-	];
+		];
+		friendsMost: [string, number][];
+		teamPositionCount: { [position: string]: number; };
+	};
 	tier: string;
 	rank: string;
 	points: number;

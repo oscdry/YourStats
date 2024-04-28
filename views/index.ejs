@@ -28,6 +28,26 @@
 
   <%- include('./partials/components/game-selector.ejs') %>
 
+  <h1 class="title my-3" id="yourstats-ranking">Ranking de YourStats</h1>
+  <div class="container-fluid my-3 d-flex justify-content-center align-items-center ">
+    <div class="home-ranking-container">
+
+      <% for (rankUser of ranking) { %>
+      <%- include('./partials/components/ranking-user-card.ejs', {
+      name: rankUser.username,
+      link: `/user/${rankUser.id}`,
+      img: `/img/storage/users/${rankUser.id}.jpg`,
+      position: rankUser.position,
+      value: rankUser.points,
+      valueId: "points",
+      valueName: "Puntos",
+      curUsername: user.username
+      }) %>
+
+      <% } %>
+    </div>
+  </div>
+
   <h2 class="container-fluid mb-5">Últimas noticias de:</h2>
   <div class="news-container container-fluid" id="news-container">
     <script src="/js/newsComponent.js" async></script>
@@ -41,7 +61,6 @@
       <a class="news-header-item" data-news-index="2">
         <h4>Brawl Stars</h4>
       </a>
-
     </div>
 
     <div class="news-container-body">
@@ -99,7 +118,8 @@
           alt>
         <div class="news-info">
           <p>
-            Balance de brawlers, cambios en el sistema de rangos, bug fixes y más.
+            Balance de brawlers, cambios en el sistema de rangos, bug fixes y
+            más.
           </p>
           <a target="_blank"
             href="https://supercell.com/en/games/brawlstars/blog/release-notes/patch-notes-ranked-update/"

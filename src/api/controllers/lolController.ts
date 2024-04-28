@@ -105,10 +105,32 @@ export const renderLolStatsForPlayer = async (req: Request, res: Response, next:
 					],
 					hoverOffset: 4
 				}]
+			},
+			options: {
+				responsive: true, // this will make the chart responsive
+				maintainAspectRatio: false // this allows you to set a custom size
 			}
 		};
 
-		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, playername: gameName, user: res.locals.user });
+		const lolKdaLastMatchesChartData = {
+			type: 'line',
+			data: {
+				labels: Object.keys(loldata.games.resultsArray.map((game) => game.championIdentifier.championName)),
+				datasets: [{
+					label: 'KDA',
+					data: Object.values(loldata.games.resultsArray).map((game) => game.kda).reverse(),
+					fill: false,
+					borderColor: 'rgb(75, 192, 192)',
+					tension: 0.1
+				}]
+			},
+			options: {
+				responsive: true, // this will make the chart responsive
+				maintainAspectRatio: false // this allows you to set a custom size
+			}
+		};
+
+		return res.render('./lol/lol-user-stats.ejs', { title: 'LoL Stats', loldata, lolPositionsChartData, playername: gameName, user: res.locals.user, lolKdaLastMatchesChartData });
 	} catch (error) {
 		const message = (error as Error).message;
 		const name = (error as Error).name;
