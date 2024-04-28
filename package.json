@@ -1,6 +1,6 @@
 {
   "name": "yourstats",
-  "version": "0.0.1",
+  "version": "1.0",
   "main": "index.js",
   "scripts": {
     "dev": "npm run build & npx prisma migrate dev --name init & npm run prisma:generate & npm run start:dev",
