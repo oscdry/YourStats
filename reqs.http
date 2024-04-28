@@ -138,6 +138,11 @@ GET http://localhost/api/lol-home
 
 ###
 
+GET https://yourstats.kxnzen.me/api/lol-home
+
+###
+
+
 POST http://localhost/admin/users/
 
 ###
