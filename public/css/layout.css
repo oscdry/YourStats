@@ -433,6 +433,7 @@ a.navbar-brand
     align-items: center;
     justify-content: center;
 
+    min-width: 250px;
     width: 25%;
     gap: 1rem;
     padding: 1rem;
@@ -1401,6 +1402,10 @@ input[type="password"].invalid:not(:focus)
 {
     opacity: 0.6;
     pointer-events: none;
+}
+
+.contact-user img {
+    object-fit: cover;
 }
 
 .game-input-username-container {
