@@ -149,8 +149,8 @@ uploadPicBtn.addEventListener('click', () => {
 });
 
 // Manejar la selección de archivo y enviar la imagen al servidor
-fileInput.addEventListener('change', async  () => {
-	const file = this.files[0]; // TODO: FIX PLS
+fileInput.addEventListener('change', async  function () {
+	const file = this.files[0];
 	if (file) {
 		const formData = new FormData();
 		formData.append('image', file);

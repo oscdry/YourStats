@@ -9,7 +9,7 @@ user in a ranking %>
     <div class="user-card-content">
 
         <div class="user-card-image">
-            <img
+            <img onerror="this.src='/img/storage/users/default-card.png'"
                 src="<%= typeof img === 'undefined' ? "/img/storage/users/default-card.png" : img %>"
                 alt>
         </div>
