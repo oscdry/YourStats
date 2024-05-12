@@ -42,7 +42,7 @@ export const LoginUser = async (req: Request, res: Response, next: NextFunction)
 		Pino.info('User ' + username + ' logged in');
 		return res.json({ token });
 	} catch (error) {
-		return next(error);
+		next(error);
 	}
 };
 

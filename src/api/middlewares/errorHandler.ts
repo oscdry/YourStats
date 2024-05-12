@@ -74,7 +74,9 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 			if (req.url.includes('/api'))
 				return handleApiError(req, res, 'Error connecting to external services', 500);
 
-			return GenericErrorPage(res, 'Error', 'external-error-header', 'Error connecting to external services', 'external-error-paragraph');
+			return GenericErrorPage(res, 'Error', 'external-error-header',
+				'Error connecting to external services',
+				'external-error-paragraph');
 
 		// Internal errors
 		case 'FirebaseError':
